@@ -40,6 +40,10 @@ Aggiornata al 28/10/2026 (versione `v2.2.0-rc1`). "Fatto" = verificato sul proge
 
 ### Da fare
 
+**In sospeso (29/10/2026)**
+- [ ] Board B: il flessibile a 4 strati con irrigidimenti costa troppo; da cercare una soluzione più economica (il progetto a scalino resta come riferimento: dima, ingombri misurati e legenda in `doc/`)
+- [ ] Cavo: in attesa della risposta di LCSC Custom Cables (mail inviata il 29/10/2026)
+
 **Prima di ordinare**
 - [ ] Misurare col calibro la distanza tra le file della spina 2×22 del flat (oggi stimata 3,9 mm)
 - [x] Cavo: tipo **1-N** (il cavo non si capovolge lungo il percorso), lunghezza **150 o 200 mm** (`doc/CABLE_SPEC.md`)
