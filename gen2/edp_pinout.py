@@ -13,9 +13,9 @@ spina) serve il "1-1". DA DECIDERE con il piazzamento reale, prima di ordinare l
 CABLE = "1-N"
 
 # pin -> net sul connettore della Board A. Ordine delle righe/colonne = ordine dei pin di J1 (connettore
-# tastiera), cosi' sulla Board B le piste da J1 a J4 sono annidate e non si incrociano. Con J4 della Board B
-# ruotato di 180 gradi (pin 1 verso J1) e cavo 1-N, Fn sta sul pin 39 della Board A = pin 2 della Board B,
-# subito dopo la massa del pin 1, il pin di J4 piu' vicino a J1.
+# tastiera), scelto per la Board B a L (piste da J1 a J4 annidate). Con il cavo 1-N Fn sta sul pin 39 della
+# Board A = pin 2 della Board B, subito dopo la massa del pin 1. Nella Board B a scalino J4 e' ruotato di 270
+# gradi sul gradino alto: la piedinatura non cambia.
 EDP_A = {
     1: "GND", 2: "GND",
     3: "VBUS", 4: "VBUS",               # 5 V del TrackPoint (dalla USB della Board A)

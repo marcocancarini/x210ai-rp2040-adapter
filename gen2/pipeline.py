@@ -99,6 +99,7 @@ def main():
             run([os.environ.get("JAVA", "java"), "-jar", jar, "-de", dsn, "-do", ses, "-mp", "100"])
         elif s == "ses":
             run([py, g("import_ses.py"), pcb, ses, pcb])
+            run([py, g("cleanup_pcb.py"), pcb, pcb])
             shutil.copy(os.path.join(ROOT, pcb), os.path.join(ROOT, out, "stadi", "02_sbrogliato.kicad_pcb"))
         elif s == "fill":
             run([py, g("fill_zones.py"), *b, pcb, pcb, "--pour", "F,B"])
@@ -115,7 +116,10 @@ def main():
             run([py, g(os.path.join("verifica", "gerber_check2.py")), os.path.join(prod, "gerber"), cpl])
             run([py, g(os.path.join("verifica", "dfm_check.py")), pcb])
         elif s == "dima":
-            run([py, g("gen_dima_rev22.py"), board, os.path.join("doc", f"x210ai_dima_board{board}_1a1.pdf")])
+            if board == "B":     # Board B a scalino: dima e legenda di tutti i componenti
+                run([py, g("gen_dima_boardB_scalino.py"), os.path.join("doc", "x210ai_dima_boardB_scalino_1a1.pdf")])
+            else:
+                run([py, g("gen_dima_rev22.py"), board, os.path.join("doc", f"x210ai_dima_board{board}_1a1.pdf")])
     print(f"\nfatto: {', '.join(steps)}. Progetto KiCad: {out}/{name}.kicad_pro")
 
 

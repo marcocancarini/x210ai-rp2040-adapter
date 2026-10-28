@@ -239,17 +239,17 @@ if BOARD == "A":
     COMMENTS = ["Board A 4 strati 0,8 mm (JLCPCB): RP2040, flash, LDO, traslatori TrackPoint, USB, J4 eDP",
                 "Firmware invariato: hektopuss ThinkPad_RP2040_Keyboard + patch X210Ai (GPIO come la rev 2.0)"]
 elif BOARD == "B":
-    LAYOUT = [("J1", 1, 63.5, 88.9), ("J1", 2, 63.5, 177.8), ("J4", 1, 228.6, 127.0),
+    LAYOUT = [("J1", 1, 63.5, 88.9), ("J2", 1, 63.5, 177.8), ("J4", 1, 228.6, 127.0),
               ("Q2", 1, 147.32, 88.9), ("Q2", 2, 147.32, 152.4), ("R13", 1, 132.08, 162.56),
               ("Q3", 1, 147.32, 190.5), ("Q3", 2, 147.32, 218.44), ("R14", 1, 132.08, 204.47)]
     NOTES = [
         (20.32, 20.32, f"{D.TITLE} - rev {D.REV}", 2.0),
-        (20.32, 25.4, "J1 unita' 1: ricettacolo sopra (tastiera). Unita' 2: spina sotto in BTB_R_CONN1 (pin 100+n).", 1.5),
-        (20.32, 29.21, "Alla scheda madre passano solo Fn (101), PgUp emulato (105, 124), accensione (19-119) e GND.", 1.5),
+        (20.32, 25.4, "J1: ricettacolo della tastiera (gradino basso). J2: spina sotto il gradino alto, in BTB_R_CONN1.", 1.5),
+        (20.32, 29.21, "Alla scheda madre passano solo Fn (J2-1), PgUp emulato (J2-5, J2-24), accensione (J1-19 / J2-19) e GND.", 1.5),
         (20.32, 33.02, f"J4: cavo eDP verso la Board A, tipo {D.E.CABLE}. Vedi CABLE_SPEC.md", 1.5),
         (119.38, 139.7, "Verso EC: Q2b porta a massa Fn, Q3 chiude riga 24 - colonna 5 (PgUp)", 1.5),
     ]
-    COMMENTS = ["Board B 4 strati 0,4 mm: sandwich su BTB_R_CONN1, J4 eDP verso la Board A",
+    COMMENTS = ["Board B flessibile 2 strati a scalino: J2 su BTB_R_CONN1, J1 tastiera, J4 eDP verso la Board A",
                 "Nessun componente attivo: solo l'emulazione Fn+PgUp verso l'EC (Q2b, Q3)"]
 
 

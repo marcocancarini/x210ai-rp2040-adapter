@@ -28,7 +28,10 @@ gdir = os.path.join(out, "gerber")
 if os.path.exists(gdir):
     shutil.rmtree(gdir)
 os.makedirs(gdir)
-LAYERS = "F.Cu,In1.Cu,In2.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts"
+CU = "F.Cu,In1.Cu,In2.Cu,B.Cu" if getattr(D, "COPPER_LAYERS", 4) == 4 else "F.Cu,B.Cu"
+LAYERS = CU + ",F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts"
+if getattr(D, "STIFFENERS", None):      # flessibile: irrigidimenti disegnati su User.1
+    LAYERS += ",User.1"
 subprocess.run([CLI, "pcb", "export", "gerbers", "--layers", LAYERS, "--subtract-soldermask",
                 "-o", gdir + "/", pcb], check=True, capture_output=True)
 subprocess.run([CLI, "pcb", "export", "drill", "--format", "excellon", "--drill-origin", "absolute",

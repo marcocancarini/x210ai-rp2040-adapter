@@ -1,6 +1,6 @@
 Designator,Package,Lato,Rot KiCad,Correzione,Rot JLCPCB
-J1,JAE_AA01_sandwich,Top,0,0,0
-J4,IPEX_20455-040E_90deg,Top,180,0,180
+J1,JAE_AA01B-S040VA1_T61_GND41,Top,-25,0,335
+J4,IPEX_20455-040E_90deg,Top,-90,0,270
 Q2,SOT-363_SC-70-6_Tight,Bottom,0,180,0
 Q3,SOT-363_SC-70-6_Tight,Bottom,0,180,0
 R13,R_0402_1005Metric,Bottom,90,0,90

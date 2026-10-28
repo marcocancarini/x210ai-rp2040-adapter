@@ -101,9 +101,9 @@ pannelli). Vanno bene solo se li verifichi con la procedura sotto.
 Barra di massa e linguette (pad 41) a GND su entrambe le schede. Con il cavo 1-1 il pin B è uguale al pin A.
 
 Scelte:
-- righe e colonne seguono l'ordine dei pin del connettore tastiera J1. Sulla Board B, J4 è ruotato di
-  180° con il pin 1 verso J1: Fn è sul pin 2 della Board B (pin 39 della Board A), subito dopo
-  la massa del pin 1, il più vicino a J1, così le piste J1 → J4 si annidano senza incroci;
+- righe e colonne seguono l'ordine dei pin del connettore tastiera J1 (scelta fatta per la Board B a L; con
+  la Board B a scalino J4 sta sul gradino alto ruotato di 270°, verso il palmrest, e la piedinatura non
+  cambia). Fn è sul pin 2 della Board B (pin 39 della Board A), subito dopo la massa del pin 1;
 - il clock PS/2 (pin A8) sta tra due masse;
 - 5 V del TrackPoint su due pin (corrente di pochi mA; il catalogo dà 0,3 A per contatto con AWG 40);
 - il **tasto di accensione (pin 19 di J1) non passa dal cavo**: va diretto da J1 a BTB_R_CONN1 sulla

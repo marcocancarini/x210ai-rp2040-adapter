@@ -25,7 +25,7 @@ def rows(D, board):
     for c in sorted(D.COMP, key=lambda c: key(c["ref"])):
         side = "Top" if D.PLACE[c["ref"]][3] == "T" else "Bottom"
         fp = c["fp"].split(":")[1]
-        if board == "B" and c["ref"] == "J1":
+        if board == "B" and c["ref"] == "J1" and hasattr(D, "J1_PARTS"):
             for s, v, lcsc, mpn, mfr, how in D.J1_PARTS:
                 out.append(dict(ref="J1", value=v, fp=fp, lcsc=lcsc, mpn=mpn, mfr=mfr, side=s, how=how,
                                 desc=c["desc"]))

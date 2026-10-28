@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "10.0.7"
     },
-    "CreationDate": "2026-10-28T16:22:12+01:00"
+    "CreationDate": "2026-10-28T23:09:02+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -14,11 +14,11 @@
       "Revision": "2.2"
     },
     "Size": {
-      "X": 39.75,
-      "Y": 15.4
+      "X": 29.0811,
+      "Y": 28.85
     },
     "LayerNumber": 4,
-    "BoardThickness": 0.4,
+    "BoardThickness": 0.25,
     "Finish": "None"
   },
   "DesignRules": [
@@ -96,6 +96,11 @@
       "Path": "x210ai_boardB-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
+    },
+    {
+      "Path": "x210ai_boardB-User_1.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
     }
   ],
   "MaterialStackup": [
@@ -119,7 +124,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.08,
+      "Thickness": 0.03,
       "Material": "FR4",
       "Name": "F.Cu/In1.Cu",
       "Notes": "Type: dielectric layer 1 (from F.Cu to In1.Cu)"
@@ -131,7 +136,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.08,
+      "Thickness": 0.03,
       "Material": "FR4",
       "Name": "In1.Cu/In2.Cu",
       "Notes": "Type: dielectric layer 2 (from In1.Cu to In2.Cu)"
@@ -143,7 +148,7 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 0.08,
+      "Thickness": 0.03,
       "Material": "FR4",
       "Name": "In2.Cu/B.Cu",
       "Notes": "Type: dielectric layer 3 (from In2.Cu to B.Cu)"

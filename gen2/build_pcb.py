@@ -35,8 +35,8 @@ COMMENTS = {
             "J1 sopra (tastiera), J2 sotto (BTB_R_CONN1 scheda madre), RP2040 sotto"),
     "A": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,8 mm JLCPCB, ENIG, via 0,4/0,2",
           "RP2040 e componenti sotto; J4 (eDP verso la Board B) sopra"),
-    "B": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,4 mm JLCPCB (solo ENIG, niente pannello), via 0,3/0,15",
-          "J1 sandwich: ricettacolo sopra, spina sotto in BTB_R_CONN1; J4 eDP sopra; Q2/Q3 sotto"),
+    "B": ("Flessibile 4 strati (poliimmide ~0,25 mm, In1 GND) con irrigidimenti su User.1 - JLCPCB flex, via 0,4/0,2",
+          "A scalino: J2 sotto in BTB_R_CONN1 e J4 sul gradino alto; J1 (tastiera) sul gradino basso a 25 gradi"),
 }
 # scritte in serigrafia: (testo, x, y, lato, altezza) in coordinate del modello dati (Board A: D.SILK)
 SILK = {
@@ -72,17 +72,22 @@ def outline_pts():
 
 
 def fillets():
-    """per ogni vertice (lati a 90 gradi): punto di tangenza in entrata, punto medio dell'arco, tangenza in uscita"""
+    """per ogni vertice (lati con angolo qualsiasi): tangenza in entrata, punto medio dell'arco, tangenza in uscita
+    e centro dell'arco di raggio CORNER_R"""
     r, pts, out = D.CORNER_R, outline_pts(), []
     for i, (px, py) in enumerate(pts):
         (ax, ay), (bx, by) = pts[i - 1], pts[(i + 1) % len(pts)]
-        din = ((px - ax) / math.hypot(px - ax, py - ay), (py - ay) / math.hypot(px - ax, py - ay))
-        dout = ((bx - px) / math.hypot(bx - px, by - py), (by - py) / math.hypot(bx - px, by - py))
-        t1, t2 = (px - din[0] * r, py - din[1] * r), (px + dout[0] * r, py + dout[1] * r)
-        cx, cy = t1[0] + dout[0] * r, t1[1] + dout[1] * r
-        mx, my = px - cx, py - cy
-        k = r / math.hypot(mx, my)
-        out.append((t1, (cx + mx * k, cy + my * k), t2, (cx, cy)))
+        u = ((ax - px) / math.hypot(ax - px, ay - py), (ay - py) / math.hypot(ax - px, ay - py))
+        v = ((bx - px) / math.hypot(bx - px, by - py), (by - py) / math.hypot(bx - px, by - py))
+        th = math.acos(max(-1.0, min(1.0, u[0] * v[0] + u[1] * v[1])))    # angolo tra i due lati
+        d = r / math.tan(th / 2)                                            # distanza dei punti di tangenza
+        t1, t2 = (px + u[0] * d, py + u[1] * d), (px + v[0] * d, py + v[1] * d)
+        w = (u[0] + v[0], u[1] + v[1])
+        wl = math.hypot(*w)
+        w = (w[0] / wl, w[1] / wl)                                          # bisettrice, verso l'interno dell'angolo
+        h = r / math.sin(th / 2)
+        cx, cy = px + w[0] * h, py + w[1] * h
+        out.append((t1, (cx - w[0] * r, cy - w[1] * r), t2, (cx, cy)))
     return out
 
 
@@ -135,6 +140,81 @@ def add_zone(board, layer, net="GND", inset=0.0, priority=0, name=""):
         z.SetZoneName(name)
     board.Add(z)
     return z
+
+
+def j1_fanout(board):
+    """Board B: Freerouting non si aggancia ai piedini di J1 ruotato di 25 gradi e fatica nel tratto inclinato.
+    Ogni piedino con una net riceve una pista fino al gradino alto: la fila rivolta allo scalino sopra (F.Cu),
+    l'altra fila con un via sotto il corpo del connettore (due profondita' alternate) e poi sotto (B.Cu). Le
+    piste escono dal gradino basso nella direzione del connettore, poi salgono dritte attraverso lo scalino e si
+    fermano 0,35 mm dentro il gradino alto; da li' instrada Freerouting"""
+    fp = board.FindFootprintByReference("J1")
+    f = fp.GetPosition()
+    fx, fy = pcbnew.ToMM(f.x), pcbnew.ToMM(f.y)
+    ox, oy = A(0, 0)
+    y_end = oy + D.Y_HI - 0.35
+    n = 0
+    for p in fp.Pads():
+        num, net = p.GetNumber(), p.GetNetname()
+        if not net or not num.isdigit() or int(num) > 40:
+            continue
+        c = p.GetPosition()
+        gx, gy = pcbnew.ToMM(c.x) - fx, pcbnew.ToMM(c.y) - fy
+        lx, ly = D._rot(gx, gy, -D.ROT_KB)                       # coordinate nell'impronta
+        ex, ey = D._rot(lx, D.J1_CRT[2], D.ROT_KB)               # uscita sul lato verso lo scalino
+        edge, top = (fx + ex, fy + ey), (fx + ex, y_end)
+        if ly < 0:                                               # fila verso lo scalino: tutto sopra
+            PR.add_track(board, net, [(fx + gx, fy + gy), edge, top], pcbnew.F_Cu, 0.1)
+        else:                                                    # altra fila: via sotto il corpo, poi sotto
+            half = pcbnew.ToMM(p.GetSize(pcbnew.F_Cu).y) / 2
+            k = round((lx + 4.7) / 0.5)
+            vx, vy = D._rot(lx, ly - half - (0.4 if k % 2 == 0 else 1.2), D.ROT_KB)
+            via = (fx + vx, fy + vy)
+            PR.add_track(board, net, [(fx + gx, fy + gy), via], pcbnew.F_Cu, 0.1)
+            PR.add_via(board, net, *via)
+            PR.add_track(board, net, [via, edge, top], pcbnew.B_Cu, 0.1)
+        n += 1
+    print(f"pre-instradamento J1: {n} piedini fino al gradino alto")
+
+
+def add_keepout(board, pts, name):
+    """area senza via (zona di piega del flessibile): le piste possono passare"""
+    z = pcbnew.ZONE(board)
+    z.SetIsRuleArea(True)
+    z.SetDoNotAllowVias(True)
+    z.SetDoNotAllowTracks(False)
+    z.SetDoNotAllowPads(True)
+    z.SetDoNotAllowZoneFills(False)
+    z.SetDoNotAllowFootprints(True)
+    z.SetLayerSet(pcbnew.LSET.AllCuMask())
+    ol = z.Outline()
+    ol.NewOutline()
+    for x, y in pts:
+        ol.Append(MM(A(x, y)[0]), MM(A(x, y)[1]))
+    z.SetZoneName(name)
+    board.Add(z)
+
+
+def add_stiffeners(board):
+    """irrigidimenti del flessibile su User.1: contorno, materiale, spessore e lato"""
+    for nome, lato, mat, sp, pts in D.STIFFENERS:
+        for i, p in enumerate(pts):
+            s = pcbnew.PCB_SHAPE(board)
+            s.SetShape(pcbnew.SHAPE_T_SEGMENT)
+            s.SetStart(V(*p))
+            s.SetEnd(V(*pts[(i + 1) % len(pts)]))
+            s.SetLayer(pcbnew.User_1)
+            s.SetWidth(MM(0.1))
+            board.Add(s)
+        t = pcbnew.PCB_TEXT(board)
+        t.SetText(f"{mat} {sp:g} mm ({lato})")
+        cx = sum(x for x, _ in pts) / len(pts)
+        cy = sum(y for _, y in pts) / len(pts)
+        t.SetPosition(V(cx, cy))
+        t.SetLayer(pcbnew.User_1)
+        t.SetTextSize(pcbnew.VECTOR2I(MM(0.6), MM(0.6)))
+        t.SetTextThickness(MM(0.08))
+        board.Add(t)
 
 
 def pad_xy(board, ref, num):
@@ -236,7 +316,7 @@ def build(out_dir, uuids=None):
     name = boards.project_name(D)
     pcb_path = os.path.join(out_dir, name + ".kicad_pcb")
     board = pcbnew.NewBoard(pcb_path)
-    board.SetCopperLayerCount(4)
+    board.SetCopperLayerCount(getattr(D, "COPPER_LAYERS", 4))
     ds = board.GetDesignSettings()
     ds.SetBoardThickness(MM(D.THICKNESS_MM))
     tb = board.GetTitleBlock()
@@ -292,10 +372,18 @@ def build(out_dir, uuids=None):
         fp.Value().SetVisible(False)
 
     add_outline(board)
-    add_zone(board, pcbnew.In1_Cu, "GND", 0.0, 0, "GND_In1")
+    four = getattr(D, "COPPER_LAYERS", 4) == 4
+    if four:
+        add_zone(board, pcbnew.In1_Cu, "GND", 0.0, 0, "GND_In1")
+    if hasattr(D, "BEND"):
+        add_keepout(board, D.BEND, "piega")
+    if hasattr(D, "STIFFENERS"):
+        add_stiffeners(board)
     outline = outline_poly()
     if BOARD == "2.0":
         special_gnd(board)
+    if BOARD == "B" and getattr(D, "ROT_KB", 0) % 90:
+        j1_fanout(board)
     if "U1" in D.BY_REF:          # rev 2.0 e Board A: stesso gruppo RP2040 (posizioni relative identiche)
         crystal_preroute(board)
         testen_to_ep(board)
@@ -307,8 +395,10 @@ def build(out_dir, uuids=None):
             print(f"fan-out QFN: {len(qd)} via interne, piazzole lasciate al router: {qs}")
     skip = (lambda fp, p: (BOARD == "2.0" and fp.GetReference() in ("J1", "J2")) or
             (fp.GetReference() == "U1" and p.GetNumber() in ("57", "19")))
-    done, failed = PR.gnd_fanout(board, outline, skip)
-    print(f"fan-out GND: {len(done)} ok, falliti (li collega il router al piano In1): {failed}")
+    failed = []
+    if four:                       # via di massa verso il piano In1 (a 2 strati la massa la instrada il router)
+        done, failed = PR.gnd_fanout(board, outline, skip)
+        print(f"fan-out GND: {len(done)} ok, falliti (li collega il router al piano In1): {failed}")
     add_silk(board)
     pcbnew.SaveBoard(pcb_path, board)
     pro = os.path.join(out_dir, name + ".kicad_pro")
@@ -414,7 +504,12 @@ def export_dsn(pcb, dsn, protect_nets=None, in1_signal=False):
     poly = " ".join(f"{x * k:.0f} {y * k:.0f}" for x, y in pts)
     t, n = re.subn(r'\(boundary\s*\(path pcb 0[^)]*\)\s*\)', f'(boundary (path pcb 0 {poly}))', t, count=1)
     assert n == 1, "boundary non trovato"
-    if not in1_signal:
+    if getattr(D, "COPPER_LAYERS", 4) == 2:
+        # a 2 strati la massa la collegano le colate F/B dopo lo sbroglio: GND resta con un solo pin, cosi'
+        # Freerouting non la instrada e lascia lo spazio alle altre net
+        m = re.search(r"\(net GND\s*\(pins ([^)]*)\)", t)
+        t = t[:m.start(1)] + m.group(1).split()[0] + t[m.end(1):]
+    elif not in1_signal:
         t = t.replace("(layer In1.Cu\n      (type signal)", "(layer In1.Cu\n      (type power)")
         t = re.sub(r'\(layer In1\.Cu\s*\(type signal\)', '(layer In1.Cu (type power)', t)
     else:

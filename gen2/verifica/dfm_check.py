@@ -61,8 +61,17 @@ res["hole_count"] = len(holes)
 
 # ---------------------------------------------------------------- copper to edge (all copper layers)
 def pad_poly(p):
-    bbp = p.GetBoundingBox()
-    return box(ToMM(bbp.GetLeft()), ToMM(bbp.GetTop()), ToMM(bbp.GetRight()), ToMM(bbp.GetBottom()))
+    """piazzola come rettangolo ruotato (le piazzole di J1 della Board B sono a 25 gradi)"""
+    try:
+        s = p.GetSize(pcbnew.F_Cu if p.IsOnLayer(pcbnew.F_Cu) else pcbnew.B_Cu)   # KiCad 10 (padstack)
+    except TypeError:
+        s = p.GetSize()                                                            # KiCad 7-9
+    w, h = ToMM(s.x) / 2, ToMM(s.y) / 2
+    a = math.radians(p.GetOrientationDegrees())
+    cx, cy = ToMM(p.GetPosition().x), ToMM(p.GetPosition().y)
+    pts = [(cx + x * math.cos(a) + y * math.sin(a), cy - x * math.sin(a) + y * math.cos(a))
+           for x, y in ((-w, -h), (w, -h), (w, h), (-w, h))]
+    return Polygon(pts)
 cu = []
 for t in tracks:
     cu.append(LineString([(ToMM(t.GetStart().x), ToMM(t.GetStart().y)), (ToMM(t.GetEnd().x), ToMM(t.GetEnd().y))]).buffer(ToMM(t.GetWidth()) / 2))

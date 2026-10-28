@@ -1,7 +1,7 @@
 {
- "componenti_schema": 6,
- "componenti_pcb": 6,
- "pin_schema": 141,
+ "componenti_schema": 7,
+ "componenti_pcb": 7,
+ "pin_schema": 138,
  "net_schema": 37,
  "net_pcb": 37,
  "errori": []
