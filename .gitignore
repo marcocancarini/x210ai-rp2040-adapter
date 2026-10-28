@@ -16,3 +16,7 @@ node_modules/
 # editor / sistema
 *~
 .DS_Store
+
+# ambiente locale e strumenti scaricati
+.venv/
+freerouting-*.jar
