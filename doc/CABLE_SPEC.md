@@ -55,7 +55,9 @@ di ordinare la Board B**, quando si conosce il percorso reale del cavo.
 (`cable@lcsc.com`), con:
 - spine I-PEX 20453-240T-03 ai due capi;
 - 40 micro-coassiali AWG 40, **tutti collegati, nessun pin unito o mancante**;
-- cablaggio 1-N, spine con i contatti dalla stessa parte a cavo steso (come l'81422-100B-02-D);
+- prezzi per **entrambi i tipi**: 1-N (come l'81422-100B-02-D, spine con i contatti dalla stessa parte a
+  cavo steso) e 1-1 (come l'82691-100B-01-D). Il progetto resta **1-N**: il 1-1 è solo un'alternativa di
+  riserva, che richiederebbe di cambiare `CABLE` in `gen2/edp_pinout.py` e rifare lo sbroglio della Board B;
 - schermi e barra di massa collegati ai due capi;
 - tratti piatti vicino alle spine e fascio tondo con guaina nel mezzo;
 - 150 o 200 mm, 3 pezzi (prezzi anche per 5 e 10);
