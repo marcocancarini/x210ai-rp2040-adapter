@@ -121,6 +121,6 @@ simboli rev 2.0), `pcb_out4/` (riferimento), `gen2/` (generatori), `doc/` (da ag
 1. **Altezza della pila della Board B**: prova della moneta da 10 centesimi (`LEGGIMI.md`).
 2. **Cavo 1-1 o 1-N**: dipende da come si guardano i due J4 (`gen2/edp_pinout.py`, oggi 1-N). Va deciso
    prima di ordinare la Board B.
-3. **Lunghezza del cavo**: lo standard I-PEX parte da 100 mm, ne servono 40-60 (cavo su misura o piegato).
+3. **Cavo**: 1-N, 150 o 200 mm, preventivo chiesto a LCSC Custom Cables (`doc/CABLE_SPEC.md`).
 4. **Spina sotto**: misurare col calibro la distanza tra le file della spina 2×22 del flat.
 5. **Board B a 0,4 mm**: JLCPCB (solo ENIG, niente pannello).

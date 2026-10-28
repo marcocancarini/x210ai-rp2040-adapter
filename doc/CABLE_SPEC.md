@@ -40,13 +40,33 @@ I-PEX vende due cablaggi standard da 40 pin, con micro-coassiale AWG 40:
 - I due J4 sullo **stesso lato** delle schede, uno di fronte all'altro, con il cavo steso: serve il **1-N**.
 - Un J4 sul lato opposto, oppure il cavo **piegato una volta** (la piega ribalta la spina): serve il **1-1**.
 
+Il cavo ha un sopra e un sotto (i contatti delle spine sono su una faccia). Curve a destra e a sinistra,
+salite, discese e anse **non contano** finché il lato "sopra" resta verso l'alto; conta solo una piega che
+capovolge il cavo (o una torsione di 180°), che cambia il tipo che serve. Scelta (28/10/2026): **1-N**, con
+il cavo che non si capovolge lungo il percorso.
+
 Oggi `edp_pinout.CABLE = "1-N"`. Cambia solo la numerazione dei pin di J4 sulla Board B. **Va deciso prima
 di ordinare la Board B**, quando si conosce il percorso reale del cavo.
 
-**Lunghezza**: lo standard I-PEX parte da 100 mm; PASSAGGIO.md chiede 40-60 mm. Ci sono due strade:
-1. un cablaggio su misura (I-PEX o un fornitore di cavi eDP), indicando le spine 20453-240T-03, la
-   lunghezza, il tipo 1-1 o 1-N, tutti i 40 conduttori collegati e la barra di massa ai due capi;
-2. un cavo da 100 mm piegato. Attenzione: ogni piega ribalta la spina e cambia il tipo che serve.
+**Lunghezza**: **150 o 200 mm** da spina a spina (misurata sul percorso reale; PASSAGGIO.md stimava
+40-60 mm). Il 200 mm 1-N esiste standard: I-PEX **81422-100B-02-D**.
+
+**Fornitura** (scelta 28/10/2026): cavo su misura, preventivo chiesto a LCSC Custom Cables
+(`cable@lcsc.com`), con:
+- spine I-PEX 20453-240T-03 ai due capi;
+- 40 micro-coassiali AWG 40, **tutti collegati, nessun pin unito o mancante**;
+- cablaggio 1-N, spine con i contatti dalla stessa parte a cavo steso (come l'81422-100B-02-D);
+- schermi e barra di massa collegati ai due capi;
+- tratti piatti vicino alle spine e fascio tondo con guaina nel mezzo;
+- 150 o 200 mm, 3 pezzi (prezzi anche per 5 e 10);
+- in opzione una versione con curva a 90°: nella forma montata i contatti delle due spine vanno dalla stessa
+  parte, verso le schede; direzione della curva e pin 1 da fissare con un disegno prima della produzione.
+
+Alternative: un produttore di cavi eDP su Alibaba (circa 11 $ al pezzo), oppure l'I-PEX standard da DigiKey.
+I cavi eDP generici per pannelli non vanno bene: hanno pin uniti o mancanti.
+
+**Ingombro**: il fascio tondo è spesso circa 3-4 mm; va fatto passare dove non c'è altro sopra o sotto, non
+sopra la Board A né sopra il connettore della tastiera.
 
 I cavi eDP generici di AliExpress hanno spesso **pin non collegati o incrociati** (sono pensati per i
 pannelli). Vanno bene solo se li verifichi con la procedura sotto.
@@ -96,7 +116,7 @@ Scelte:
 | Conduttori | 40, tutti collegati, schermi alla barra di massa ai due capi |
 | Segnali | matrice e PS/2 lenti (scansione in kHz, PS/2 10-17 kHz): nessun vincolo di impedenza |
 | Corrente | < 50 mA in totale (TrackPoint); 0,3 A per contatto ammessi |
-| Resistenza del conduttore | < 2 Ω per filo (100 mm di AWG 40: circa 0,35 Ω) |
+| Resistenza del conduttore | < 2 Ω per filo (200 mm di AWG 40: circa 0,7 Ω) |
 
 ## Verifica prima del montaggio
 
@@ -110,8 +130,9 @@ Scelte:
 
 ## Da decidere
 
-- [ ] Tipo di cavo 1-1 o 1-N (dal piazzamento reale delle due schede).
-- [ ] Lunghezza: su misura (40-60 mm) o 100 mm standard piegato.
+- [x] Tipo di cavo: 1-N, con il cavo che non si capovolge lungo il percorso.
+- [x] Lunghezza: 150 o 200 mm, su misura (preventivo LCSC) o I-PEX 81422-100B-02-D (200 mm).
+- [ ] Curva a 90° in opzione: direzione e pin 1 da disegnare se si sceglie questa versione.
 - [ ] **Ingombro della Board B**: il ricettacolo da 40 pin richiede 28,2 × 6,7 mm liberi, più della stima
   "15 × 12 mm". Nel piazzamento preliminare (`design_boardB.py`, con 2,5 mm di margine extra tra J1 e J4)
   la Board B misura 45,3 × 8,7 mm ed esce di 8,8 mm dall'ingombro della rev 2.0 (29 mm a sinistra del centro del connettore). Alternative: un

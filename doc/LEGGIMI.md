@@ -112,8 +112,8 @@ si recupera da una tastiera X200/X201 guasta.
 ### Cavo
 
 Micro-coassiale con spina **I-PEX 20453-240T-03** ai due capi, **40 fili tutti collegati, nessun pin unito**,
-barra di massa ai due capi, cablaggio 1-N (pin n → pin 41−n). Standard: I-PEX 82190-100B-02-D (100 mm,
-DigiKey). Su misura: LCSC Custom Cables o produttori di cavi eDP. I cavi eDP generici per pannelli non vanno
+barra di massa ai due capi, cablaggio 1-N (pin n → pin 41−n). Lunghezza 150 o 200 mm; standard: I-PEX
+81422-100B-02-D (200 mm, DigiKey). Su misura: LCSC Custom Cables o produttori di cavi eDP. I cavi eDP generici per pannelli non vanno
 bene. Dettagli e prova di continuità in `CABLE_SPEC.md`.
 
 ### Flash
@@ -139,7 +139,7 @@ piedinatura, compatibile con il boot dell'RP2040.
 1. **Prova della moneta** (sopra).
 2. **Spina sotto di J1**: l'impronta è ricavata, non presa da un disegno JAE. Misura col calibro la spina sul
    flat della tastiera: 20 piedini per fila a passo 0,5 mm, file a **3,9 mm** tra i centri.
-3. **Cavo**: lunghezza misurata con uno spago tra i due J4 e tipo (1-N con il cavo steso, 1-1 con una piega).
+3. **Cavo**: 150 o 200 mm, 1-N; il percorso non deve capovolgere il cavo (`CABLE_SPEC.md`).
 4. **USB-CON1**: piedinatura e presenza dei 5 V (anche in sospensione, se vuoi il risveglio da tastiera).
 
 Le dime 1:1 delle due schede (`documentazione/`) sono già state provate sulla scheda madre.

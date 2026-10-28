@@ -41,8 +41,8 @@ Aggiornata al 28/10/2026 (versione `v2.2.0-rc1`). "Fatto" = verificato sul proge
 **Prima di ordinare**
 - [ ] Prova della moneta da 10 centesimi sul dorso della spina della tastiera (`doc/LEGGIMI.md`): altezza reale della pila della Board B
 - [ ] Misurare col calibro la distanza tra le file della spina 2×22 del flat (oggi stimata 3,9 mm)
-- [ ] Lunghezza del cavo con uno spago tra i due J4 e tipo: **1-N** con il cavo steso (impostato), **1-1** con una piega (`gen2/edp_pinout.py`, poi nuovo sbroglio della Board B)
-- [ ] Cavo: micro-coassiale I-PEX 20453 a 40 fili, nessun pin unito, barra di massa ai due capi. Preventivo LCSC Custom Cables (`cable@lcsc.com`) o produttore su Alibaba (~11 $/pz); altrimenti I-PEX 82190-100B-02-D da DigiKey (~40 $, 100 mm). I cavi eDP generici per pannelli 4K non vanno bene
+- [x] Cavo: tipo **1-N** (il cavo non si capovolge lungo il percorso), lunghezza **150 o 200 mm** (`doc/CABLE_SPEC.md`)
+- [ ] Cavo: micro-coassiale I-PEX 20453 a 40 fili, nessun pin unito, barra di massa ai due capi. Preventivo chiesto a LCSC Custom Cables (`cable@lcsc.com`): 150 o 200 mm, tratti piatti alle spine e fascio tondo nel mezzo, in opzione curva a 90°. Alternative: produttore su Alibaba (~11 $/pz) o I-PEX 81422-100B-02-D da DigiKey (200 mm). I cavi eDP generici per pannelli 4K non vanno bene
 - [ ] Board B: confermare nel configuratore JLCPCB 4 strati 0,4 mm ENIG con via 0,3/0,15 e piste 0,1 mm
 
 **Facoltativo**
