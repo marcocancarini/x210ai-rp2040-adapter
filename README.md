@@ -20,6 +20,7 @@ Aggiornata al 28/10/2026. "Fatto" = verificato sul modello dati o sulla netlist,
 - [x] Schemi generati e verificati sul modello: `out_boardA/`, `out_boardB/`
 - [x] Specifica del cavo: [`doc/CABLE_SPEC.md`](doc/CABLE_SPEC.md)
 - [x] BOM JLCPCB e BOM completa con MPN per le due schede (`produzione/`)
+- [x] Ambiente locale (Linux): KiCad 10.0.7, `.venv/` con shapely/gerbonara/cairosvg, Freerouting 1.9.0 + Java 21, ngspice 47, arduino-cli + arduino-pico 6.3.0 (firmware ricompilato identico), `emu2/node_modules`
 - [x] Dime 1:1 (piazzamento provvisorio): Board A, Board B attuale, Board B a L rovesciata (`doc/`)
 
 ### Da fare
@@ -35,8 +36,7 @@ Aggiornata al 28/10/2026. "Fatto" = verificato sul modello dati o sulla netlist,
 - [ ] Misurare col calibro la distanza tra le file della spina 2×22 del flat (oggi stimata 3,9 mm)
 - [ ] Board B 4 strati 0,4 mm: PCBWay oppure verifica nel configuratore JLCPCB
 
-**PCB e produzione** (in locale con KiCad 10: `gen2/pipeline.py --board A|B`, vedi [`doc/ESECUZIONE_LOCALE.md`](doc/ESECUZIONE_LOCALE.md))
-- [ ] Installare Freerouting 1.9.0 (KiCad e ngspice ci sono già)
+**PCB e produzione** (in locale: `.venv/bin/python gen2/pipeline.py --board A|B`, vedi [`doc/ESECUZIONE_LOCALE.md`](doc/ESECUZIONE_LOCALE.md))
 - [ ] Board A: PCB, sbroglio, ERC = 0, DRC = 0, confronto schema/PCB
 - [ ] Board A: ridurre l'ingombro (oggi 40 × 25 mm provvisori)
 - [ ] Board B: PCB, sbroglio a mano, ERC = 0, DRC = 0
