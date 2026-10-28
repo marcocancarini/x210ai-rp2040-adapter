@@ -20,3 +20,4 @@ node_modules/
 # ambiente locale e strumenti scaricati
 .venv/
 freerouting-*.jar
+logs/
