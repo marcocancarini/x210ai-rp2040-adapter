@@ -104,11 +104,8 @@ def write_set(suffix, with_j1):
     return len(sel)
 
 
-if BOARD == "2.0":
-    n1 = write_set("solo_bottom", False)
-    n2 = write_set("bottom_e_top", True)
-else:                           # rev 2.2: entrambe le schede hanno parti sopra e sotto (JLCPCB Standard)
-    n1 = n2 = write_set("bottom_e_top", True)
+n1 = write_set("solo_bottom", False)    # JLCPCB Economic: un lato solo, le parti sopra si saldano a mano
+n2 = write_set("bottom_e_top", True)    # JLCPCB Standard: entrambi i lati
 with open(os.path.join(out, f"{PREFIX}_cpl_rotazioni_applicate.csv"), "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(["Designator", "Package", "Lato", "Rot KiCad", "Correzione", "Rot JLCPCB"])

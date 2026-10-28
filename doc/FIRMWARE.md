@@ -1,11 +1,12 @@
-# Firmware – rev 2.0
+# Firmware – rev 2.2
 
 Il firmware è quello di [hektopuss/ThinkPad_RP2040_Keyboard](https://github.com/hektopuss/ThinkPad_RP2040_Keyboard)
-(commit `970379d`, GPLv3) con una patch per la scheda-ponte. La patch è applicata da
+(commit `970379d`, GPLv3) con una patch per l'adattatore. Il firmware è lo stesso della rev 2.0: i GPIO della Board A coincidono
+con quelli della scheda-ponte rev 2.0 (controllo automatico su `x210ai_pins.h`). La patch è applicata da
 `sorgenti/gen2/patch_fw.py`, che sostituisce solo testo esatto del file originale: se hektopuss aggiorna il
 repository, lo script si ferma invece di produrre un file sbagliato.
 
-`firmware/x210ai_rev2.0.uf2` è già compilato (core arduino-pico 6.3.0, scheda "Raspberry Pi Pico", 71 kB):
+`firmware/x210ai_rev2.2.uf2` (identico al file della rev 2.0) è già compilato (core arduino-pico 6.3.0, scheda "Raspberry Pi Pico", 71 kB):
 basta copiarlo sul disco **RPI-RP2**.
 SHA-256: `bf325f9a294858f8f08f89307a970341929446da00dd066ff3580920e6f4c984`
 
@@ -13,14 +14,14 @@ SHA-256: `bf325f9a294858f8f08f89307a970341929446da00dd066ff3580920e6f4c984`
 
 | Funzione | Come funziona |
 |---|---|
-| **Fn+PgUp = ThinkLight** | La ThinkLight la accende l'EC della scheda madre, che non vede più la tastiera. Il firmware gli "preme" Fn+PgUp: Q2b porta a massa il Fn (pin 1 di J2), Q3 collega riga 24 e colonna 5 (PgUp). Sequenza: Fn 40 ms, PgUp 100 ms, Fn ancora 40 ms, pausa 150 ms. Fino a 4 comandi in coda. |
+| **Fn+PgUp = ThinkLight** | La ThinkLight la accende l'EC della scheda madre, che non vede più la tastiera. Il firmware gli "preme" Fn+PgUp: sulla Board B Q2b porta a massa il Fn della scheda madre, Q3 collega riga 24 e colonna 5 (PgUp); i gate arrivano dalla Board A nel cavo eDP (EC_FN_G, EC_PGUP_G). Sequenza: Fn 40 ms, PgUp 100 ms, Fn ancora 40 ms, pausa 150 ms. Fino a 4 comandi in coda. |
 | **Scambio Fn / Ctrl** | Tieni premuti insieme **Fn e Ctrl sinistro per 2 s**: i due tasti si scambiano. La ThinkLight lampeggia due volte come conferma. Lo stesso gesto (gli stessi due tasti fisici) torna indietro. L'impostazione resta salvata in flash. Con lo scambio attivo, anche **Ctrl+PgUp** (cioè il nuovo Fn) accende la ThinkLight. |
 | **Fn+F5 = modalità aereo** | Invia il tasto HID "Wireless Radio Button": Windows attiva/disattiva la modalità aereo, Linux lo riceve come `KEY_RFKILL` (GNOME/KDE fanno lo stesso). Prima era Win+A, valido solo su Windows. |
 | **Fn+ThinkVantage = bootloader** | Va tenuto **3 s**: prima bastava sfiorarlo per riavviare in modalità UF2. |
 | **Tastiera giapponese (JIS)** | I 5 tasti in più (ろ, かな, ¥, 変換, 無変換) cadono in posizioni vuote della matrice. Il comando seriale `JIS` le impara (vedi sotto) e le invia come International1-5, che Windows e Linux con layout giapponese riconoscono. |
 | **Risveglio dalla sospensione** | Un tasto qualsiasi chiede al PC di svegliarsi (USB remote wakeup). Funziona se USB-CON1 resta alimentata in sospensione e il sistema lo permette; il tasto di accensione funziona comunque, perché passa diretto alla scheda madre. |
 | **Niente LED** | Il GPIO25 (LED del Pico) qui è una riga della matrice. |
-| **GPIO** | Seguono il PCB: sono in `x210ai_pins.h`, generato dal modello del progetto. |
+| **GPIO** | Seguono il PCB della Board A: sono in `x210ai_pins.h`, generato dal modello del progetto. |
 
 La tastiera ISO italiana funziona già con le mappe di hektopuss (che usa una tastiera tedesca ISO): `< >`
 è `KEY_NON_US_BS` e `ù` arriva come il tasto a sinistra di Invio. Il layout lo sceglie il sistema
@@ -80,14 +81,15 @@ anche quando aggiorni il firmware copiando un nuovo `.uf2`.
 | TrackPoint reset / clock / data | 25 / 28 / 29 |
 | EC: Fn (gate Q2b) / PgUp (gate Q3) | 26 / 27 |
 
-L'ordine segue il giro dei pin del QFN, così le piste dal connettore non si incrociano.
+L'ordine segue il giro dei pin del QFN. Righe, colonne, Fn, TrackPoint e gate EC passano dal cavo eDP: la
+piedinatura del cavo è in `CABLE_SPEC.md`.
 
 ## Caricare
 
 * **Prima volta**: l'RP2040 con la flash vuota si presenta da solo come disco **RPI-RP2**: copia il `.uf2`.
 * **Aggiornamenti**: Fn+ThinkVantage tenuti 3 s, oppure il comando `BOOT`, oppure doppio reset (cortocircuita
   due volte di fila il ponticello **RST**, JP2). Emergenza: tieni chiuso **BOOT** (JP1) durante il reset.
-* **SWD** (facoltativo): pad `CLK`, `DIO`, `GND` sul lato tastiera.
+* **SWD** (facoltativo): pad `CLK`, `DIO`, `GND`, `3V3` sul lato superiore della Board A, accanto a J4.
 
 ## Compilare
 
