@@ -1,0 +1,44 @@
+Designator,Value,Manufacturer,MPN,LCSC,Footprint,Side,Assembly,Note
+C1,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C2,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C3,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C4,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C5,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C6,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C7,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento DVDD
+C8,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento DVDD
+C9,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C10,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento IOVDD/USB_VDD/ADC
+C11,1uF,Samsung,CL05A105KA5NQNC,C52923,C_0402_1005Metric,Bottom,si,VREG_VIN
+C12,1uF,Samsung,CL05A105KA5NQNC,C52923,C_0402_1005Metric,Bottom,si,VREG_VOUT
+C13,15pF,Samsung,CL05C150JB5NNNC,C1548,C_0402_1005Metric,Bottom,si,carico quarzo
+C14,15pF,Samsung,CL05C150JB5NNNC,C1548,C_0402_1005Metric,Bottom,si,carico quarzo
+C15,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,disaccoppiamento flash
+C16,10uF,Samsung,CL05A106MQ5NUNC,C15525,C_0402_1005Metric,Bottom,si,ingresso regolatore
+C17,10uF,Samsung,CL05A106MQ5NUNC,C15525,C_0402_1005Metric,Bottom,si,uscita regolatore
+C18,100nF,Samsung,CL05B104KO5NNNC,C1525,C_0402_1005Metric,Bottom,si,alimentazione TrackPoint
+JP1,BOOT,,,,SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm,Top,no (solo rame),ponticello BOOTSEL
+JP2,RESET,,,,SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm,Top,no (solo rame),ponticello RESET
+J3,USB,,,,Pads_1x04_P1.60mm_Wire_Edge,Bottom,no (solo rame),fili verso USB-CON1
+J4,20455-040E-76,I-PEX,20455-040E-76,C5160883,IPEX_20455-040E_90deg,Top,si,ricettacolo eDP verso la Board B
+Q1,BSS138DW,Diodes Inc.,BSS138DW-7-F,C154900,SOT-363_SC-70-6_Tight,Bottom,si,traslatori PS/2 clock (a) e data (b)
+Q2,BSS138DW,Diodes Inc.,BSS138DW-7-F,C154900,SOT-363_SC-70-6_Tight,Bottom,si,"traslatore reset TrackPoint (a); meta' b non usata, a massa"
+R1,27R,UNI-ROYAL,0402WGF270JTCE,C25100,R_0402_1005Metric,Bottom,si,serie USB D-
+R2,27R,UNI-ROYAL,0402WGF270JTCE,C25100,R_0402_1005Metric,Bottom,si,serie USB D+
+R3,1k,UNI-ROYAL,0402WGF1001TCE,C11702,R_0402_1005Metric,Bottom,si,serie quarzo
+R4,1k,UNI-ROYAL,0402WGF1001TCE,C11702,R_0402_1005Metric,Bottom,si,BOOTSEL
+R5,10k,UNI-ROYAL,0402WGF1002TCE,C25744,R_0402_1005Metric,Bottom,si,pull-up RUN
+R7,4.7k,UNI-ROYAL,0402WGF4701TCE,C25900,R_0402_1005Metric,Bottom,si,"pull-up PS/2 clock lato 3,3 V"
+R8,4.7k,UNI-ROYAL,0402WGF4701TCE,C25900,R_0402_1005Metric,Bottom,si,pull-up PS/2 clock lato 5 V
+R9,4.7k,UNI-ROYAL,0402WGF4701TCE,C25900,R_0402_1005Metric,Bottom,si,"pull-up PS/2 data lato 3,3 V"
+R10,4.7k,UNI-ROYAL,0402WGF4701TCE,C25900,R_0402_1005Metric,Bottom,si,pull-up PS/2 data lato 5 V
+R11,10k,UNI-ROYAL,0402WGF1002TCE,C25744,R_0402_1005Metric,Bottom,si,"pull-up reset TrackPoint lato 3,3 V"
+R12,10k,UNI-ROYAL,0402WGF1002TCE,C25744,R_0402_1005Metric,Bottom,si,pull-up reset TrackPoint lato 5 V
+TP1,SWCLK,,,,TP_Pad_1.0x1.0mm,Top,no (solo rame),test point SWD
+TP2,SWDIO,,,,TP_Pad_1.0x1.0mm,Top,no (solo rame),test point SWD
+TP3,GND,,,,TP_Pad_1.0x1.0mm,Top,no (solo rame),test point
+TP4,+3V3,,,,TP_Pad_1.0x1.0mm,Top,no (solo rame),test point
+U1,RP2040,Raspberry Pi,RP2040,C2040,QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm_ThermalVias,Bottom,si,microcontrollore
+U2,W25Q16JVUXIQ,Winbond,W25Q16JVUXIQ,C2843335,Winbond_USON-8-1EP_3x2mm_P0.5mm_EP0.2x1.6mm,Bottom,si,flash 2 MB (pad 9 lasciato libero)
+U3,XC6206P332MR,Torex,XC6206P332MR-G,C5446,SOT-23-3,Bottom,si,"LDO 3,3 V"
+Y1,12MHz,Abracon,ABM8-272-T3,C20625731,Crystal_SMD_3225-4Pin_3.2x2.5mm,Bottom,si,quarzo 12 MHz

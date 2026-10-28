@@ -1,0 +1,39 @@
+* PS/2 DATA line through Q2: the firmware writes '1' bits with go_1 (push-pull HIGH), '0' with go_0.
+* Checks: 5 V side level for a pushed '1'; contention if the TrackPoint pulls low while the RP2040 drives high.
+.include bss138.lib
+.param vth=1.3
+VBUS vbus 0 5
+V3 v33 0 3.3
+R10 tp5 vbus 4.7k
+C5 tp5 0 100p
+R9 tp3 v33 4.7k
+C3 tp3 0 15p
+X2 tp5 v33 tp3 BSS138 PARAMS: VTH={vth}
+* RP2040 pin: drives high (go_1) 0..100us, low (go_0) 100..200us, high 200..300us
+Vhi chi 0 PWL(0 1 100u 1 100.01u 0 200u 0 200.01u 1 300u 1)
+Vlo clo 0 PWL(0 0 100u 0 100.01u 1 200u 1 200.01u 0 300u 0)
+Vmeas tp3 pin 0
+Shi pin v33 chi 0 SWD
+Slo pin 0 clo 0 SWD
+.model SWD SW(Ron=80 Roff=1e10 Vt=0.5 Vh=0.05)
+* TrackPoint pulls DATA low during 250..290 us (protocol violation -> contention with the pushed '1')
+Vdev cdev 0 PWL(0 0 250u 0 250.01u 1 290u 1 290.01u 0 300u 0)
+Sdev tp5 0 cdev 0 SWDEV
+.model SWDEV SW(Ron=60 Roff=1e10 Vt=0.5 Vh=0.05)
+.tran 20n 300u
+.control
+run
+meas tran one5 AVG v(tp5) from=50u to=90u
+meas tran zero5 AVG v(tp5) from=150u to=190u
+meas tran cont5 AVG v(tp5) from=260u to=285u
+meas tran cont3 AVG v(tp3) from=260u to=285u
+meas tran i_cont AVG i(Vmeas) from=260u to=285u
+let vth_lo = 0.8
+alterparam vth=0.8
+reset
+run
+meas tran one5_vth08 AVG v(tp5) from=50u to=90u
+meas tran zero5_vth08 AVG v(tp5) from=150u to=190u
+quit
+.endc
+.end

@@ -1,0 +1,59 @@
+* X210Ai rev 2.0 - emulazione Fn+PgUp verso l'EC della scheda madre
+* Q3 (BSS138DW, due NMOS a sorgente comune) collega riga 24 (J2-24) e colonna 5 (J2-5);
+* Q2b porta a massa il Fn (J2-1). Gate pilotati da GPIO27 (PgUp) e GPIO26 (Fn), pull-down 100k (R14, R13).
+* EC: righe pilotate basse a turno (fessura 100 us ogni 1 ms), colonne e Fn con pull-up interno {rpu} a {vec}.
+.include bss138.lib
+.param vec=3.3 rpu=47k
+V3 v33 0 3.3
+VEC vec 0 {vec}
+* --- riga 24: l'EC la porta bassa 100 us ogni 1 ms (push-pull, 50 ohm), altrimenti alta
+VROW rowdrv 0 PULSE({vec} 0 0.3m 1u 1u 100u 1m)
+RROW rowdrv row24 50
+CROW row24 0 30p
+* --- colonna 5: ingresso EC con pull-up
+RCOL col5 vec {rpu}
+CCOL col5 0 30p
+* --- Fn: ingresso EC con pull-up
+RFN fn vec {rpu}
+CFN fn 0 30p
+* --- GPIO RP2040 (80 ohm), gate con pull-down 100k
+VG27 g27 0 PWL(0 0 2m 0 2.001m 3.3 6m 3.3 6.001m 0)
+RG27 g27 gpg 80
+R14 gpg 0 100k
+VG26 g26 0 PWL(0 0 1.6m 0 1.601m 3.3 6.4m 3.3 6.401m 0)
+RG26 g26 gfn 80
+R13 gfn 0 100k
+* --- Q3: FET1 D=riga24, FET2 D=colonna5, sorgente comune
+XQ3A row24 gpg src BSS138
+XQ3B col5 gpg src BSS138
+* --- Q2b: D=Fn, S=GND
+XQ2B fn gfn 0 BSS138
+.tran 1u 8m 0 1u
+.control
+run
+meas tran col_off_rowlow AVG v(col5) from=1.32m to=1.38m
+meas tran col_on_rowlow AVG v(col5) from=2.32m to=2.38m
+meas tran col_on_rowhigh AVG v(col5) from=2.6m to=3.2m
+meas tran row_on_rowlow AVG v(row24) from=2.32m to=2.38m
+meas tran col_off_after AVG v(col5) from=7.32m to=7.38m
+meas tran fn_off AVG v(fn) from=0.5m to=1.5m
+meas tran fn_on AVG v(fn) from=2m to=6m
+meas tran t_col_fall TRIG v(rowdrv) VAL=1.0 FALL=3 TARG v(col5) VAL=0.8 FALL=1
+meas tran t_col_rise TRIG v(rowdrv) VAL=1.0 RISE=3 TARG v(col5) VAL=2.0 RISE=1
+meas tran i_row_on AVG i(VROW) from=2.32m to=2.38m
+wrdata ec_switch.csv v(row24) v(col5) v(fn) v(gpg) v(src)
+alterparam rpu=10k
+reset
+run
+meas tran col_on_rowlow_10k AVG v(col5) from=2.32m to=2.38m
+meas tran fn_on_10k AVG v(fn) from=2m to=6m
+alterparam vec=5
+alterparam rpu=47k
+reset
+run
+meas tran col_off_rowlow_5v AVG v(col5) from=1.32m to=1.38m
+meas tran col_on_rowlow_5v AVG v(col5) from=2.32m to=2.38m
+meas tran col_off_after_5v AVG v(col5) from=7.32m to=7.38m
+quit
+.endc
+.end

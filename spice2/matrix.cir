@@ -1,0 +1,28 @@
+* Keyboard matrix column recovery: key (row x, col y) pressed, row x released, next row read 50 us later.
+* Column: RP2040 internal pull-up (worst case 80k), line capacitance 100 pF (FPC + PCB + pin, worst case),
+* membrane switch 2 kohm. Row x driven low 0..60 us (50 us settle + reading), then hi-Z (go_z).
+.param rpu=80k cl=100p rsw=2k
+V3 v33 0 3.3
+Rpu col v33 {rpu}
+Cl col 0 {cl}
+Rsw col rowx {rsw}
+Crow rowx 0 30p
+Vdrv cdrv 0 PWL(0 1 60u 1 60.01u 0 300u 0)
+Sdrv rowx 0 cdrv 0 SWR
+.model SWR SW(Ron=80 Roff=1e10 Vt=0.5 Vh=0.05)
+.tran 50n 300u
+.control
+run
+meas tran v_pressed AVG v(col) from=50u to=60u
+meas tran v_next_read FIND v(col) AT=110u
+meas tran t_vih TRIG v(rowx) VAL=1 RISE=1 TARG v(col) VAL=2.0 RISE=1
+wrdata matrix.csv v(col) v(rowx)
+alterparam rpu=50k
+alterparam cl=30p
+reset
+run
+meas tran typ_next_read FIND v(col) AT=110u
+meas tran typ_t_vih TRIG v(rowx) VAL=1 RISE=1 TARG v(col) VAL=2.0 RISE=1
+quit
+.endc
+.end

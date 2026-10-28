@@ -1,0 +1,52 @@
+== ps2.cir
+dev_low5            =  1.033083e-01 from=  4.000000e-05 to=  5.000814e-05
+dev_low3            =  1.042048e-01 from=  4.000000e-05 to=  5.000814e-05
+fall3               =  2.198013e-08 targ=  2.003069e-05 trig=  2.000871e-05
+rise3               =  4.147092e-07 targ=  5.343915e-05 trig=  5.302444e-05
+rise5               =  1.106721e-06 targ=  5.414648e-05 trig=  5.303975e-05
+host_low5           =  1.379910e-01 from=  2.500000e-04 to=  2.900028e-04
+host_low3           =  1.366026e-01 from=  2.500000e-04 to=  2.900028e-04
+hrise5              =  1.107562e-06 targ=  3.011440e-04 trig=  3.000364e-04
+idle5               =  4.999976e+00 from=  1.500000e-04 to=  1.900078e-04
+idle3               =  3.299985e+00 from=  1.500000e-04 to=  1.900078e-04
+w_dev_low3          =  1.043092e-01 from=  4.000000e-05 to=  5.001711e-05
+w_host_low5         =  1.381553e-01 from=  2.500000e-04 to=  2.900066e-04
+w_rise3             =  4.098917e-07 targ=  5.343430e-05 trig=  5.302441e-05
+== ps2_data.cir
+one5                =  4.999998e+00 from=  5.000000e-05 to=  9.000560e-05
+zero5               =  1.379911e-01 from=  1.500000e-04 to=  1.900028e-04
+cont5               =  1.408419e+00 from=  2.600000e-04 to=  2.850084e-04
+cont3               =  1.513647e+00 from=  2.600000e-04 to=  2.850084e-04
+i_cont              =  -2.232942e-02 from=  2.600000e-04 to=  2.850084e-04
+one5_vth08          =  4.999998e+00 from=  5.000000e-05 to=  9.000560e-05
+zero5_vth08         =  1.377021e-01 from=  1.500000e-04 to=  1.900098e-04
+== tp_reset.cir
+rst_boot            =  4.545455e+00 from=  1.000000e-01 to=  1.000200e+00
+gp_boot             =  2.749998e+00 from=  1.000000e-01 to=  1.000200e+00
+rst_pulse           =  4.545455e+00 from=  1.052000e+00 to=  1.058184e+00
+rst_run             =  6.583164e-02 from=  1.080000e+00 to=  1.200000e+00
+rst_hi_at           =  7.701306e-04 targ=  7.701306e-04 trig=  0.000000e+00
+rst_boot_80k        =  4.545455e+00 from=  1.000000e-01 to=  1.000200e+00
+gp_boot_80k         =  2.933331e+00 from=  1.000000e-01 to=  1.000200e+00
+== matrix.cir
+v_pressed           =  8.362573e-02 from=  5.000000e-05 to=  6.000100e-05
+v_next_read         =  3.273408e+00
+t_vih               =  5.881456e-06 targ=  6.948531e-05 trig=  6.360385e-05
+typ_next_read       =  3.299983e+00
+typ_t_vih           =  1.668248e-06 targ=  6.273445e-05 trig=  6.106621e-05
+== ec_switch.cir
+col_off_rowlow      =  3.299933e+00 from=  1.320000e-03 to=  1.380277e-03
+col_on_rowlow       =  3.682605e-03 from=  2.320000e-03 to=  2.380393e-03
+col_on_rowhigh      =  3.300000e+00 from=  2.600000e-03 to=  3.200572e-03
+row_on_rowlow       =  3.506721e-03 from=  2.320000e-03 to=  2.380393e-03
+col_off_after       =  3.300000e+00 from=  7.320000e-03 to=  7.380173e-03
+fn_off              =  3.300000e+00 from=  5.000000e-04 to=  1.500010e-03
+fn_on               =  8.788143e-05 from=  2.000000e-03 to=  6.000007e-03
+t_col_fall          =  6.743101e-08 targ=  2.300764e-03 trig=  2.300697e-03
+t_col_rise          =  3.240268e-07 targ=  2.401627e-03 trig=  2.401303e-03
+i_row_on            =  7.013441e-05 from=  2.320000e-03 to=  2.380393e-03
+col_on_rowlow_10k   =  1.724254e-02 from=  2.320000e-03 to=  2.380505e-03
+fn_on_10k           =  4.130341e-04 from=  2.000000e-03 to=  6.000009e-03
+col_off_rowlow_5v   =  4.999933e+00 from=  1.320000e-03 to=  1.380382e-03
+col_on_rowlow_5v    =  5.579951e-03 from=  2.320000e-03 to=  2.380191e-03
+col_off_after_5v    =  4.999999e+00 from=  7.320000e-03 to=  7.380431e-03

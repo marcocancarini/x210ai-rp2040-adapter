@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+
+# KiCad: backup, cache e lock
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.lck
+\#auto_saved_files#
+_autosave-*
+
+# Node (emulatore)
+node_modules/
+
+# editor / sistema
+*~
+.DS_Store

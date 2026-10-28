@@ -1,0 +1,44 @@
+* PS/2 CLOCK line of the TrackPoint through Q1 (BSS138) - both directions
+* 5 V side: R8 4.7k to VBUS, 100 pF (FPC + TrackPoint input), TrackPoint open-drain driver
+* 3.3 V side: R7 4.7k to +3V3, 15 pF (trace + RP2040 pin), RP2040 pin = open drain (go_0 / go_z)
+.include bss138.lib
+.param vth=1.3
+VBUS vbus 0 5
+V3 v33 0 3.3
+R8 tp5 vbus 4.7k
+C5 tp5 0 100p
+R7 tp3 v33 4.7k
+C3 tp3 0 15p
+X1 tp5 v33 tp3 BSS138 PARAMS: VTH={vth}
+* TrackPoint drives the clock: 15 kHz, low 33 us / high 33 us, two pulses (device -> host)
+Vdev cdev 0 PWL(0 0  20u 0  20.01u 1  53u 1  53.01u 0  86u 0  86.01u 1  119u 1  119.01u 0  400u 0)
+Sdev tp5 0 cdev 0 SWDEV
+.model SWDEV SW(Ron=60 Roff=1e9 Vt=0.5 Vh=0.05)
+* RP2040 inhibits / requests the bus: pulls its side low from 200 us to 300 us (host -> device)
+Vhost chost 0 PWL(0 0 200u 0 200.01u 1 300u 1 300.01u 0)
+Shost tp3 0 chost 0 SWHOST
+.model SWHOST SW(Ron=80 Roff=1e9 Vt=0.5 Vh=0.05)
+.tran 20n 400u
+.control
+run
+meas tran dev_low5 AVG v(tp5) from=40u to=50u
+meas tran dev_low3 AVG v(tp3) from=40u to=50u
+meas tran fall3 TRIG v(tp3) VAL=2.97 FALL=1 TARG v(tp3) VAL=0.33 FALL=1
+meas tran rise3 TRIG v(tp3) VAL=0.33 RISE=1 TARG v(tp3) VAL=2.97 RISE=1
+meas tran rise5 TRIG v(tp5) VAL=0.5 RISE=1 TARG v(tp5) VAL=4.5 RISE=1
+meas tran host_low5 AVG v(tp5) from=250u to=290u
+meas tran host_low3 AVG v(tp3) from=250u to=290u
+meas tran hrise5 TRIG v(tp5) VAL=0.5 RISE=3 TARG v(tp5) VAL=4.5 RISE=3
+meas tran idle5 AVG v(tp5) from=150u to=190u
+meas tran idle3 AVG v(tp3) from=150u to=190u
+wrdata ps2_vth13.csv v(tp5) v(tp3)
+alterparam vth=1.5
+reset
+run
+meas tran w_dev_low3 AVG v(tp3) from=40u to=50u
+meas tran w_host_low5 AVG v(tp5) from=250u to=290u
+meas tran w_rise3 TRIG v(tp3) VAL=0.33 RISE=1 TARG v(tp3) VAL=2.97 RISE=1
+wrdata ps2_vth15.csv v(tp5) v(tp3)
+quit
+.endc
+.end

@@ -1,0 +1,51 @@
+** Drc report for routed_p.kicad_pcb **
+** Created on 2026-10-21 08:53:24 **
+
+** Found 4 DRC violations **
+[starved_thermal]: Thermal relief connection to zone incomplete (zone min spoke count 2; actual 1)
+    Local override; Severity: error
+    @(71.0000 mm, 95.0000 mm): Zone [GND] on B.Cu
+    @(87.9875 mm, 99.3000 mm): Pad 19 [GND] of U1 on B.Cu
+[via_dangling]: Via is not connected or connected on only one layer
+    Local override; Severity: warning
+    @(83.5500 mm, 102.8500 mm): Via [EC_FN_G] on F.Cu - B.Cu
+[via_dangling]: Via is not connected or connected on only one layer
+    Local override; Severity: warning
+    @(83.1500 mm, 102.3500 mm): Via [EC_PGUP_G] on F.Cu - B.Cu
+[via_dangling]: Via is not connected or connected on only one layer
+    Local override; Severity: warning
+    @(83.9500 mm, 102.3500 mm): Via [TP_RST_3V3] on F.Cu - B.Cu
+
+** Found 7 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(95.8900 mm, 104.3700 mm): Track [EC_FN_G] on B.Cu, length 0.4900 mm
+    @(83.5500 mm, 103.7375 mm): Track [EC_FN_G] on B.Cu, length 0.8875 mm
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(100.4000 mm, 104.8800 mm): Pad 1 [EC_PGUP_G] of R14 on B.Cu
+    @(97.4500 mm, 104.3700 mm): Track [EC_PGUP_G] on B.Cu, length 1.9000 mm
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(97.4500 mm, 104.3700 mm): Pad 2 [EC_PGUP_G] of Q3 on B.Cu
+    @(83.1500 mm, 103.7375 mm): Track [EC_PGUP_G] on B.Cu, length 1.3875 mm
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(91.4900 mm, 104.9500 mm): Pad 1 [TP_RST_3V3] of R11 on B.Cu
+    @(93.5000 mm, 105.0200 mm): Pad 1 [TP_RST_3V3] of Q2 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(83.9500 mm, 103.7375 mm): Track [TP_RST_3V3] on B.Cu, length 1.3875 mm
+    @(91.4900 mm, 104.9500 mm): Pad 1 [TP_RST_3V3] of R11 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(102.0000 mm, 104.8800 mm): Pad 1 [TP_RST_5V] of R12 on B.Cu
+    @(104.8000 mm, 102.3700 mm): Pad 40 [TP_RST_5V] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; Severity: error
+    @(95.4000 mm, 105.0200 mm): Pad 6 [TP_RST_5V] of Q2 on B.Cu
+    @(102.0000 mm, 104.8800 mm): Pad 1 [TP_RST_5V] of R12 on B.Cu
+
+** Found 0 Footprint errors **
+
+** End of Report **

@@ -1,0 +1,2261 @@
+{
+ "tests": [
+  {
+   "name": "avvio: USB enumerata con HID, seriale attiva",
+   "ok": true,
+   "detail": {
+    "usbConnected": true,
+    "hidIn": 4,
+    "descrittore": 100,
+    "serial": "BOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL"
+   }
+  },
+  {
+   "name": "avvio: nessun impulso verso EC",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "name": "avvio: nessun riavvio",
+   "ok": true,
+   "detail": null
+  },
+  {
+   "name": "94 tasti: posizione in matrice e report HID corretti",
+   "ok": true,
+   "detail": {
+    "ok": 94,
+    "totale": 94,
+    "falliti": []
+   }
+  },
+  {
+   "name": "Fn+PgUp: un comando ThinkLight verso EC (Fn 40 ms, PgUp 100 ms, Fn 40 ms)",
+   "ok": true,
+   "detail": {
+    "seq": [
+     {
+      "fn_lead_ms": 44.6,
+      "pgup_ms": 100.4,
+      "fn_tail_ms": 44.6,
+      "t_ms": 12997.547
+     }
+    ],
+    "pgupSent": false
+   }
+  },
+  {
+   "name": "PgUp da solo: report HID PageUp, nessun evento EC",
+   "ok": true,
+   "detail": {
+    "pgupSent": true,
+    "ec": []
+   }
+  },
+  {
+   "name": "Fn+F5: report radio 1 poi 0 (modalita' aereo)",
+   "ok": true,
+   "detail": {
+    "radio": [
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "name": "Fn+Ctrl 2 s: scambio attivo, salvato, ThinkLight lampeggia (4 comandi EC)",
+   "ok": true,
+   "detail": {
+    "swapOn": 1,
+    "comandi_ec": 4
+   }
+  },
+  {
+   "name": "scambio attivo: il Fn fisico manda Ctrl sinistro",
+   "ok": true,
+   "detail": {
+    "reports": [
+     [
+      18328.247,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  {
+   "name": "scambio attivo: Ctrl fisico + PgUp = ThinkLight (il Ctrl fa da Fn)",
+   "ok": true,
+   "detail": {
+    "seq": [
+     {
+      "fn_lead_ms": 44.6,
+      "pgup_ms": 100.4,
+      "fn_tail_ms": 44.6,
+      "t_ms": 18474.232
+     }
+    ],
+    "pgupSent": false,
+    "ctrlSent": false
+   }
+  },
+  {
+   "name": "comando seriale SWAP: scambio spento",
+   "ok": true,
+   "detail": {
+    "swap": 0
+   }
+  },
+  {
+   "name": "JIS: posizione vuota appresa come International1 e inviata come 0x87",
+   "ok": true,
+   "detail": {
+    "posizione": [
+     0,
+     0
+    ],
+    "appresa": [
+     0,
+     0
+    ],
+    "intl": true
+   }
+  },
+  {
+   "name": "Fn+ThinkVantage 1 s: nessun riavvio",
+   "ok": true,
+   "detail": {
+    "PC": "0x100077f4"
+   }
+  },
+  {
+   "name": "Fn+ThinkVantage tenuto: riavvio nel bootloader UF2 dopo circa 3 s",
+   "ok": true,
+   "detail": {
+    "dopo_ms": 3031,
+    "PC": "0x1000a3b8"
+   }
+  }
+ ],
+ "keys": [
+  {
+   "name": "Ctrl-Left",
+   "pins": [
+    30,
+    5
+   ],
+   "gpio": [
+    10,
+    6
+   ],
+   "matrix": [
+    9,
+    0
+   ],
+   "code": "MODIFIERKEY_LEFT_CTRL",
+   "hid": "modificatore 0x1",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ctrl-Right",
+   "pins": [
+    30,
+    15
+   ],
+   "gpio": [
+    10,
+    1
+   ],
+   "matrix": [
+    9,
+    4
+   ],
+   "code": "MODIFIERKEY_RIGHT_CTRL",
+   "hid": "modificatore 0x10",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Shift-Left",
+   "pins": [
+    26,
+    7
+   ],
+   "gpio": [
+    12,
+    5
+   ],
+   "matrix": [
+    8,
+    6
+   ],
+   "code": "MODIFIERKEY_LEFT_SHIFT",
+   "hid": "modificatore 0x2",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Shift-Right",
+   "pins": [
+    26,
+    15
+   ],
+   "gpio": [
+    12,
+    1
+   ],
+   "matrix": [
+    8,
+    4
+   ],
+   "code": "MODIFIERKEY_RIGHT_SHIFT",
+   "hid": "modificatore 0x20",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Esc",
+   "pins": [
+    22,
+    3
+   ],
+   "gpio": [
+    14,
+    7
+   ],
+   "matrix": [
+    7,
+    7
+   ],
+   "code": "KEY_ESC",
+   "hid": "tasto 0x29",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "^",
+   "pins": [
+    22,
+    5
+   ],
+   "gpio": [
+    14,
+    6
+   ],
+   "matrix": [
+    7,
+    0
+   ],
+   "code": "KEY_TILDE",
+   "hid": "tasto 0x35",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Tab",
+   "pins": [
+    22,
+    7
+   ],
+   "gpio": [
+    14,
+    5
+   ],
+   "matrix": [
+    7,
+    6
+   ],
+   "code": "KEY_TAB",
+   "hid": "tasto 0x2b",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "1",
+   "pins": [
+    22,
+    13
+   ],
+   "gpio": [
+    14,
+    2
+   ],
+   "matrix": [
+    7,
+    2
+   ],
+   "code": "KEY_1",
+   "hid": "tasto 0x1e",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "q",
+   "pins": [
+    22,
+    9
+   ],
+   "gpio": [
+    14,
+    4
+   ],
+   "matrix": [
+    7,
+    1
+   ],
+   "code": "KEY_Q",
+   "hid": "tasto 0x14",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "a",
+   "pins": [
+    22,
+    11
+   ],
+   "gpio": [
+    14,
+    3
+   ],
+   "matrix": [
+    7,
+    5
+   ],
+   "code": "KEY_A",
+   "hid": "tasto 0x4",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:y  /  Intl:z",
+   "pins": [
+    22,
+    15
+   ],
+   "gpio": [
+    14,
+    1
+   ],
+   "matrix": [
+    7,
+    4
+   ],
+   "code": "KEY_Z",
+   "hid": "tasto 0x1d",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger: <> | Intl:\\|",
+   "pins": [
+    18,
+    3
+   ],
+   "gpio": [
+    16,
+    7
+   ],
+   "matrix": [
+    10,
+    7
+   ],
+   "code": "KEY_NON_US_BS",
+   "hid": "tasto 0x64",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F1",
+   "pins": [
+    18,
+    5
+   ],
+   "gpio": [
+    16,
+    6
+   ],
+   "matrix": [
+    10,
+    0
+   ],
+   "code": "KEY_F1",
+   "hid": "tasto 0x3a",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Caps-Locks",
+   "pins": [
+    18,
+    7
+   ],
+   "gpio": [
+    16,
+    5
+   ],
+   "matrix": [
+    10,
+    6
+   ],
+   "code": "KEY_CAPS_LOCK",
+   "hid": "tasto 0x39",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "2",
+   "pins": [
+    18,
+    13
+   ],
+   "gpio": [
+    16,
+    2
+   ],
+   "matrix": [
+    10,
+    2
+   ],
+   "code": "KEY_2",
+   "hid": "tasto 0x1f",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "w",
+   "pins": [
+    18,
+    9
+   ],
+   "gpio": [
+    16,
+    4
+   ],
+   "matrix": [
+    10,
+    1
+   ],
+   "code": "KEY_W",
+   "hid": "tasto 0x1a",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "s",
+   "pins": [
+    18,
+    11
+   ],
+   "gpio": [
+    16,
+    3
+   ],
+   "matrix": [
+    10,
+    5
+   ],
+   "code": "KEY_S",
+   "hid": "tasto 0x16",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "x",
+   "pins": [
+    18,
+    15
+   ],
+   "gpio": [
+    16,
+    1
+   ],
+   "matrix": [
+    10,
+    4
+   ],
+   "code": "KEY_X",
+   "hid": "tasto 0x1b",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F4",
+   "pins": [
+    14,
+    3
+   ],
+   "gpio": [
+    18,
+    7
+   ],
+   "matrix": [
+    11,
+    7
+   ],
+   "code": "KEY_F4",
+   "hid": "tasto 0x3d",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F2",
+   "pins": [
+    14,
+    5
+   ],
+   "gpio": [
+    18,
+    6
+   ],
+   "matrix": [
+    11,
+    0
+   ],
+   "code": "KEY_F2",
+   "hid": "tasto 0x3b",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F3",
+   "pins": [
+    14,
+    7
+   ],
+   "gpio": [
+    18,
+    5
+   ],
+   "matrix": [
+    11,
+    6
+   ],
+   "code": "KEY_F3",
+   "hid": "tasto 0x3c",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "3",
+   "pins": [
+    14,
+    13
+   ],
+   "gpio": [
+    18,
+    2
+   ],
+   "matrix": [
+    11,
+    2
+   ],
+   "code": "KEY_3",
+   "hid": "tasto 0x20",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "e",
+   "pins": [
+    14,
+    9
+   ],
+   "gpio": [
+    18,
+    4
+   ],
+   "matrix": [
+    11,
+    1
+   ],
+   "code": "KEY_E",
+   "hid": "tasto 0x8",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "d",
+   "pins": [
+    14,
+    11
+   ],
+   "gpio": [
+    18,
+    3
+   ],
+   "matrix": [
+    11,
+    5
+   ],
+   "code": "KEY_D",
+   "hid": "tasto 0x7",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "c",
+   "pins": [
+    14,
+    15
+   ],
+   "gpio": [
+    18,
+    1
+   ],
+   "matrix": [
+    11,
+    4
+   ],
+   "code": "KEY_C",
+   "hid": "tasto 0x6",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "g",
+   "pins": [
+    10,
+    3
+   ],
+   "gpio": [
+    20,
+    7
+   ],
+   "matrix": [
+    12,
+    7
+   ],
+   "code": "KEY_G",
+   "hid": "tasto 0xa",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "5",
+   "pins": [
+    10,
+    5
+   ],
+   "gpio": [
+    20,
+    6
+   ],
+   "matrix": [
+    12,
+    0
+   ],
+   "code": "KEY_5",
+   "hid": "tasto 0x22",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "t",
+   "pins": [
+    10,
+    7
+   ],
+   "gpio": [
+    20,
+    5
+   ],
+   "matrix": [
+    12,
+    6
+   ],
+   "code": "KEY_T",
+   "hid": "tasto 0x17",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "4",
+   "pins": [
+    10,
+    13
+   ],
+   "gpio": [
+    20,
+    2
+   ],
+   "matrix": [
+    12,
+    2
+   ],
+   "code": "KEY_4",
+   "hid": "tasto 0x21",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "r",
+   "pins": [
+    10,
+    9
+   ],
+   "gpio": [
+    20,
+    4
+   ],
+   "matrix": [
+    12,
+    1
+   ],
+   "code": "KEY_R",
+   "hid": "tasto 0x15",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "f",
+   "pins": [
+    10,
+    11
+   ],
+   "gpio": [
+    20,
+    3
+   ],
+   "matrix": [
+    12,
+    5
+   ],
+   "code": "KEY_F",
+   "hid": "tasto 0x9",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "v",
+   "pins": [
+    10,
+    15
+   ],
+   "gpio": [
+    20,
+    1
+   ],
+   "matrix": [
+    12,
+    4
+   ],
+   "code": "KEY_V",
+   "hid": "tasto 0x19",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "b",
+   "pins": [
+    10,
+    17
+   ],
+   "gpio": [
+    20,
+    0
+   ],
+   "matrix": [
+    12,
+    3
+   ],
+   "code": "KEY_B",
+   "hid": "tasto 0x5",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F5",
+   "pins": [
+    6,
+    3
+   ],
+   "gpio": [
+    22,
+    7
+   ],
+   "matrix": [
+    13,
+    7
+   ],
+   "code": "KEY_F5",
+   "hid": "tasto 0x3e",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F9",
+   "pins": [
+    6,
+    5
+   ],
+   "gpio": [
+    22,
+    6
+   ],
+   "matrix": [
+    13,
+    0
+   ],
+   "code": "KEY_F9",
+   "hid": "tasto 0x42",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Back-Space",
+   "pins": [
+    6,
+    7
+   ],
+   "gpio": [
+    22,
+    5
+   ],
+   "matrix": [
+    13,
+    6
+   ],
+   "code": "KEY_BACKSPACE",
+   "hid": "tasto 0x2a",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F10",
+   "pins": [
+    6,
+    13
+   ],
+   "gpio": [
+    22,
+    2
+   ],
+   "matrix": [
+    13,
+    2
+   ],
+   "code": "KEY_F10",
+   "hid": "tasto 0x43",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "\\",
+   "pins": [
+    6,
+    11
+   ],
+   "gpio": [
+    22,
+    3
+   ],
+   "matrix": [
+    13,
+    5
+   ],
+   "code": "KEY_BACKSLASH",
+   "hid": "tasto 0x31",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Enter",
+   "pins": [
+    6,
+    15
+   ],
+   "gpio": [
+    22,
+    1
+   ],
+   "matrix": [
+    13,
+    4
+   ],
+   "code": "KEY_ENTER",
+   "hid": "tasto 0x28",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Space",
+   "pins": [
+    6,
+    17
+   ],
+   "gpio": [
+    22,
+    0
+   ],
+   "matrix": [
+    13,
+    3
+   ],
+   "code": "KEY_SPACE",
+   "hid": "tasto 0x2c",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "h",
+   "pins": [
+    2,
+    3
+   ],
+   "gpio": [
+    24,
+    7
+   ],
+   "matrix": [
+    14,
+    7
+   ],
+   "code": "KEY_H",
+   "hid": "tasto 0xb",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "6",
+   "pins": [
+    2,
+    5
+   ],
+   "gpio": [
+    24,
+    6
+   ],
+   "matrix": [
+    14,
+    0
+   ],
+   "code": "KEY_6",
+   "hid": "tasto 0x23",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:z   Intl:y",
+   "pins": [
+    2,
+    7
+   ],
+   "gpio": [
+    24,
+    5
+   ],
+   "matrix": [
+    14,
+    6
+   ],
+   "code": "KEY_Y",
+   "hid": "tasto 0x1c",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "7",
+   "pins": [
+    2,
+    13
+   ],
+   "gpio": [
+    24,
+    2
+   ],
+   "matrix": [
+    14,
+    2
+   ],
+   "code": "KEY_7",
+   "hid": "tasto 0x24",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "u",
+   "pins": [
+    2,
+    9
+   ],
+   "gpio": [
+    24,
+    4
+   ],
+   "matrix": [
+    14,
+    1
+   ],
+   "code": "KEY_U",
+   "hid": "tasto 0x18",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "j",
+   "pins": [
+    2,
+    11
+   ],
+   "gpio": [
+    24,
+    3
+   ],
+   "matrix": [
+    14,
+    5
+   ],
+   "code": "KEY_J",
+   "hid": "tasto 0xd",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "m",
+   "pins": [
+    2,
+    15
+   ],
+   "gpio": [
+    24,
+    1
+   ],
+   "matrix": [
+    14,
+    4
+   ],
+   "code": "KEY_M",
+   "hid": "tasto 0x10",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "n",
+   "pins": [
+    2,
+    17
+   ],
+   "gpio": [
+    24,
+    0
+   ],
+   "matrix": [
+    14,
+    3
+   ],
+   "code": "KEY_N",
+   "hid": "tasto 0x11",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F6",
+   "pins": [
+    4,
+    3
+   ],
+   "gpio": [
+    23,
+    7
+   ],
+   "matrix": [
+    6,
+    7
+   ],
+   "code": "KEY_F6",
+   "hid": "tasto 0x3f",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "´",
+   "pins": [
+    4,
+    5
+   ],
+   "gpio": [
+    23,
+    6
+   ],
+   "matrix": [
+    6,
+    0
+   ],
+   "code": "KEY_EQUAL",
+   "hid": "tasto 0x2e",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "}]",
+   "pins": [
+    4,
+    7
+   ],
+   "gpio": [
+    23,
+    5
+   ],
+   "matrix": [
+    6,
+    6
+   ],
+   "code": "KEY_RIGHT_BRACE",
+   "hid": "tasto 0x30",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "8",
+   "pins": [
+    4,
+    13
+   ],
+   "gpio": [
+    23,
+    2
+   ],
+   "matrix": [
+    6,
+    2
+   ],
+   "code": "KEY_8",
+   "hid": "tasto 0x25",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "i",
+   "pins": [
+    4,
+    9
+   ],
+   "gpio": [
+    23,
+    4
+   ],
+   "matrix": [
+    6,
+    1
+   ],
+   "code": "KEY_I",
+   "hid": "tasto 0xc",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "k",
+   "pins": [
+    4,
+    11
+   ],
+   "gpio": [
+    23,
+    3
+   ],
+   "matrix": [
+    6,
+    5
+   ],
+   "code": "KEY_K",
+   "hid": "tasto 0xe",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": ",",
+   "pins": [
+    4,
+    15
+   ],
+   "gpio": [
+    23,
+    1
+   ],
+   "matrix": [
+    6,
+    4
+   ],
+   "code": "KEY_COMMA",
+   "hid": "tasto 0x36",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F8",
+   "pins": [
+    8,
+    5
+   ],
+   "gpio": [
+    21,
+    6
+   ],
+   "matrix": [
+    5,
+    0
+   ],
+   "code": "KEY_F8",
+   "hid": "tasto 0x41",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F7",
+   "pins": [
+    8,
+    7
+   ],
+   "gpio": [
+    21,
+    5
+   ],
+   "matrix": [
+    5,
+    6
+   ],
+   "code": "KEY_F7",
+   "hid": "tasto 0x40",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "9",
+   "pins": [
+    8,
+    13
+   ],
+   "gpio": [
+    21,
+    2
+   ],
+   "matrix": [
+    5,
+    2
+   ],
+   "code": "KEY_9",
+   "hid": "tasto 0x26",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "o",
+   "pins": [
+    8,
+    9
+   ],
+   "gpio": [
+    21,
+    4
+   ],
+   "matrix": [
+    5,
+    1
+   ],
+   "code": "KEY_O",
+   "hid": "tasto 0x12",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "l",
+   "pins": [
+    8,
+    11
+   ],
+   "gpio": [
+    21,
+    3
+   ],
+   "matrix": [
+    5,
+    5
+   ],
+   "code": "KEY_L",
+   "hid": "tasto 0xf",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": ".",
+   "pins": [
+    8,
+    15
+   ],
+   "gpio": [
+    21,
+    1
+   ],
+   "matrix": [
+    5,
+    4
+   ],
+   "code": "KEY_PERIOD",
+   "hid": "tasto 0x37",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:ä   Intl:\"",
+   "pins": [
+    12,
+    3
+   ],
+   "gpio": [
+    19,
+    7
+   ],
+   "matrix": [
+    4,
+    7
+   ],
+   "code": "KEY_QUOTE",
+   "hid": "tasto 0x34",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:ß   Intl:-",
+   "pins": [
+    12,
+    5
+   ],
+   "gpio": [
+    19,
+    6
+   ],
+   "matrix": [
+    4,
+    0
+   ],
+   "code": "KEY_MINUS",
+   "hid": "tasto 0x2d",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:ü   Intl:[{",
+   "pins": [
+    12,
+    7
+   ],
+   "gpio": [
+    19,
+    5
+   ],
+   "matrix": [
+    4,
+    6
+   ],
+   "code": "KEY_LEFT_BRACE",
+   "hid": "tasto 0x2f",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "0",
+   "pins": [
+    12,
+    13
+   ],
+   "gpio": [
+    19,
+    2
+   ],
+   "matrix": [
+    4,
+    2
+   ],
+   "code": "KEY_0",
+   "hid": "tasto 0x27",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "p",
+   "pins": [
+    12,
+    9
+   ],
+   "gpio": [
+    19,
+    4
+   ],
+   "matrix": [
+    4,
+    1
+   ],
+   "code": "KEY_P",
+   "hid": "tasto 0x13",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:ö   Intl:;",
+   "pins": [
+    12,
+    11
+   ],
+   "gpio": [
+    19,
+    3
+   ],
+   "matrix": [
+    4,
+    5
+   ],
+   "code": "KEY_SEMICOLON",
+   "hid": "tasto 0x33",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:#'   Intl:#~\\",
+   "pins": [
+    12,
+    15
+   ],
+   "gpio": [
+    19,
+    1
+   ],
+   "matrix": [
+    4,
+    4
+   ],
+   "code": "KEY_BACKSLASH",
+   "hid": "tasto 0x31",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Ger:-   Intl:/",
+   "pins": [
+    12,
+    17
+   ],
+   "gpio": [
+    19,
+    0
+   ],
+   "matrix": [
+    4,
+    3
+   ],
+   "code": "KEY_SLASH",
+   "hid": "tasto 0x38",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "ThinkVantage",
+   "pins": [
+    16,
+    3
+   ],
+   "gpio": [
+    17,
+    7
+   ],
+   "matrix": [
+    3,
+    7
+   ],
+   "code": "KEY_THINK_VANTAGE",
+   "hid": "consumer 0x192",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Delete",
+   "pins": [
+    16,
+    5
+   ],
+   "gpio": [
+    17,
+    6
+   ],
+   "matrix": [
+    3,
+    0
+   ],
+   "code": "KEY_DELETE",
+   "hid": "tasto 0x4c",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Vol-Down",
+   "pins": [
+    16,
+    7
+   ],
+   "gpio": [
+    17,
+    5
+   ],
+   "matrix": [
+    3,
+    6
+   ],
+   "code": "KEY_MEDIA_VOLUME_DEC",
+   "hid": "consumer 0xea",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F11",
+   "pins": [
+    16,
+    13
+   ],
+   "gpio": [
+    17,
+    2
+   ],
+   "matrix": [
+    3,
+    2
+   ],
+   "code": "KEY_F11",
+   "hid": "tasto 0x44",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Vol-Up",
+   "pins": [
+    16,
+    9
+   ],
+   "gpio": [
+    17,
+    4
+   ],
+   "matrix": [
+    3,
+    1
+   ],
+   "code": "KEY_MEDIA_VOLUME_INC",
+   "hid": "consumer 0xe9",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Mute",
+   "pins": [
+    16,
+    11
+   ],
+   "gpio": [
+    17,
+    3
+   ],
+   "matrix": [
+    3,
+    5
+   ],
+   "code": "KEY_MEDIA_MUTE",
+   "hid": "consumer 0xe2",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Cursor Down",
+   "pins": [
+    16,
+    17
+   ],
+   "gpio": [
+    17,
+    0
+   ],
+   "matrix": [
+    3,
+    3
+   ],
+   "code": "KEY_DOWN",
+   "hid": "tasto 0x51",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Insert",
+   "pins": [
+    20,
+    5
+   ],
+   "gpio": [
+    15,
+    6
+   ],
+   "matrix": [
+    2,
+    0
+   ],
+   "code": "KEY_INSERT",
+   "hid": "tasto 0x49",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "F12",
+   "pins": [
+    20,
+    13
+   ],
+   "gpio": [
+    15,
+    2
+   ],
+   "matrix": [
+    2,
+    2
+   ],
+   "code": "KEY_F12",
+   "hid": "tasto 0x45",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Cursor Right",
+   "pins": [
+    20,
+    17
+   ],
+   "gpio": [
+    15,
+    0
+   ],
+   "matrix": [
+    2,
+    3
+   ],
+   "code": "KEY_RIGHT",
+   "hid": "tasto 0x4f",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Page-Up",
+   "pins": [
+    24,
+    5
+   ],
+   "gpio": [
+    13,
+    6
+   ],
+   "matrix": [
+    15,
+    0
+   ],
+   "code": "KEY_PAGE_UP",
+   "hid": "tasto 0x4b",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Page-Down",
+   "pins": [
+    24,
+    13
+   ],
+   "gpio": [
+    13,
+    2
+   ],
+   "matrix": [
+    15,
+    2
+   ],
+   "code": "KEY_PAGE_DOWN",
+   "hid": "tasto 0x4e",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "GUI/Win",
+   "pins": [
+    24,
+    9
+   ],
+   "gpio": [
+    13,
+    4
+   ],
+   "matrix": [
+    15,
+    1
+   ],
+   "code": "MODIFIERKEY_GUI",
+   "hid": "modificatore 0x8",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Menu",
+   "pins": [
+    24,
+    11
+   ],
+   "gpio": [
+    13,
+    3
+   ],
+   "matrix": [
+    15,
+    5
+   ],
+   "code": "KEY_MENU",
+   "hid": "tasto 0x65",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Document-Left",
+   "pins": [
+    24,
+    15
+   ],
+   "gpio": [
+    13,
+    1
+   ],
+   "matrix": [
+    15,
+    4
+   ],
+   "code": "KEY_AC_BACK",
+   "hid": "consumer 0x224",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Document-Right",
+   "pins": [
+    24,
+    17
+   ],
+   "gpio": [
+    13,
+    0
+   ],
+   "matrix": [
+    15,
+    3
+   ],
+   "code": "KEY_AC_FORWARD",
+   "hid": "consumer 0x225",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Cursor Up",
+   "pins": [
+    28,
+    3
+   ],
+   "gpio": [
+    11,
+    7
+   ],
+   "matrix": [
+    1,
+    7
+   ],
+   "code": "KEY_UP",
+   "hid": "tasto 0x52",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Home",
+   "pins": [
+    28,
+    5
+   ],
+   "gpio": [
+    11,
+    6
+   ],
+   "matrix": [
+    1,
+    0
+   ],
+   "code": "KEY_HOME",
+   "hid": "tasto 0x4a",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "End",
+   "pins": [
+    28,
+    13
+   ],
+   "gpio": [
+    11,
+    2
+   ],
+   "matrix": [
+    1,
+    2
+   ],
+   "code": "KEY_END",
+   "hid": "tasto 0x4d",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Pause",
+   "pins": [
+    28,
+    15
+   ],
+   "gpio": [
+    11,
+    1
+   ],
+   "matrix": [
+    1,
+    4
+   ],
+   "code": "KEY_PAUSE",
+   "hid": "tasto 0x48",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Cursor Left",
+   "pins": [
+    28,
+    17
+   ],
+   "gpio": [
+    11,
+    0
+   ],
+   "matrix": [
+    1,
+    3
+   ],
+   "code": "KEY_LEFT",
+   "hid": "tasto 0x50",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Alt-Left",
+   "pins": [
+    32,
+    3
+   ],
+   "gpio": [
+    9,
+    7
+   ],
+   "matrix": [
+    0,
+    7
+   ],
+   "code": "MODIFIERKEY_LEFT_ALT",
+   "hid": "modificatore 0x4",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Print-Screen",
+   "pins": [
+    32,
+    13
+   ],
+   "gpio": [
+    9,
+    2
+   ],
+   "matrix": [
+    0,
+    2
+   ],
+   "code": "KEY_PRINT_SCREEN",
+   "hid": "tasto 0x46",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Scroll-Lock",
+   "pins": [
+    32,
+    9
+   ],
+   "gpio": [
+    9,
+    4
+   ],
+   "matrix": [
+    0,
+    1
+   ],
+   "code": "KEY_SCROLL_LOCK",
+   "hid": "tasto 0x47",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  },
+  {
+   "name": "Alt-Right",
+   "pins": [
+    32,
+    17
+   ],
+   "gpio": [
+    9,
+    0
+   ],
+   "matrix": [
+    0,
+    3
+   ],
+   "code": "MODIFIERKEY_RIGHT_ALT",
+   "hid": "modificatore 0x40",
+   "matrix_hit": true,
+   "hid_ok": true,
+   "released": true
+  }
+ ],
+ "ec_events": [
+  [
+   12997.547,
+   "EC_FN",
+   1
+  ],
+  [
+   13042.164,
+   "EC_PGUP",
+   1
+  ],
+  [
+   13142.579,
+   "EC_PGUP",
+   0
+  ],
+  [
+   13187.187,
+   "EC_FN",
+   0
+  ],
+  [
+   16232.412,
+   "EC_FN",
+   1
+  ],
+  [
+   16277.017,
+   "EC_PGUP",
+   1
+  ],
+  [
+   16377.397,
+   "EC_PGUP",
+   0
+  ],
+  [
+   16422.008,
+   "EC_FN",
+   0
+  ],
+  [
+   16583.145,
+   "EC_FN",
+   1
+  ],
+  [
+   16627.764,
+   "EC_PGUP",
+   1
+  ],
+  [
+   16728.157,
+   "EC_PGUP",
+   0
+  ],
+  [
+   16772.77,
+   "EC_FN",
+   0
+  ],
+  [
+   16928.907,
+   "EC_FN",
+   1
+  ],
+  [
+   16968.516,
+   "EC_PGUP",
+   1
+  ],
+  [
+   17068.893,
+   "EC_PGUP",
+   0
+  ],
+  [
+   17113.504,
+   "EC_FN",
+   0
+  ],
+  [
+   17269.64,
+   "EC_FN",
+   1
+  ],
+  [
+   17314.253,
+   "EC_PGUP",
+   1
+  ],
+  [
+   17414.631,
+   "EC_PGUP",
+   0
+  ],
+  [
+   17459.243,
+   "EC_FN",
+   0
+  ],
+  [
+   18474.232,
+   "EC_FN",
+   1
+  ],
+  [
+   18518.837,
+   "EC_PGUP",
+   1
+  ],
+  [
+   18619.252,
+   "EC_PGUP",
+   0
+  ],
+  [
+   18663.863,
+   "EC_FN",
+   0
+  ],
+  [
+   19199.657,
+   "EC_FN",
+   1
+  ],
+  [
+   19244.265,
+   "EC_PGUP",
+   1
+  ],
+  [
+   19344.641,
+   "EC_PGUP",
+   0
+  ],
+  [
+   19389.257,
+   "EC_FN",
+   0
+  ],
+  [
+   19545.386,
+   "EC_FN",
+   1
+  ],
+  [
+   19589.996,
+   "EC_PGUP",
+   1
+  ],
+  [
+   19690.372,
+   "EC_PGUP",
+   0
+  ],
+  [
+   19734.983,
+   "EC_FN",
+   0
+  ],
+  [
+   19891.106,
+   "EC_FN",
+   1
+  ],
+  [
+   19935.718,
+   "EC_PGUP",
+   1
+  ],
+  [
+   20036.101,
+   "EC_PGUP",
+   0
+  ],
+  [
+   20080.712,
+   "EC_FN",
+   0
+  ],
+  [
+   20236.848,
+   "EC_FN",
+   1
+  ],
+  [
+   20281.46,
+   "EC_PGUP",
+   1
+  ],
+  [
+   20381.842,
+   "EC_PGUP",
+   0
+  ],
+  [
+   20426.454,
+   "EC_FN",
+   0
+  ]
+ ],
+ "warnings": {
+  "USB: Unimplemented peripheral read from N": 12,
+  "XOSC_BASE: Unimplemented peripheral write to N: N": 2,
+  "XOSC_BASE: Unimplemented peripheral read from N": 2,
+  "XOSC_BASE: Unimplemented peripheral write to N: Nx-N": 1,
+  "PLL_SYS_BASE: Unimplemented peripheral read from N": 10,
+  "PLL_SYS_BASE: Unimplemented peripheral write to N: N": 6,
+  "PLL_SYS_BASE: Unimplemented peripheral write to N: Nx-N": 4,
+  "PLL_USB_BASE: Unimplemented peripheral read from N": 5,
+  "PLL_USB_BASE: Unimplemented peripheral write to N: N": 3,
+  "PLL_USB_BASE: Unimplemented peripheral write to N: Nx-N": 2,
+  "RP2040: Read from invalid memory address: N": 14,
+  "IO_QSPI_BASE: Unimplemented peripheral write to N: N": 105,
+  "SSI: Unimplemented peripheral read from N": 7,
+  "SSI: Unimplemented peripheral write to N: N": 7,
+  "IO_QSPI_BASE: Unimplemented peripheral read from N": 8391,
+  "IO_QSPI_BASE: Unimplemented peripheral write to N: Nx-N": 4154,
+  "RP2040: Write to undefined address: N": 21,
+  "VREG_AND_CHIP_RESET_BASE: Unimplemented peripheral read from N": 1,
+  "USB: Unimplemented peripheral write to N: N": 2,
+  "USB: Unimplemented peripheral write to N: Nx-N": 10,
+  "PSM_BASE: Unimplemented peripheral read from N": 1
+ },
+ "watchdog": null,
+ "hid_count": 204,
+ "serial_tail": "\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nBOOTSEL pressed\r\nRebooting to UF2 mode...",
+ "wall_seconds": 23.798,
+ "sim_ms": 26361.317136,
+ "passed": 14,
+ "total": 14
+}

@@ -1,0 +1,8 @@
+Designator,Value,Manufacturer,MPN,LCSC,Footprint,Side,Assembly,Note
+J1,AA01B-S040VA1,JAE,AA01B-S040VA1-R3000,C2938571,JAE_AA01_sandwich,Top,si,ricettacolo tastiera (sopra) + spina verso BTB_R_CONN1 (sotto)
+J1,AA01B-P040VA1,JAE,AA01B-P040VA1-R3000 (o spina 2x22 recuperata da un flat),,JAE_AA01_sandwich,Bottom,"DNP - saldare a mano, non su LCSC",ricettacolo tastiera (sopra) + spina verso BTB_R_CONN1 (sotto)
+J4,20455-040E-76,I-PEX,20455-040E-76,C5160883,IPEX_20455-040E_90deg,Top,si,ricettacolo eDP verso la Board A (cavo 1-N)
+Q2,BSS138DW,Diodes Inc.,BSS138DW-7-F,C154900,SOT-363_SC-70-6_Tight,Bottom,si,meta' a non usata (a massa); b: Fn verso EC
+Q3,BSS138DW,Diodes Inc.,BSS138DW-7-F,C154900,SOT-363_SC-70-6_Tight,Bottom,si,interruttore bidirezionale riga24-colonna5 (PgUp) verso EC
+R13,100k,UNI-ROYAL,0402WGF1003TCE,C25741,R_0402_1005Metric,Bottom,si,pull-down gate Fn->EC
+R14,100k,UNI-ROYAL,0402WGF1003TCE,C25741,R_0402_1005Metric,Bottom,si,pull-down gate PgUp->EC

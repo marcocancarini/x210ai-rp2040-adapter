@@ -1,0 +1,38 @@
+* TrackPoint RESET path: GP28 -> Q3 (BSS138, gate +3V3) -> J1 pin 40, R11 10k (3V3 side), R12 10k (5V side)
+* GP28: input with RP2040 default pull-down (50k) until the firmware runs trackpoint_reset():
+*       go_1 (drive high) for 10 ms at t=1.05 s, then go_0 (drive low) for the rest of the run.
+.include bss138.lib
+.param rpd=50k
+VBUS vbus 0 PWL(0 0 1m 5)
+V3 v33 0 PWL(0 0 0.3m 0 1.3m 3.3)
+R11 gp28 v33 10k
+Rpd gp28 0 {rpd}
+Cg gp28 0 10p
+X3 rst5 v33 gp28 BSS138
+R12 rst5 vbus 10k
+* TrackPoint reset input (unknown): modelled as 100k to GND + 10 pF (the T61 board used 100k to GND)
+Rtp rst5 0 100k
+Ctp rst5 0 10p
+* RP2040 output driver: high switch (to 3.3 V) and low switch (to GND)
+Vhi chi 0 PWL(0 0 1.05 0 1.05001 1 1.06 1 1.06001 0)
+Vlo clo 0 PWL(0 0 1.06 0 1.06001 1 1.3 1)
+Shi gp28 v33 chi 0 SWD
+Slo gp28 0 clo 0 SWD
+.model SWD SW(Ron=80 Roff=1e10 Vt=0.5 Vh=0.05)
+.tran 50u 1.2 0 200u
+.control
+run
+meas tran rst_boot AVG v(rst5) from=0.1 to=1.0
+meas tran gp_boot AVG v(gp28) from=0.1 to=1.0
+meas tran rst_pulse AVG v(rst5) from=1.052 to=1.058
+meas tran rst_run AVG v(rst5) from=1.08 to=1.2
+meas tran rst_hi_at TRIG AT=0 TARG v(rst5) VAL=3.5 RISE=1
+wrdata tp_reset.csv v(rst5) v(gp28) v(vbus) v(v33)
+alterparam rpd=80k
+reset
+run
+meas tran rst_boot_80k AVG v(rst5) from=0.1 to=1.0
+meas tran gp_boot_80k AVG v(gp28) from=0.1 to=1.0
+quit
+.endc
+.end
