@@ -20,7 +20,7 @@ import edp_pinout as E
 BOARD = "B"
 PROJECT = "x210ai_boardB"   # nome dei file KiCad (.kicad_pro/.kicad_sch/.kicad_pcb)
 REV = "2.2"
-DATE = "2026-10-27"
+DATE = "2026-10-28"
 TITLE = "X210Ai - Board B (sandwich sul connettore tastiera)"
 COMPANY = R20.COMPANY
 
@@ -91,19 +91,28 @@ NETS = sorted({n for c in COMP for n in c["pins"].values() if n})
 POWER_NETS = ["GND", "VBUS"]
 
 # ---------------------------------------------------------------- scheda
-# PIAZZAMENTO PRELIMINARE. Il ricettacolo eDP 40 pin occupa 27,1 mm di piazzole e 28,2 x 6,7 mm di area
-# libera (catalogo I-PEX): non sta nella stima "15 x 12 mm" ne' nell'ingombro della rev 2.0 (29 mm a sinistra
-# del centro di J1). Qui e' a sinistra di J1, parallelo, ruotato di 180 gradi: pin 1 verso J1, cavo verso -y.
-J1_J4_GAP = 2.5      # margine extra tra J1 e J4 (richiesto 2-3 mm), oltre ai rispettivi courtyard
-# J4 ruotato di 180 gradi (cavo verso -y) e spostato verso +y. Limite misurato dalla foto della dima sulla
-# scheda madre (27/10/2026, ~22 px/mm): lo slot SIM inizia a y ~ +5,0 per x < -33. Con le piazzole a y = +3,5
-# il bordo della scheda e' a +4,3 (circa 0,7 mm dallo slot SIM: da ricontrollare con la dima).
-EDP_Y = 3.5
-X0, X1, Y0, Y1 = -35.3 - J1_J4_GAP, 7.5, -4.4, 4.3
+# Contorno a L rovesciata, provato con la dima sulla scheda madre il 28/10/2026 (gen_dima_boardB_L.py, OK):
+# braccio alto con J1 su BTB_R_CONN1, la scheda scende sul lato destro e torna verso sinistra con un braccio
+# basso che porta J4, ruotato di 180 gradi (pin 1 a destra, spina e cavo verso -y). Il cavo sale a sinistra
+# di J1, a CAVO_J1 dal suo courtyard. MOSFET e resistenze sono sotto, a destra di J4.
+J1_CRT = (-6.8, 6.9, -3.66, 3.45)   # courtyard di JAE_AA01_sandwich (x0, x1, y0, y1)
+J4_CRT = (-14.1, 14.1, -1.0, 5.7)   # courtyard di IPEX_20455-040E_90deg (rot 0, cavo verso +y)
+CAVO_W = 21.0        # larghezza del fascio micro-coassiale (40 x 0,5 mm + nastro)
+CAVO_J1 = 0.5        # distanza minima tra il cavo e il courtyard di J1
+J1_J4_GAP = 2.5      # margine richiesto tra i courtyard di J1 e J4 (2-3 mm) ...
+J4_DY = 2.0          # ... ridotto: J4 risalito di 2 mm verso il quadrato bianco (dima del 28/10, OK)
+EDGE = 0.3           # bordo scheda oltre il courtyard di J4
+J4_X = J1_CRT[0] - CAVO_J1 - CAVO_W / 2
+J4_Y = J1_CRT[3] + J1_J4_GAP + J4_CRT[3] - J4_DY
+TOP_X0, X1, Y0 = -7.5, 7.5, -4.4                    # braccio alto: bordi come nella dima rev 2.0
+X0 = J4_X + J4_CRT[0] - EDGE                         # rot 180: x e y del courtyard si invertono
+BOT_Y0 = J4_Y - J4_CRT[3] - EDGE
+Y1 = J4_Y - J4_CRT[2] + EDGE
+OUTLINE = [(TOP_X0, Y0), (X1, Y0), (X1, Y1), (X0, Y1), (X0, BOT_Y0), (TOP_X0, BOT_Y0)]   # X0..Y1 = riquadro
 CORNER_R = 0.6
 ORIGIN = R20.ORIGIN
-THICKNESS_MM = 0.4   # PCBWay 4 strati, lavorazione avanzata
-VIA = (0.3, 0.15)    # diametro / foro (regole PCBWay avanzate)
+THICKNESS_MM = 0.4   # JLCPCB 4 strati: a 0,4 mm solo ENIG e niente pannello (0,6 mm non c'e' a 4 strati)
+VIA = (0.3, 0.15)    # diametro / foro (JLCPCB multistrato: foro minimo 0,15, diametro minimo 0,25)
 ENVELOPE_REV20 = (-29.0, 7.5, -5.0, 5.6)   # ingombro verificato con la dima della rev 2.0
 # ostacoli sulla scheda madre misurati dalla foto della dima (precisione ~0,5 mm): (nome, x0, x1, y0, y1)
 OSTACOLI_FOTO = [("slot SIM", -45.0, -32.9, 5.0, 12.0), ("vite", -12.5, -4.8, 15.0, 20.7),
@@ -111,14 +120,36 @@ OSTACOLI_FOTO = [("slot SIM", -45.0, -32.9, 5.0, 12.0), ("vite", -12.5, -4.8, 15
 
 PLACE = {
     "J1": (0.0, 0.0, 0, "T"),
-    "J4": (-21.35 - J1_J4_GAP, EDP_Y, 180, "T"),
-    "Q2": (-10.0, 0.0, 0, "B"), "R13": (-8.3, 0.0, 90, "B"),
-    "Q3": (-13.5, 0.0, 0, "B"), "R14": (-11.8, 0.0, 90, "B"),
+    "J4": (J4_X, J4_Y, 180, "T"),
+    # sotto, sulla stessa riga: courtyard SOT-363 3,0 mm e 0402 1,04 mm di larghezza, ~0,6 mm tra l'uno e l'altro
+    "Q3": (-2.0, 7.0, 0, "B"), "R14": (0.6, 7.0, 90, "B"),
+    "Q2": (3.2, 7.0, 0, "B"), "R13": (5.8, 7.0, 90, "B"),
 }
 
+
+def inside(x, y, poly=OUTLINE):
+    """punto dentro il poligono (ray casting)"""
+    n, ok = len(poly), False
+    for i in range(n):
+        (xa, ya), (xb, yb) = poly[i], poly[i - 1]
+        if (ya > y) != (yb > y) and x < xa + (y - ya) * (xb - xa) / (yb - ya):
+            ok = not ok
+    return ok
+
+
+def margini():
+    """distanze dagli ostacoli della foto e tra J4, il cavo e J1 (positivo = libero)"""
+    ost = {n: (x0, x1, y0, y1) for n, x0, x1, y0, y1 in OSTACOLI_FOTO}
+    sim, vite, quad = ost["slot SIM"], ost["vite"], ost["quadrato bianco"]
+    return {"slot SIM (in x)": X0 - sim[1], "vite (in y)": vite[2] - Y1, "quadrato bianco (in y)": Y0 - quad[3],
+            "cavo - J1 (in x)": J1_CRT[0] - (J4_X + CAVO_W / 2),
+            "J4 - J1 (in y)": (J4_Y - J4_CRT[3]) - J1_CRT[3]}
+
+
 assert set(PLACE) == set(BY_REF), set(PLACE) ^ set(BY_REF)
-for r, (_, _, _, side) in PLACE.items():
+for r, (x, y, _, side) in PLACE.items():
     assert (side == "T") == (r in TOP_SIDE), r
+    assert inside(x, y), r
 
 
 def cable_check():
@@ -136,7 +167,6 @@ def cable_check():
 if __name__ == "__main__":
     print("Board B:", len(COMP), "componenti,", len(NETS), "net, cavo", E.CABLE)
     print("cavo coerente con la Board A:", cable_check())
-    ex0, ex1, ey0, ey1 = ENVELOPE_REV20
-    if X0 < ex0 or X1 > ex1 or Y0 < ey0 or Y1 > ey1:
-        print(f"ATTENZIONE: contorno {X1 - X0:.1f} x {Y1 - Y0:.1f} mm fuori dall'ingombro rev 2.0 "
-              f"(x {X0} < {ex0}): verificare con la dima")
+    print(f"contorno a L {X1 - X0:.2f} x {Y1 - Y0:.2f} mm, J4 a ({J4_X:.2f}, {J4_Y:.2f}) rot 180")
+    for k, v in margini().items():
+        print(f"  margine {k}: {v:.2f} mm")

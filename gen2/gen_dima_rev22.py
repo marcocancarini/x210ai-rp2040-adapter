@@ -14,7 +14,7 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt                     # noqa: E402
-from matplotlib.patches import Rectangle            # noqa: E402
+from matplotlib.patches import Polygon, Rectangle   # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -61,8 +61,10 @@ def main():
     ax.set_ylim(h, 0)
     ax.axis("off")
 
-    ax.add_patch(Rectangle((ox + D.X0, oy + D.Y0), D.X1 - D.X0, D.Y1 - D.Y0, fc="none", ec="black", lw=0.8))
-    legend = [f"nero: contorno Board {board} {D.X1 - D.X0:.1f} x {D.Y1 - D.Y0:.1f} mm, vista dall'alto "
+    outline = getattr(D, "OUTLINE", [(D.X0, D.Y0), (D.X1, D.Y0), (D.X1, D.Y1), (D.X0, D.Y1)])
+    ax.add_patch(Polygon([(ox + x, oy + y) for x, y in outline], closed=True, fc="none", ec="black", lw=0.8))
+    forma = "a L " if len(outline) > 4 else ""
+    legend = [f"nero: contorno Board {board} {forma}{D.X1 - D.X0:.1f} x {D.Y1 - D.Y0:.1f} mm, vista dall'alto "
               f"(piazzamento PRELIMINARE)"]
     if board == "B":
         ex0, ex1, ey0, ey1 = D.ENVELOPE_REV20
@@ -75,7 +77,10 @@ def main():
         legend += ["rosso puntinato: ingombro della rev 2.0 (29 mm a sinistra del centro del connettore)",
                    "tratteggio grigio: ostacoli misurati dalla foto (slot SIM, vite, quadrato bianco), +/-0,5 mm",
                    "blu: J1 sandwich centrato su BTB_R_CONN1 (pieno = sopra, vuoto = spina sotto)",
-                   "Ritaglia il contorno nero e appoggialo con J1 sul connettore (pin 1 come in serigrafia)."]
+                   "verde chiaro: fascio del cavo eDP (non fa parte della scheda: NON ritagliare)"]
+        if hasattr(D, "margini"):
+            legend += ["margini: " + ";  ".join(f"{k} {v:.1f} mm" for k, v in D.margini().items())]
+        legend += ["Ritaglia il contorno nero e appoggialo con J1 sul connettore (pin 1 come in serigrafia)."]
     legend += ["verde: ricettacolo eDP 20455-040E, tratteggio = area libera 28,2 x 6,7 mm (barra di sgancio)",
                "grigio: altri componenti (pieno = sopra, vuoto = sotto)"]
     for c in D.COMP:
@@ -101,9 +106,16 @@ def main():
     dx, dy = rot_pt(0, 1, jrot)                    # il cavo esce verso +y dell'impronta
     sx, sy = jx + 5 * dx, jy + 5 * dy
     ex, ey = sx + 8 * dx, (D.Y1 + 8 if dy > 0 else D.Y0 - 8) if abs(dy) > 0.5 else sy
+    if hasattr(D, "CAVO_W"):
+        ax.add_patch(Rectangle((ox + jx - D.CAVO_W / 2, oy + ey), D.CAVO_W, sy - ey, fc="tab:green", alpha=0.12,
+                               ec="tab:green", lw=0.3))
     ax.annotate("", xy=(ox + ex, oy + ey), xytext=(ox + sx, oy + sy),
                 arrowprops=dict(arrowstyle="->", lw=0.6, color="tab:green"))
-    ax.text(ox + ex + 1, oy + (ey + sy) / 2, "uscita cavo eDP", fontsize=5, color="tab:green")
+    if hasattr(D, "CAVO_W"):                       # a sinistra del fascio, lontano da J1
+        ax.text(ox + jx - D.CAVO_W / 2 - 1, oy + (ey + sy) / 2, "uscita cavo eDP", fontsize=5, color="tab:green",
+                ha="right")
+    else:
+        ax.text(ox + ex + 1, oy + (ey + sy) / 2, "uscita cavo eDP", fontsize=5, color="tab:green")
 
     ax.plot([20, 70], [250, 250], color="black", lw=0.8)
     for x in range(20, 71, 10):

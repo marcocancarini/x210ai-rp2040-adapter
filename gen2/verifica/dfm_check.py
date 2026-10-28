@@ -11,12 +11,25 @@ from shapely.ops import unary_union
 b = pcbnew.LoadBoard(sys.argv[1])
 res = {}
 
+
+def via_w(v):
+    """diametro del via: KiCad 10 vuole lo strato (padstack), KiCad 7-9 no"""
+    try:
+        return ToMM(v.GetWidth(pcbnew.F_Cu))
+    except TypeError:
+        return ToMM(v.GetWidth())
+
+
 # ---------------------------------------------------------------- board outline
 edge = [d for d in b.GetDrawings() if d.GetLayer() == pcbnew.Edge_Cuts]
 bb = b.GetBoardEdgesBoundingBox()
 outline = None
 ol = pcbnew.SHAPE_POLY_SET()
-if b.GetBoardPolygonOutlines(ol):
+try:
+    ok = b.GetBoardPolygonOutlines(ol, False)     # KiCad 10: aInferOutlineIfNecessary obbligatorio
+except TypeError:
+    ok = b.GetBoardPolygonOutlines(ol)            # KiCad 7-9
+if ok:
     o = ol.Outline(0)
     outline = Polygon([(ToMM(o.CPoint(i).x), ToMM(o.CPoint(i).y)) for i in range(o.PointCount())])
 res["board_mm"] = [round(outline.bounds[2] - outline.bounds[0], 3), round(outline.bounds[3] - outline.bounds[1], 3)]
@@ -27,8 +40,8 @@ res["copper_layers"] = b.GetCopperLayerCount()
 tracks = [t for t in b.GetTracks() if t.GetClass() == "PCB_TRACK"]
 vias = [t for t in b.GetTracks() if t.GetClass() == "PCB_VIA"]
 res["min_track_mm"] = round(min(ToMM(t.GetWidth()) for t in tracks), 3)
-res["via_sizes"] = sorted({(round(ToMM(v.GetWidth()), 3), round(ToMM(v.GetDrillValue()), 3)) for v in vias})
-res["min_via_annular_mm"] = round(min((ToMM(v.GetWidth()) - ToMM(v.GetDrillValue())) / 2 for v in vias), 3)
+res["via_sizes"] = sorted({(round(via_w(v), 3), round(ToMM(v.GetDrillValue()), 3)) for v in vias})
+res["min_via_annular_mm"] = round(min((via_w(v) - ToMM(v.GetDrillValue())) / 2 for v in vias), 3)
 holes = [(ToMM(v.GetPosition().x), ToMM(v.GetPosition().y), ToMM(v.GetDrillValue()) / 2, "via") for v in vias]
 pth_annular = []
 smd_min = []
@@ -54,7 +67,7 @@ cu = []
 for t in tracks:
     cu.append(LineString([(ToMM(t.GetStart().x), ToMM(t.GetStart().y)), (ToMM(t.GetEnd().x), ToMM(t.GetEnd().y))]).buffer(ToMM(t.GetWidth()) / 2))
 for v in vias:
-    cu.append(Point(ToMM(v.GetPosition().x), ToMM(v.GetPosition().y)).buffer(ToMM(v.GetWidth()) / 2))
+    cu.append(Point(ToMM(v.GetPosition().x), ToMM(v.GetPosition().y)).buffer(via_w(v) / 2))
 for fp in b.GetFootprints():
     for p in fp.Pads():
         cu.append(pad_poly(p))
@@ -75,7 +88,10 @@ res["min_copper_to_edge_mm"] = round(min(edge_line.distance(g) for g in cu), 3)
 def mask_open(p, layer):
     if not p.IsOnLayer(layer):
         return None
-    m = ToMM(p.GetSolderMaskExpansion()) if hasattr(p, "GetSolderMaskExpansion") else 0.0
+    try:
+        m = ToMM(p.GetSolderMaskExpansion(layer))     # KiCad 10
+    except TypeError:
+        m = ToMM(p.GetSolderMaskExpansion())          # KiCad 7-9
     return pad_poly(p).buffer(m, join_style=2)
 for side, layer in (("top", pcbnew.F_Mask), ("bottom", pcbnew.B_Mask)):
     opens = [(fp.GetReference() + "." + p.GetNumber(), mask_open(p, layer)) for fp in b.GetFootprints() for p in fp.Pads()]
@@ -95,7 +111,7 @@ def add_item(it, ref):
     if it.GetLayer() not in (pcbnew.F_SilkS, pcbnew.B_SilkS):
         return
     cls = it.GetClass()
-    if "TEXT" in cls:
+    if "TEXT" in cls or "FIELD" in cls:
         if hasattr(it, "IsVisible") and not it.IsVisible():
             return
         silk_texts.append((round(ToMM(it.GetTextHeight()), 3), round(ToMM(it.GetTextThickness()), 3), ref, it.GetText()))
@@ -104,7 +120,8 @@ def add_item(it, ref):
         if w > 0:
             silk_lines.append((round(w, 3), ref, cls))
 for fp in b.GetFootprints():
-    for it in list(fp.GraphicalItems()) + [fp.Reference(), fp.Value()]:
+    fields = list(fp.GetFields()) if hasattr(fp, "GetFields") else [fp.Reference(), fp.Value()]
+    for it in list(fp.GraphicalItems()) + fields:
         add_item(it, fp.GetReference())
 for d in b.GetDrawings():
     add_item(d, "board")

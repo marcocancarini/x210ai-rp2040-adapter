@@ -206,7 +206,7 @@ POWER_NETS = ["GND", "+3V3", "VBUS", "+1V1"]
 X0, X1, Y0, Y1 = -29.0, 7.5, -5.0, 5.6
 CORNER_R = 0.6
 ORIGIN = (100.0, 100.0)
-THICKNESS_MM = 0.8   # JLCPCB 4 strati: minimo 0,8 mm (PCBWay: 0,6 / 0,4 mm)
+THICKNESS_MM = 0.8   # JLCPCB 4 strati: 0,4 / 0,8 mm e oltre (0,6 mm non disponibile)
 
 # ref: (x, y, rot, lato)
 PLACE = {

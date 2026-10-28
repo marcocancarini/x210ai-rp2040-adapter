@@ -29,8 +29,9 @@ def rect(x1, y1, x2, y2, layer, w, key):
 def text(kind, txt, x, y, layer, size, key, hide=False, rot=0):
     r = f" {rot:g}" if rot else ""
     h = " hide" if hide else ""
+    m = " (justify mirror)" if layer.startswith("B.") else ""     # testo leggibile dal lato sotto
     return (f'  (fp_text {kind} "{txt}" (at {x:g} {y:g}{r}) (layer "{layer}"){h}\n'
-            f'      (effects (font (size {size:g} {size:g}) (thickness {size*0.15:.3f})))\n'
+            f'      (effects (font (size {size:g} {size:g}) (thickness {size*0.15:.3f})){m})\n'
             f'    (tstamp {tid(key, kind, txt)})\n  )\n')
 
 

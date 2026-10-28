@@ -89,21 +89,29 @@ def lib_symbols(rev13_sch):
                 break
     blk = parse(tokenize(t[i:j + 1]))[0]
     syms = {unq(s[1]): s for s in children(blk, "symbol")}
-    if "Device:Q_Dual_NMOS_S1G1D2S2G2D1" not in syms:
-        # Q_Dual_NMOS dalla libreria KiCad (lo schema rev 2.0 lo contiene gia')
-        dev = open(os.path.join(boards.kicad_share("symbols"), "Device.kicad_sym")).read()
-        a = dev.find('(symbol "Q_Dual_NMOS_S1G1D2S2G2D1"')
-        depth = 0
-        for b in range(a, len(dev)):
-            if dev[b] == "(":
-                depth += 1
-            elif dev[b] == ")":
-                depth -= 1
-                if depth == 0:
-                    break
-        qd = parse(tokenize(dev[a:b + 1]))[0]
-        qd[1] = q("Device:Q_Dual_NMOS_S1G1D2S2G2D1")
-        syms["Device:Q_Dual_NMOS_S1G1D2S2G2D1"] = qd
+    # Q_Dual_NMOS dalla libreria di KiCad 10 (Transistor_FET, prima in Device): pin identici alla copia della
+    # rev 2.0, che si scarta perche' l'ERC la segnalerebbe come diversa dalla libreria
+    QD = "Transistor_FET:Q_Dual_NMOS_S1G1D2S2G2D1"
+    syms.pop("Device:Q_Dual_NMOS_S1G1D2S2G2D1", None)
+    dev = open(os.path.join(boards.kicad_share("symbols"), "Transistor_FET.kicad_sym")).read()
+    a = dev.find('(symbol "Q_Dual_NMOS_S1G1D2S2G2D1"')
+    depth = 0
+    for b in range(a, len(dev)):
+        if dev[b] == "(":
+            depth += 1
+        elif dev[b] == ")":
+            depth -= 1
+            if depth == 0:
+                break
+    qd = parse(tokenize(dev[a:b + 1]))[0]
+    qd[1] = q(QD)
+    syms[QD] = qd
+    # simboli della rev 2.0 cambiati nelle librerie di KiCad 10 (pin spostati o rinumerati): restano come
+    # sono, ma nella libreria di progetto x210ai, come fa il "rescue" di KiCad, cosi' lo schema non cambia
+    for k in RESCUE:
+        s = syms.pop(k)
+        s[1] = q("x210ai:" + k.split(":")[1])
+        syms["x210ai:" + k.split(":")[1]] = s
     syms.update(new_symbols())
     return syms
 
@@ -174,11 +182,12 @@ def pins_of(sym):
     return out
 
 
-LIBID = {"C0402": "Device:C", "R0402": "Device:R", "QFN56": "MCU_RaspberryPi:RP2040",
-         "USON8": "Memory_Flash:W25Q32JVZP", "SOT23": "Regulator_Linear:XC6206PxxxMR",
-         "SOT363": "Device:Q_Dual_NMOS_S1G1D2S2G2D1", "XTAL": "Device:Crystal_GND24",
+RESCUE = ["MCU_RaspberryPi:RP2040", "Memory_Flash:W25Q32JVZP", "Device:Crystal_GND24", "Jumper:SolderJumper_2_Open"]
+LIBID = {"C0402": "Device:C", "R0402": "Device:R", "QFN56": "x210ai:RP2040",
+         "USON8": "x210ai:W25Q32JVZP", "SOT23": "Regulator_Linear:XC6206PxxxMR",
+         "SOT363": "Transistor_FET:Q_Dual_NMOS_S1G1D2S2G2D1", "XTAL": "x210ai:Crystal_GND24",
          "J1": "x210ai:X210Ai_KB_Receptacle", "J2": "x210ai:X210Ai_MB_Plug",
-         "USB": "Connector_Generic:Conn_01x04", "TP": "Connector:TestPoint", "SJ": "Jumper:SolderJumper_2_Open",
+         "USB": "Connector_Generic:Conn_01x04", "TP": "Connector:TestPoint", "SJ": "x210ai:SolderJumper_2_Open",
          "JSANDWICH": "x210ai:X210Ai_KB_Sandwich", "EDP": "x210ai:IPEX_20455-040E"}
 POWER = {"GND": "power:GND", "+3V3": "power:+3V3", "VBUS": "power:VBUS", "+1V1": "power:+1V1"}
 
@@ -381,6 +390,15 @@ def build(rev13, out):
             ["comment", "1", q(COMMENTS[0])], ["comment", "2", q(COMMENTS[1])]],
            lib] + items + [["sheet_instances", ["path", q("/"), ["page", q("1")]]]]
     open(out, "w", newline="\n").write(dump(doc) + "\n")      # fine riga LF come KiCad, anche su Windows
+    # libreria di progetto con i simboli x210ai usati, cosi' l'ERC li trova (sym-lib-table accanto allo schema)
+    d = os.path.dirname(os.path.abspath(out))
+    mine = [[s[0], q(unq(s[1]).split(":", 1)[1])] + s[2:] for k, s in sorted(syms.items())
+            if k in used_lib and k.startswith("x210ai:")]
+    lib_doc = ["kicad_symbol_lib", ["version", "20220914"], ["generator", "x210ai_gen_sch2"]] + mine
+    open(os.path.join(d, "x210ai.kicad_sym"), "w", newline="\n").write(dump(lib_doc) + "\n")
+    open(os.path.join(d, "sym-lib-table"), "w", newline="\n").write(
+        '(sym_lib_table\n  (version 7)\n  (lib (name "x210ai")(type "KiCad")(uri "${KIPRJMOD}/x210ai.kicad_sym")'
+        '(options "")(descr "Simboli progetto X210Ai"))\n)\n')
     print(f"schema: {len(items)} oggetti, simboli di libreria {len(used_lib)}")
 
 

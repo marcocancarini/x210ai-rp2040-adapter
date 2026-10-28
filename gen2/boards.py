@@ -71,6 +71,10 @@ def kc_flip(fp):
 def kc_set_field(fp, name, value):
     if hasattr(fp, "SetField"):
         fp.SetField(name, value)
+        # KiCad 8+ crea il campo visibile sulla serigrafia: e' un dato per la BOM, non va stampato
+        for fld in fp.GetFields():
+            if fld.GetName() == name:
+                fld.SetVisible(False)
     else:
         fp.SetProperty(name, value)
 

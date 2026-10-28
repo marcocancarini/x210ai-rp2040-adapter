@@ -49,9 +49,8 @@ DRC ed ERC non sono stati eseguiti, perché KiCad non è installato su questo PC
 
 Componenti non montati sulla Board A (solo rame): J3 (piazzole USB), JP1/JP2 (ponticelli), TP1-TP4.
 
-**Board B a 0,4 mm**: secondo i documenti del progetto JLCPCB non fa il 4 strati a 0,4 mm (minimo
-0,8 mm); serve PCBWay (lavorazione avanzata), oppure va controllato nel configuratore JLCPCB al momento
-dell'ordine.
+**Board B a 0,4 mm** (aggiornato il 28/10/2026): JLCPCB fa il 4 strati a 0,4 mm, solo con finitura ENIG e
+senza pannello (non fa invece il 4 strati a 0,6 mm). Le due schede si ordinano entrambe da JLCPCB.
 
 ## 4. Prossimi passi di PASSAGGIO.md
 
@@ -125,4 +124,4 @@ simboli rev 2.0), `pcb_out4/` (riferimento), `gen2/` (generatori), `doc/` (da ag
    prima di ordinare la Board B.
 3. **Lunghezza del cavo**: lo standard I-PEX parte da 100 mm, ne servono 40-60 (cavo su misura o piegato).
 4. **Spina sotto**: misurare col calibro la distanza tra le file della spina 2×22 del flat.
-5. **Board B a 0,4 mm**: JLCPCB o PCBWay.
+5. **Board B a 0,4 mm**: JLCPCB (solo ENIG, niente pannello).

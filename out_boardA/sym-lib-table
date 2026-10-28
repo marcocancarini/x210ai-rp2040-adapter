@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "x210ai")(type "KiCad")(uri "${KIPRJMOD}/x210ai.kicad_sym")(options "")(descr "Simboli progetto X210Ai"))
+)

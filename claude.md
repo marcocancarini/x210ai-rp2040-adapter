@@ -19,7 +19,7 @@ Board B (sandwich sul connettore tastiera, ~15x12 mm)
         Sotto: spina JAE AA01B-P040VA1 (nel connettore madre)
         Sopra: ricettacolo JAE AA01B-S040VA1 (riceve flat tastiera)
         Lato: eDP 90 gradi (riceve cavo da Board A)
-    PCB: 4 strati, 0.4 mm (PCBWay avanzato), ENIG
+    PCB: 4 strati, 0.4 mm (JLCPCB, solo ENIG a questo spessore)
     Assemblaggio: a mano (connettori JAE saldati dall'utente)
 
 Cavo eDP
@@ -118,6 +118,6 @@ Riferimenti
 Note importanti
 
     I connettori JAE AA01 sono saldati a mano dall'utente (nessun problema di reperibilita LCSC)
-    La Board B ha spessore 0.4 mm (PCBWay lavorazione avanzata) per minimizzare ingombro verticale
-    Il cavo eDP e standard e facilmente reperibile (AliExpress, Mouser, DigiKey ~5-10 euro)
+    La Board B ha spessore 0.4 mm (JLCPCB, solo ENIG, niente pannello) per minimizzare ingombro verticale
+    Il cavo eDP e un micro-coassiale I-PEX 20453 a 40 fili: standard I-PEX da DigiKey (~40 $, 100 mm) oppure su misura (LCSC Custom Cables, produttori su Alibaba ~11 $); i cavi eDP generici per pannelli non vanno bene (pin uniti o mancanti), vedi doc/CABLE_SPEC.md
     Lo swap Fn/Ctrl e firmware, funziona indipendentemente dall'architettura hardware

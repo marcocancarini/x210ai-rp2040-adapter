@@ -30,11 +30,13 @@ CAVO_W = 21.0                       # larghezza del fascio micro-coassiale (40 x
 CAVO_J1 = 0.5                       # distanza minima tra il cavo e il courtyard di J1
 J1_J4_GAP = D.J1_J4_GAP             # margine tra i courtyard di J1 e J4 (richiesto 2-3 mm)
 EDGE = 0.3                          # bordo scheda oltre il courtyard di J4
+J4_DY = 2.0                         # J4 spostato di 2 mm verso il quadrato bianco (-y), prova del 28/10
 TOP_X0, X1, Y0 = -7.5, D.X1, D.Y0   # braccio alto (J1): stesso bordo destro e superiore di oggi
 
-# J4: il bordo destro del cavo resta a CAVO_J1 dal courtyard di J1, il courtyard di J4 sta J1_J4_GAP sotto J1
+# J4: il bordo destro del cavo resta a CAVO_J1 dal courtyard di J1, il courtyard di J4 sta J1_J4_GAP sotto J1,
+# poi risale di J4_DY
 J4_X = J1_CRT[0] - CAVO_J1 - CAVO_W / 2
-J4_Y = J1_CRT[3] + J1_J4_GAP + J4_CRT[3]
+J4_Y = J1_CRT[3] + J1_J4_GAP + J4_CRT[3] - J4_DY
 BOT_X0 = J4_X + J4_CRT[0] - EDGE                    # rot 180: x e y del courtyard si invertono
 BOT_Y0 = J4_Y - J4_CRT[3] - EDGE
 Y1 = J4_Y - J4_CRT[2] + EDGE
@@ -53,7 +55,8 @@ def margini():
     m = {"slot SIM (in x)": BOT_X0 - sim[1] if Y1 > sim[2] else None,
          "vite (in y)": vite[2] - Y1,
          "quadrato bianco (in y)": Y0 - quad[3],
-         "cavo - J1 (in x)": J1_CRT[0] - (J4_X + CAVO_W / 2)}
+         "cavo - J1 (in x)": J1_CRT[0] - (J4_X + CAVO_W / 2),
+         "J4 - J1 (in y)": (J4_Y - J4_CRT[3]) - J1_CRT[3]}
     return {k: v for k, v in m.items() if v is not None}
 
 

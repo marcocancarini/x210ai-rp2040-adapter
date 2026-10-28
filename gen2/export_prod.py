@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File di produzione: Gerber + forature (zip), BOM e CPL per JLCPCB, BOM con MPN per PCBWay.
+"""File di produzione: Gerber + forature (zip), BOM e CPL per JLCPCB, BOM completa con MPN.
 
 uso: python export_prod.py --board A|B board.kicad_pcb out_dir      (senza --board: rev 2.0)
 Richiede kicad-cli nel PATH (oppure la variabile KICAD_CLI con il percorso completo).

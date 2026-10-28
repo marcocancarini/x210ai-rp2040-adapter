@@ -17,7 +17,7 @@ import edp_pinout as E
 BOARD = "A"
 PROJECT = "x210ai_boardA"   # nome dei file KiCad (.kicad_pro/.kicad_sch/.kicad_pcb)
 REV = "2.2"
-DATE = "2026-10-27"
+DATE = "2026-10-28"
 TITLE = "X210Ai - Board A (RP2040, sotto il palmrest)"
 COMPANY = R20.COMPANY
 
@@ -124,17 +124,43 @@ NETS = sorted({n for c in COMP for n in c["pins"].values() if n})
 POWER_NETS = R20.POWER_NETS
 
 # ---------------------------------------------------------------- scheda
-X0, X1, Y0, Y1 = -20.0, 20.0, -12.5, 12.5      # ~40 x 25 mm, da ridurre dopo lo sbroglio
+# Ingombro ridotto (28/10/2026): J4 e' l'unico componente sopra insieme ai ponticelli e ai test point, quindi
+# il resto sta sotto, nella stessa area di J4. La larghezza la decide J4 (courtyard 28,3 mm).
+J4_CRT = (-14.14, 14.14, -1.05, 5.75)   # courtyard di IPEX_20455-040E_90deg (rot 0, cavo verso +y)
+EDGE = 0.3                               # bordo scheda oltre i courtyard
+X0, X1 = J4_CRT[0] - EDGE, J4_CRT[1] + EDGE
+Y0 = -6.0
 CORNER_R = 0.6
 ORIGIN = R20.ORIGIN
 THICKNESS_MM = 0.8   # JLCPCB 4 strati, ENIG
 VIA = (0.4, 0.2)     # diametro / foro
 
-# PIAZZAMENTO PRELIMINARE: il gruppo RP2040 della rev 2.0 (gia' sbrogliato) traslato di DX, DY; J4 sopra,
-# lungo il bordo inferiore, con il cavo che esce verso +y.
-DX, DY = 9.0, -6.5
-PLACE = {r: (x + DX, y + DY, rot, side) for r, (x, y, rot, side) in R20.PLACE.items() if r in BY_REF}
-PLACE["J4"] = (0.0, 4.0, 0, "T")
+# Gruppo RP2040 della rev 2.0 (gia' sbrogliato, fan-out della QFN e quarzo) traslato in blocco di DX, DY:
+# J3 sul bordo sinistro, il bordo alto dei courtyard (C1, y = -4,91 nelle coordinate rev 2.0) sul bordo
+# superiore. La fila di piazzole di J4 (alta 0,9 mm, sopra) non puo' passare sopra U1: la piazzola centrale
+# ha via termici passanti e intorno c'e' il fan-out. Sta quindi sotto il courtyard di U1 (y = 4,47 nelle
+# coordinate rev 2.0); ponticelli e test point (sopra, fino a y = -0,31) restano lontani da J4.
+CORE_X0, CORE_Y0, U1_Y1 = -29.0, -4.91, 4.47        # coordinate rev 2.0
+DX, DY = X0 + EDGE - CORE_X0, Y0 + EDGE - CORE_Y0
+J4_Y = U1_Y1 + DY + 0.25 + 0.45
+Y1 = J4_Y + J4_CRT[3] + EDGE
+TRACKPOINT = {"Q2", "Q1", "R8", "R10", "R12", "C18"}
+PLACE = {r: (x + DX, y + DY, rot, side) for r, (x, y, rot, side) in R20.PLACE.items()
+         if r in BY_REF and r not in TRACKPOINT}
+PLACE["C13"] = (PLACE["C13"][0], PLACE["C13"][1] - 0.15, 0, "B")   # rev 2.0: courtyard sovrapposto a Y1
+PLACE["J4"] = (0.0, J4_Y, 0, "T")
+# TrackPoint a destra del gruppo, in due colonne: SOT-363 (courtyard 3,0 x 2,6) e 0402 (1,94 x 1,04)
+_qx, _rx = -5.3 + DX, -2.6 + DX      # colonne a destra del bordo del gruppo (x = -7,03 nelle coordinate rev 2.0)
+PLACE.update({"Q2": (_qx, -3.2 + DY, 0, "B"), "Q1": (_qx, -0.4 + DY, 0, "B"),
+              "R8": (_rx, -4.4 + DY, 0, "B"), "R10": (_rx, -3.25 + DY, 0, "B"),
+              "R12": (_rx, -2.1 + DY, 0, "B"), "C18": (_rx, -0.95 + DY, 0, "B")})
+# scritte in serigrafia (testo, x, y, lato, altezza), legate ai componenti
+_jp1, _jp2, _tp1, _tp4 = PLACE["JP1"], PLACE["JP2"], PLACE["TP1"], PLACE["TP4"]
+# lato sopra libero a destra dei test point e sopra J4 (x 0..14, y fino a ~3): titolo e verso del cavo
+SILK = [(f"X210Ai Board A rev {REV}", 7.0, Y0 + 1.5, "F", 0.7),
+        ("BOOT", _jp1[0], _jp1[1] + 1.15, "F", 0.5), ("RST", _jp2[0], _jp2[1] + 1.15, "F", 0.5),
+        ("CLK DIO GND 3V3", (_tp1[0] + _tp4[0]) / 2, _tp1[1] + 1.15, "F", 0.45),
+        ("eDP -> Board B", 7.0, Y0 + 3.0, "F", 0.6)]
 
 assert set(PLACE) == set(BY_REF), set(PLACE) ^ set(BY_REF)
 for r, (_, _, _, side) in PLACE.items():
@@ -144,6 +170,8 @@ for r, (x, y, _, _) in PLACE.items():
 
 if __name__ == "__main__":
     print("Board A:", len(COMP), "componenti,", len(NETS), "net")
+    print(f"contorno {X1 - X0:.2f} x {Y1 - Y0:.2f} mm, J4 a (0, {J4_Y:.2f}), gruppo RP2040 traslato di "
+          f"({DX:.2f}, {DY:.2f})")
     print("Row_IO", ROW_IO)
     print("Col_IO", COL_IO)
     pads = {}

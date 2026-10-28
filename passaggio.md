@@ -42,7 +42,7 @@ Requisiti dichiarati:
 
     R1: Convertire la tastiera in USB (base: thedalles77 T61 Teensy 4.0 e hektopuss/ThinkPad_RP2040_Keyboard) → RP2040 legge la matrice → tastiera HID USB
     R2: RP2040 integrato sul PCB (niente modulo Pico saldato), assemblato da JLCPCB → QFN-56 + flash + quarzo sulla Board A
-    R3: Scheda più sottile possibile nella zona critica (sopra il connettore madre) → Board B sandwich 0,4 mm (PCBWay), altezza totale ~4,4 mm
+    R3: Scheda più sottile possibile nella zona critica (sopra il connettore madre) → Board B sandwich 0,4 mm (JLCPCB), altezza totale ~4,4 mm
     R4: Touchpad non serve. TrackPoint sì → TrackPoint PS/2 via traslatori BSS138 sulla Board A
     R5: LED sacrificabili → nessun LED
     R6: Tasto di accensione verso la FPC 40 pin della scheda madre, senza passare dall'RP2040 → pin 19 diretto sulla Board B
@@ -106,7 +106,7 @@ Schema a blocchi:
     Posizione: incastonata direttamente sul connettore BTB_R_CONN1 della scheda madre.
     Componenti: Spina JAE AA01B-P040VA1 (sotto), ricettacolo JAE AA01B-S040VA1 (sopra), connettore eDP 90° (lato), 2x BSS138DW (Q2, Q3), resistori 100k (R13, R14).
     Dimensioni stimate: ~15 × 12 mm (minimo).
-    Spessore PCB: 0,4 mm (PCBWay lavorazione avanzata).
+    Spessore PCB: 0,4 mm (JLCPCB, solo ENIG; inizialmente previsto PCBWay).
     Funzioni: Passaggio 1:1 dei segnali matrice e TrackPoint. Passaggio diretto pin 19 (accensione) e GND. Emulazione EC via MOSFET pilotati dalla Board A.
 
 3.3 Cavo eDP
@@ -151,7 +151,7 @@ Board A
 
 Board B
 
-    PCB: PCBWay 4 strati, 0,4 mm (lavorazione avanzata), ENIG.
+    PCB: JLCPCB 4 strati, 0,4 mm, ENIG (a 0,4 mm JLCPCB accetta solo ENIG; inizialmente previsto PCBWay).
     Assemblaggio: A mano (connettori JAE saldati dall'utente con pasta + aria calda).
     Regole: pista/isolamento 0,1 mm, via 0,3/0,15 mm.
 

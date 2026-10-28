@@ -31,22 +31,19 @@ VIA = getattr(D, "VIA", (0.4, 0.2))
 PR.VIA_D, PR.VIA_DRILL = VIA
 
 COMMENTS = {
-    "2.0": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - spessore 0,8 mm (JLCPCB) o 0,6-0,4 mm (PCBWay)",
+    "2.0": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - spessore 0,8 mm o 0,4 mm (JLCPCB)",
             "J1 sopra (tastiera), J2 sotto (BTB_R_CONN1 scheda madre), RP2040 sotto"),
     "A": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,8 mm JLCPCB, ENIG, via 0,4/0,2",
           "RP2040 e componenti sotto; J4 (eDP verso la Board B) sopra"),
-    "B": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,4 mm PCBWay avanzato, ENIG, via 0,3/0,15",
+    "B": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,4 mm JLCPCB (solo ENIG, niente pannello), via 0,3/0,15",
           "J1 sandwich: ricettacolo sopra, spina sotto in BTB_R_CONN1; J4 eDP sopra; Q2/Q3 sotto"),
 }
-# scritte in serigrafia: (testo, x, y, lato, altezza) in coordinate del modello dati
+# scritte in serigrafia: (testo, x, y, lato, altezza) in coordinate del modello dati (Board A: D.SILK)
 SILK = {
     "2.0": [(f"X210Ai ISO/JIS rev {D.REV}", -13.2, -4.15, "F", 0.8), ("TASTIERA", -11.0, 4.6, "F", 0.7),
             ("BOOT", -25.4, -0.45, "F", 0.6), ("RST", -21.8, -0.45, "F", 0.6),
             ("CLK DIO GND 3V3", -23.3, -2.95, "F", 0.45)],
-    "A": [(f"X210Ai Board A rev {D.REV}", 9.0, -11.3, "F", 0.8), ("BOOT", -16.4, -6.95, "F", 0.6),
-          ("RST", -12.8, -6.95, "F", 0.6), ("CLK DIO GND 3V3", -14.3, -9.45, "F", 0.45),
-          ("eDP -> Board B", 0.0, 11.4, "F", 0.7)],
-    "B": [(f"X210Ai Board B rev {D.REV}", -27.0, 0.0, "B", 0.8), ("eDP -> Board A", -24.0, -3.6, "F", 0.6)],
+    "B": [(f"X210Ai Board B rev {D.REV}", -17.8, 6.2, "B", 0.8), ("eDP -> Board A", -17.8, 8.2, "B", 0.6)],
 }
 
 
@@ -69,38 +66,50 @@ def load_fp(libid):
     return fp
 
 
+def outline_pts():
+    """vertici del contorno (coordinate relative): OUTLINE del modello dati, altrimenti il rettangolo X0..Y1"""
+    return getattr(D, "OUTLINE", [(D.X0, D.Y0), (D.X1, D.Y0), (D.X1, D.Y1), (D.X0, D.Y1)])
+
+
+def fillets():
+    """per ogni vertice (lati a 90 gradi): punto di tangenza in entrata, punto medio dell'arco, tangenza in uscita"""
+    r, pts, out = D.CORNER_R, outline_pts(), []
+    for i, (px, py) in enumerate(pts):
+        (ax, ay), (bx, by) = pts[i - 1], pts[(i + 1) % len(pts)]
+        din = ((px - ax) / math.hypot(px - ax, py - ay), (py - ay) / math.hypot(px - ax, py - ay))
+        dout = ((bx - px) / math.hypot(bx - px, by - py), (by - py) / math.hypot(bx - px, by - py))
+        t1, t2 = (px - din[0] * r, py - din[1] * r), (px + dout[0] * r, py + dout[1] * r)
+        cx, cy = t1[0] + dout[0] * r, t1[1] + dout[1] * r
+        mx, my = px - cx, py - cy
+        k = r / math.hypot(mx, my)
+        out.append((t1, (cx + mx * k, cy + my * k), t2, (cx, cy)))
+    return out
+
+
 def outline_poly():
-    r = D.CORNER_R
     pts = []
-    corners = [(D.X1 - r, D.Y0 + r, -90), (D.X1 - r, D.Y1 - r, 0), (D.X0 + r, D.Y1 - r, 90), (D.X0 + r, D.Y0 + r, 180)]
-    for cx, cy, a0 in corners:
+    for t1, _, t2, (cx, cy) in fillets():
+        a0, a1 = math.atan2(t1[1] - cy, t1[0] - cx), math.atan2(t2[1] - cy, t2[0] - cx)
+        da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
         for i in range(9):
-            a = math.radians(a0 + 90 * i / 8)
-            pts.append(A(cx + r * math.cos(a), cy + r * math.sin(a)))
+            a = a0 + da * i / 8
+            pts.append(A(cx + D.CORNER_R * math.cos(a), cy + D.CORNER_R * math.sin(a)))
     return Polygon(pts)
 
 
 def add_outline(board):
-    r = D.CORNER_R
-    segs = [((D.X0 + r, D.Y0), (D.X1 - r, D.Y0)), ((D.X1, D.Y0 + r), (D.X1, D.Y1 - r)),
-            ((D.X1 - r, D.Y1), (D.X0 + r, D.Y1)), ((D.X0, D.Y1 - r), (D.X0, D.Y0 + r))]
-    for a, b in segs:
+    f = fillets()
+    for i, (t1, mid, t2, _) in enumerate(f):
         s = pcbnew.PCB_SHAPE(board)
-        s.SetShape(pcbnew.SHAPE_T_SEGMENT)
-        s.SetStart(V(*a))
-        s.SetEnd(V(*b))
+        s.SetShape(pcbnew.SHAPE_T_ARC)
+        s.SetArcGeometry(V(*t1), V(*mid), V(*t2))
         s.SetLayer(pcbnew.Edge_Cuts)
         s.SetWidth(MM(0.05))
         board.Add(s)
-    # archi: centro, punto iniziale, angolo
-    arcs = [((D.X1 - r, D.Y0 + r), (D.X1 - r, D.Y0)), ((D.X1 - r, D.Y1 - r), (D.X1, D.Y1 - r)),
-            ((D.X0 + r, D.Y1 - r), (D.X0 + r, D.Y1)), ((D.X0 + r, D.Y0 + r), (D.X0, D.Y0 + r))]
-    for c, st in arcs:
         s = pcbnew.PCB_SHAPE(board)
-        s.SetShape(pcbnew.SHAPE_T_ARC)
-        s.SetCenter(V(*c))
-        s.SetStart(V(*st))
-        s.SetArcAngleAndEnd(pcbnew.EDA_ANGLE(90, pcbnew.DEGREES_T), True)
+        s.SetShape(pcbnew.SHAPE_T_SEGMENT)
+        s.SetStart(V(*t2))
+        s.SetEnd(V(*f[(i + 1) % len(f)][0]))
         s.SetLayer(pcbnew.Edge_Cuts)
         s.SetWidth(MM(0.05))
         board.Add(s)
@@ -112,8 +121,8 @@ def add_zone(board, layer, net="GND", inset=0.0, priority=0, name=""):
     z.SetNet(board.FindNet(net))
     ol = z.Outline()
     ol.NewOutline()
-    for x, y in ((D.X0 + inset, D.Y0 + inset), (D.X1 - inset, D.Y0 + inset),
-                 (D.X1 - inset, D.Y1 - inset), (D.X0 + inset, D.Y1 - inset)):
+    poly = Polygon(outline_pts()).buffer(-inset, join_style=2) if inset else Polygon(outline_pts())
+    for x, y in list(poly.exterior.coords)[:-1]:
         ol.Append(MM(A(x, y)[0]), MM(A(x, y)[1]))
     z.SetMinThickness(MM(0.12))
     z.SetLocalClearance(MM(0.15))
@@ -199,7 +208,27 @@ def testen_to_ep(board):
     else:
         end = (cx, cy + math.copysign(3.4375 - 1.4, dy))
     PR.add_track(board, "GND", [(cx, cy), end], pcbnew.B_Cu, 0.15)
+    # gia' collegato al pad centrale: niente raggi verso la zona GND (tra le piazzole vicine ne entra uno solo)
+    p19.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_NONE)
     return d
+
+
+def vdd_48_49(board):
+    """IOVDD 48 e 49 unite su B.Cu e portate a una via interna sull'anello del fan-out (2,55 mm dal centro),
+    come nello sbroglio della rev 2.0: lasciate al router, nella Board A restavano isolate dal resto del +3V3"""
+    fp = board.FindFootprintByReference("U1")
+    pad = {p.GetNumber(): p for p in fp.Pads() if p.GetAttribute() != pcbnew.PAD_ATTRIB_PTH}
+    c = pad["57"].GetPosition()
+    cx, cy = pcbnew.ToMM(c.x), pcbnew.ToMM(c.y)
+    (x48, y48), (x49, y49) = [(pcbnew.ToMM(pad[n].GetPosition().x), pcbnew.ToMM(pad[n].GetPosition().y))
+                              for n in ("48", "49")]
+    assert pad["48"].GetNetname() == pad["49"].GetNetname() == "+3V3"
+    if abs(x49 - cx) > abs(y49 - cy):      # lato verticale: si rientra in x
+        via = (cx + math.copysign(2.55, x49 - cx), y49)
+    else:
+        via = (x49, cy + math.copysign(2.55, y49 - cy))
+    PR.add_track(board, "+3V3", [(x48, y48), (x49, y49), via], pcbnew.B_Cu, 0.2)
+    PR.add_via(board, "+3V3", *via)
 
 
 def build(out_dir, uuids=None):
@@ -270,6 +299,7 @@ def build(out_dir, uuids=None):
     if "U1" in D.BY_REF:          # rev 2.0 e Board A: stesso gruppo RP2040 (posizioni relative identiche)
         crystal_preroute(board)
         testen_to_ep(board)
+        vdd_48_49(board)
         if FANOUT_QFN:
             direct = {"+3V3", "+1V1", "GND", "XIN", "XOUT", "USB_DM_MCU", "USB_DP_MCU", "QSPI_SS", "QSPI_SCLK",
                       "QSPI_SD0", "QSPI_SD1", "QSPI_SD2", "QSPI_SD3"}
@@ -309,7 +339,7 @@ def add_silk(board):
         if rot:
             t.SetTextAngleDegrees(rot)
         board.Add(t)
-    for s, x, y, side, size in SILK[BOARD]:
+    for s, x, y, side, size in getattr(D, "SILK", None) or SILK[BOARD]:
         txt(s, x, y, pcbnew.F_SilkS if side == "F" else pcbnew.B_SilkS, size, mirror=(side == "B"))
 
 
@@ -378,10 +408,9 @@ def export_dsn(pcb, dsn, protect_nets=None, in1_signal=False):
     k = 1000  # (unit um): coordinate in micron
     ins = 0.17
     ch = 0.5
-    x0, x1 = (D.ORIGIN[0] + D.X0 + ins), (D.ORIGIN[0] + D.X1 - ins)
-    y0, y1 = -(D.ORIGIN[1] + D.Y0 + ins), -(D.ORIGIN[1] + D.Y1 - ins)
-    pts = [(x0 + ch, y0), (x1 - ch, y0), (x1, y0 - ch), (x1, y1 + ch), (x1 - ch, y1), (x0 + ch, y1),
-           (x0, y1 + ch), (x0, y0 - ch), (x0 + ch, y0)]
+    # spigoli smussati di ch (cap_style/join_style 3 = bevel); y del DSN verso l'alto
+    shape = Polygon(outline_pts()).buffer(-ins - ch, join_style=2).buffer(ch, join_style=3)
+    pts = [(D.ORIGIN[0] + x, -(D.ORIGIN[1] + y)) for x, y in shape.exterior.coords]
     poly = " ".join(f"{x * k:.0f} {y * k:.0f}" for x, y in pts)
     t, n = re.subn(r'\(boundary\s*\(path pcb 0[^)]*\)\s*\)', f'(boundary (path pcb 0 {poly}))', t, count=1)
     assert n == 1, "boundary non trovato"
@@ -395,6 +424,10 @@ def export_dsn(pcb, dsn, protect_nets=None, in1_signal=False):
         m = re.search(r"\(net GND\s*\(pins ([^)]*)\)", t)
         first = m.group(1).split()[0]
         t = t[:m.start(1)] + first + t[m.end(1):]
+    # Freerouting conosce solo l'isolamento rame-rame: lo si alza quanto basta perche' il rame resti a
+    # min_hole_clearance dal foro dei via (via 0,3/0,15 della Board B: 0,2 - 0,075 -> 0,13 mm)
+    need = math.ceil((project.RULES["min_hole_clearance"] - VIA[1] / 2) * 100 - 1e-9) * 10 * k / 1000
+    t = re.sub(r'\(clearance (\d+(?:\.\d+)?)\)', lambda m: f"(clearance {max(float(m.group(1)), need):g})", t)
     if protect_nets is None:
         t = re.sub(r'\(type route\)', '(type protect)', t)
     else:

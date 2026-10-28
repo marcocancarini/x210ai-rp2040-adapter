@@ -37,6 +37,8 @@ def main():
             put(f"{o}/x210ai_board{b}.{ext}", f"board{b}")
         put(f"{o}/x210ai.pretty", f"board{b}")
         put(f"{o}/fp-lib-table", f"board{b}")
+        put(f"{o}/sym-lib-table", f"board{b}")
+        put(f"{o}/x210ai.kicad_sym", f"board{b}")
         put(f"{o}/drc.rpt", f"verifica/board{b}")
         put(f"{o}/erc.json", f"verifica/board{b}")
         put(f"{o}/parity.json", f"verifica/board{b}")

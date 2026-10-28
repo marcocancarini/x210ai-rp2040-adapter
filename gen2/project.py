@@ -40,7 +40,7 @@ IGNORE = ["silk_edge_clearance", "silk_overlap", "silk_over_copper", "text_heigh
 
 
 def write(pro_path, via=(0.4, 0.2)):
-    """via = (diametro, foro) della classe di default: 0,4/0,2 JLCPCB; 0,3/0,15 Board B (PCBWay avanzato)"""
+    """via = (diametro, foro) della classe di default: 0,4/0,2 JLCPCB; 0,3/0,15 Board B (JLCPCB 0,4 mm)"""
     d = json.load(open(pro_path))
     ds = d.setdefault("board", {}).setdefault("design_settings", {})
     rules = dict(RULES)

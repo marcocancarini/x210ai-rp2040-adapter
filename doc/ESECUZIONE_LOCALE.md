@@ -73,7 +73,8 @@ Il progetto si apre in KiCad con `out_boardX/x210ai_boardX.kicad_pro`.
   (`passaggio.md` prevede lo sbroglio manuale della Board B).
 - **Rotazioni CPL**: per J1 e J4 (impronte del progetto) va controllata l'anteprima di JLCPCB, in
   particolare il pin 1.
-- **Board B a 0,4 mm**: verificare se JLCPCB la fa; altrimenti PCBWay con gli stessi Gerber.
+- **Board B a 0,4 mm**: JLCPCB la fa a 4 strati solo con finitura ENIG e senza pannello (0,6 mm a 4 strati non c'è).
+  Nell'ordine: 4 strati, 0,4 mm, ENIG, via 0,3/0,15 (foro minimo 0,15 mm: può avere un sovrapprezzo).
 
 ## 5. Script e scelta della scheda
 
