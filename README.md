@@ -5,6 +5,12 @@ Controller USB con RP2040 per la tastiera del ThinkPad X210Ai (ISO italiana e JI
 collegate da un cavo eDP 40 pin. Dettagli in [`passaggio.md`](passaggio.md) e
 [`doc/REPORT_rev2.2.md`](doc/REPORT_rev2.2.md).
 
+## Render
+PNG di entrambe le schede in [`render/`](render/): viste 2D top/bottom dei layer
+(`boardA_top.png`, `boardA_bottom.png`, `boardB_top.png`, `boardB_bottom.png`, 40 px/mm con
+`gen2/render.py`) e render 3D (`boardA_3d_top/bottom.png`, `boardB_3d_top/bottom.png`,
+`kicad-cli pcb render`).
+
 ## Checklist
 
 Aggiornata al 28/10/2026 (versione `v2.2.0-rc1`). "Fatto" = verificato sul progetto, non su una scheda costruita.
