@@ -6,10 +6,22 @@ collegate da un cavo eDP 40 pin. Dettagli in [`passaggio.md`](passaggio.md) e
 [`doc/REPORT_rev2.2.md`](doc/REPORT_rev2.2.md).
 
 ## Render
-PNG di entrambe le schede in [`render/`](render/): viste 2D top/bottom dei layer
-(`boardA_top.png`, `boardA_bottom.png`, `boardB_top.png`, `boardB_bottom.png`, 40 px/mm con
-`gen2/render.py`) e render 3D (`boardA_3d_top/bottom.png`, `boardB_3d_top/bottom.png`,
-`kicad-cli pcb render`).
+Tutti i PNG in [`render/`](render/): viste 2D dei layer a 40 px/mm (`gen2/render.py`) e render 3D
+(`kicad-cli pcb render`, 1600×900).
+
+### Board A (28,9 × 16,4 mm)
+
+| 3D top | 3D bottom |
+|---|---|
+| ![Board A 3D top](render/boardA_3d_top.png) | ![Board A 3D bottom](render/boardA_3d_bottom.png) |
+| ![Board A top](render/boardA_top.png) | ![Board A bottom](render/boardA_bottom.png) |
+
+### Board B (29,1 × 28,8 mm)
+
+| 3D top | 3D bottom |
+|---|---|
+| ![Board B 3D top](render/boardB_3d_top.png) | ![Board B 3D bottom](render/boardB_3d_bottom.png) |
+| ![Board B top](render/boardB_top.png) | ![Board B bottom](render/boardB_bottom.png) |
 
 ## Checklist
 
