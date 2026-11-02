@@ -24,6 +24,23 @@ dima. Da OCR sui righelli letta anche la serigrafia `BTB_R_CONN1` e le scritte d
 Immagine rettificata in coordinate dima (40 px/mm), con griglia 10 mm e ostacoli disegnati:
 [`foto_20261102_rettificata_mm.jpg`](foto_20261102_rettificata_mm.jpg) (ridotta a 20 px/mm).
 
+## Elementi riconosciuti dal parsing della foto (rettangoli scuri dentro la finestra)
+
+| Elemento | x (mm) | y (mm) | Dimensione |
+|---|---|---|---|
+| connettore FPC sinistro | −55,0..−33,4 | −26,0..−13,9 | 21,6 × 12,1 mm |
+| connettore FPC centrale | −25,6..1,7 | −26,0..−13,9 | 27,3 × 12,1 mm |
+| connettore FPC destro | 9,3..30,0 | −26,0..−14,0 | 20,7 × 12,1 mm |
+| **slot SIM** (colonna verticale a sinistra) | −54,0..−42,0 | −12,5..4,3 | 12 × 16,8 mm |
+| flat arancione | −37,35..−21,35 | 12,7..17,2 | 16 × 4,5 mm |
+| vite | centro (−7,8, 19,1) | raggio 3,55 | — |
+| linguetta vite | −13,1..−5,8 | 22,3..26,4 | 7,3 × 4,1 mm |
+| connettore CN1 | −30,35..−21,6 | 17,25..23,5 | 8,75 × 6,25 mm |
+
+Nota: il vecchio rettangolo "slot SIM" (x −50..−40, y −38,9..−26,9, dalla foto 19/10) era fuori dalla
+finestra della cornice e non c'entra: lo slot SIM vero è la colonna a sinistra sopra. I nomi in
+`gen2/gen_dima_giro.py` sono corretti di conseguenza.
+
 ## Ostacoli misurati (confronto con `OSTACOLI` in `gen2/design_boardB.py`)
 
 | Ostacolo | Da questa foto (mm) | Stima in `design_boardB.py` (mm) |

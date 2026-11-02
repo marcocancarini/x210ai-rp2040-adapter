@@ -62,15 +62,18 @@ RETT_V4 = [
 # FORMA viene calcolata in main() dopo aver scelto RETT (v1/v2/v3)
 
 # ostacoli (come OSTACOLI in design_boardB.py)
+# ostacoli: nomi e posizioni dal parsing della foto 02/11/2026 (riferimenti/misure/)
 OSTACOLI = [
     ("quadrato bianco VIETATO (<1 mm sopra), 39,3 x 33 mm", "r", (-27.25, 12.0, -40.2, -7.2)),
     ("BTB_R_CONN1 (spina J2 sotto, a 0,0)", "r", (-7.8, 7.8, -3.45, 3.45)),
-    ("connettore FPC", "r", (-45.0, -32.35, -2.8, 12.7)),
+    ("slot SIM", "r", (-54.0, -42.0, -12.5, 4.3)),                    # colonna verticale a sinistra (dalla foto)
+    ("connettore FPC sinistro", "r", (-55.0, -33.4, -26.0, -13.9)),   # fila in alto, dalla foto
+    ("connettore FPC centrale", "r", (-25.6, 1.7, -26.0, -13.9)),
+    ("connettore FPC destro", "r", (9.3, 30.0, -26.0, -14.0)),
     ("flat arancione", "r", (-37.35, -21.35, 12.7, 17.2)),
     ("vite", "c", (-7.8, 19.1, 3.55)),
     ("linguetta vite", "r", (-13.1, -5.8, 22.3, 26.4)),
     ("connettore CN1", "r", (-30.35, -21.6, 17.25, 23.5)),
-    ("slot SIM", "r", (-50.0, -40.0, -38.9, -26.9)),
 ]
 
 
