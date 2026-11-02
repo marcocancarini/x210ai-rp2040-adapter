@@ -50,6 +50,15 @@ RETT_V3 = [
     (-39.5, -27.75, -60.0, -3.3),   # R3 invariato
     (-39.5, 9.0, -60.0, -40.7),     # R4 tagliata a x = 9
 ]
+# v4 = v3 + modifiche: invade lo spazio dello slot SIM di 2,2 mm (R3 x min -39,5 -> -42,2),
+# parte bassa della U tagliata di 2 mm (R1 y max 12,2 -> 10,2),
+# parte sinistra della U allargata di 7 mm (R4 y min -60 -> -67)
+RETT_V4 = [
+    (-31.85, 9.0, -6.7, 10.2),      # R1: tagliata 2 mm in basso
+    (-39.5, -31.85, -6.7, -3.3),    # R2 invariato
+    (-42.2, -27.75, -60.0, -3.3),   # R3: invade lo slot SIM di 2,2 mm (bordo SIM a x=-40)
+    (-39.5, 9.0, -67.0, -40.7),     # R4: allargata di 7 mm in alto
+]
 # FORMA viene calcolata in main() dopo aver scelto RETT (v1/v2/v3)
 
 # ostacoli (come OSTACOLI in design_boardB.py)
@@ -69,13 +78,15 @@ def main():
     args = sys.argv[1:]
     ccw = "--rot90ccw" in args
     v3 = "--v3" in args
+    v4 = "--v4" in args
     pos = [a for a in args if not a.startswith("--")]
     if pos:
         out = pos[0]
     else:
-        nome = "x210ai_dima_boardC_v3_1a1.pdf" if v3 else ("x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf")
+        nome = ("x210ai_dima_boardC_v4_1a1.pdf" if v4 else "x210ai_dima_boardC_v3_1a1.pdf" if v3
+                else "x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf")
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc", nome)
-    rett = RETT_V3 if v3 else RETT
+    rett = RETT_V4 if v4 else (RETT_V3 if v3 else RETT)
     FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in rett])
     # v2 (--rot90ccw): ruota di 90 gradi in senso ANTIORARIO tutti gli oggetti in coordinate
     # dima (board, quadrato vietato, connettori, riferimenti): (x,y) -> (y,-x). Pagina sempre A4

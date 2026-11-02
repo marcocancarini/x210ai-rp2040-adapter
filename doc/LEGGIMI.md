@@ -23,7 +23,7 @@ quadrato (lato opposto al connettore, y < −40,2), dove in verticale ci sono ~5
 restano ~1,8 mm: lì solo PCB 0,4–0,8 mm, niente componenti.
 
 - Dime 1:1 (scala verificata 1:1, righello 50,09 mm), generate da `gen2/gen_dima_giro.py`:
-  `doc/x210ai_dima_boardC_1a1.pdf` (v1, portrait) · `x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario: board, quadrato, connettori e riferimenti ruotano insieme; `--rot90ccw`) · `x210ai_dima_boardC_v3_1a1.pdf` (v3 = v2 con i due lati della U tagliati fino a 3 mm sotto la parte superiore del quadrato bianco, cioè x = 9 mm in coordinate dima; `--rot90ccw --v3`)
+  `doc/x210ai_dima_boardC_1a1.pdf` (v1, portrait) · `x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario: board, quadrato, connettori e riferimenti ruotano insieme; `--rot90ccw`) · `x210ai_dima_boardC_v3_1a1.pdf` (v3 = v2 tagliata a x = 9 mm; `--rot90ccw --v3`) · `x210ai_dima_boardC_v4_1a1.pdf` (v4 = v3 + invade lo slot SIM di 2,2 mm (R3 a x = −42,2), parte bassa della U tagliata di 2 mm (R1 a y = 10,2), lato sinistro allargato di 7 mm (R4 a y = −67); `--rot90ccw --v4`)
 - Misure dalla foto con dima millimetrata: `riferimenti/misure/` (report `MISURE_foto_20261102.md`)
 - Ingombri: quadrato bianco 39,25 × 33 mm (x −27,25..12, y −40,2..−7,2); forma C4 area 2936 mm²,
   margine 0,5 mm dagli ostacoli, BTB coperta al 100 %

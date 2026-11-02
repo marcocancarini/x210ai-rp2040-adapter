@@ -65,7 +65,7 @@ Aggiornata al 28/10/2026 (versione `v2.2.0-rc1`). "Fatto" = verificato sul proge
 **Board C (rev 2.3, in prova — 02/11/2026)**: integrazione di Board A + Board B in una scheda unica
 senza cavo eDP, che aggira il quadrato bianco (zona vietata, < 1 mm sopra): si innesta su BTB_R_CONN1,
 passa sotto e a sinistra del quadrato e mette le componenti del RP2040 sopra il quadrato (lato opposto
-al connettore). Dime 1:1 in `doc/`: `x210ai_dima_boardC_1a1.pdf` (v1), `x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario), `x210ai_dima_boardC_v3_1a1.pdf` (v3 = v2 con i due lati della U tagliati a 3 mm sotto la parte superiore del quadrato, x = 9 mm; area 2134 mm²); generate da `gen2/gen_dima_giro.py` (`--rot90ccw`, `--v3`);
+al connettore). Dime 1:1 in `doc/`: `x210ai_dima_boardC_1a1.pdf` (v1), `x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario), `x210ai_dima_boardC_v3_1a1.pdf` (v3 = v2 tagliata a x = 9 mm; 2134 mm²) · `x210ai_dima_boardC_v4_1a1.pdf` (v4 = v3 + invade lo slot SIM di 2,2 mm, parte bassa della U tagliata di 2 mm, lato sinistro allargato di 7 mm; 2545 mm²); generate da `gen2/gen_dima_giro.py` (`--rot90ccw`, `--v3`, `--v4`);
 misure dalla foto con dima millimetrata in `riferimenti/misure/`.
 
 **Prima di ordinare**
