@@ -33,7 +33,7 @@ FORMA = [(-31.5, -6.7), (30.0, -6.7), (30.0, -26.0), (12.5, -26.0),
 
 # ostacoli (come OSTACOLI in design_boardB.py), più margine 0,5 mm dove serve
 OSTACOLI = [
-    ("quadrato bianco VIETATO (<1 mm sopra)", "r", (-27.25, 12.0, -29.7, -7.2)),
+    ("quadrato bianco VIETATO (<1 mm sopra), 39,3 x 33 mm", "r", (-27.25, 12.0, -40.2, -7.2)),
     ("BTB_R_CONN1 (spina J2 sotto, a 0,0)", "r", (-7.8, 7.8, -3.45, 3.45)),
     ("connettore FPC", "r", (-45.0, -32.35, -2.8, 12.7)),
     ("flat arancione", "r", (-37.35, -21.35, 12.7, 17.2)),

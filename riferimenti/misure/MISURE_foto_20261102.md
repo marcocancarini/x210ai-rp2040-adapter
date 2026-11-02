@@ -28,7 +28,7 @@ Immagine rettificata in coordinate dima (40 px/mm), con griglia 10 mm e ostacoli
 
 | Ostacolo | Da questa foto (mm) | Stima in `design_boardB.py` (mm) |
 |---|---|---|
-| Quadrato bianco (zona vietata, < 1 mm sopra) | x −25..−3, y −26..−7 visibile nella finestra (la stima arriva a x +12, y −29.7: coperto da componenti) | x −27,25..12,0 · y −29,7..−7,2 |
+| Quadrato bianco (zona vietata, < 1 mm sopra) | x ≈ −27..+12 (lato 39,3 mm) nella finestra; lato alto non visibile (coperto dalla cornice sopra y = −26) | calibro 02/11: **x −27,25..12,0 · y −40,2..−7,2 → 39,25 × 33 mm** |
 | BTB_R_CONN1 (origine) | centro (0,0), corpo ≈ 15,6 × 6,9 mm | x −7,8..7,8 · y −3,45..3,45 |
 | Connettore FPC, flat arancione, CN1, vite, linguetta | come stima (±0,3 mm) | vedi `OSTACOLI` |
 

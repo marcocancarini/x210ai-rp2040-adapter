@@ -105,9 +105,10 @@ OSTACOLI = [   # (nome, "r" = rettangolo x0, x1, y0, y1 | "c" = cerchio cx, cy, 
     ("vite", "c", (-7.8, 19.1, 3.55)),
     ("linguetta vite", "r", (-13.1, -5.8, 22.3, 26.4)),             # dalla prima foto
     ("connettore CN1", "r", (-30.35, -21.6, 17.25, 23.5)),          # dalla prima foto
-    # quadrato bianco: zona vietata, sopra c'e' meno di 1 mm di spazio. Bordo verso il connettore e lato
-    # sinistro misurati sulla serigrafia; il lato verso il palmrest (x = 12) dalle dime precedenti
-    ("quadrato bianco", "r", (-27.25, 12.0, -29.7, -7.2)),
+    # quadrato bianco: zona vietata, sopra c'e' meno di 1 mm di spazio. Lato verso il connettore
+    # (y = -7,2), lato sinistro (x = -27,25) e lato palmrest (x = 12) misurati sulla serigrafia;
+    # lato alto (y = -40,2) misurato col calibro il 02/11/2026: quadrato 39,25 x 33 mm
+    ("quadrato bianco", "r", (-27.25, 12.0, -40.2, -7.2)),
 ]
 VIETATE = {"quadrato bianco"}
 NASTRI = [          # non ingombri, solo riferimento
