@@ -28,8 +28,8 @@ from gen_dima_rev22 import MM                       # noqa: E402
 # ---------------------------------------------------------------- forma della scheda (mm, coordinate dima)
 BASE = (-31.5, 30.0, -6.7, 12.2)      # x0, x1, y0, y1  (sotto il quadrato bianco)
 BRACCIO = (12.5, 30.0, -26.0, -6.7)   # braccio destro (zona libera 18 x 54)
-FORMA = [(-31.5, -6.7), (30.0, -6.7), (30.0, -26.0), (12.5, -26.0),
-         (12.5, -6.7), (-31.5, -6.7)]     # poligono a L (base + braccio destro)
+FORMA = [(-31.5, -6.7), (12.5, -6.7), (12.5, -26.0), (30.0, -26.0),
+         (30.0, 12.2), (-31.5, 12.2)]     # poligono a L: base y -6,7..12,2 + braccio destro y -26..-6,7
 
 # ostacoli (come OSTACOLI in design_boardB.py), più margine 0,5 mm dove serve
 OSTACOLI = [
@@ -134,6 +134,16 @@ def main():
     print("ok", os.path.normpath(out))
     print(f"base {BASE[1]-BASE[0]:g} x {BASE[3]-BASE[2]:g} mm, braccio "
           f"{BRACCIO[1]-BRACCIO[0]:g} x {BRACCIO[3]-BRACCIO[2]:g} mm")
+
+    # verifica automatica: la forma non deve toccare gli ostacoli (margine 0,3 mm) e deve coprire BTB
+    from shapely.geometry import Polygon as SPoly, box, Point
+    forma = SPoly([(x, y) for x, y in FORMA])
+    for nome, t, d in OSTACOLI:
+        o = box(*d) if t == "r" else Point(d[:2]).buffer(d[2], 32)
+        if "BTB" in nome:
+            print(f"  BTB_R_CONN1 coperta: {forma.contains(o)}")
+        else:
+            print(f"  distanza da {nome}: {forma.distance(o):.2f} mm")
 
 
 if __name__ == "__main__":
