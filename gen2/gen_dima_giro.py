@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Dime di prova 1:1 (PDF A4) per la scheda unica "a giro del quadrato bianco" (rev 2.3, senza cavo eDP).
+"""Dima di prova 1:1 (PDF A4) per la scheda unica "a giro del quadrato bianco" (rev 2.3, senza cavo eDP).
 
-uso: python3 gen_dima_giro.py [--forma L|C|C2] [out.pdf]
-  default: --forma C2, out ../doc/x210ai_dima_giro_C2_1a1.pdf
+Forma C4 (coordinate dima, mm; origine al centro di BTB_R_CONN1, x verso il palmrest = -x,
+y verso la vite = +y, come in design_boardB.py). La scheda aggira il quadrato bianco passant
+SOTTO (y > -7,2) e a SINISTRA (x < -27,25, tra slot SIM e quadrato); sopra il quadrato (lato
+opposto a BTB) mette le componenti del RP2040:
 
-Coordinate dima (mm): origine al centro di BTB_R_CONN1, x verso il palmrest (-x), y verso la vite
-(+y), come in design_boardB.py. Ostacoli: quadrato bianco vietato x -27,25..12, y -40,2..-7,2 (sopra
-< 1 mm); BTB_R_CONN1 x -7,8..7,8, y -3,45..3,45 (la spina J2 va sotto a 0,0).
+  R1 base (copre BTB, scende in +y):   x -31,85 .. 30    y -6,7 .. 12,2     (61,9 x 18,9 mm)
+  R2 raccordo verso sinistra:          x -39,5 .. -31,85 y -6,7 .. -3,3     (7,65 x 3,4 mm)
+  R3 braccio sinistro:                 x -39,5 .. -27,75 y -60 .. -3,3      (11,75 x 56,7 mm)
+  R4 componenti SOPRA il quadrato:     x -39,5 .. 30     y -60 .. -40,7     (69,5 x 19,3 mm)
 
-Forme (rettangoli x0,x1,y0,y1):
-  L  (prima prova):  base sotto il quadrato + braccio destro
-       [(-31.5, 30, -6.7, 12.2), (12.5, 30, -26, -6.7)]
-  C  (componenti a SINISTRA del quadrato):
-       [(-8, 8, -3.95, 12.2), (-55, 8, -6.7, -3.3), (-55, -27.75, -26, -3.3)]
-  C2 (componenti SOPRA il quadrato, lato opposto a BTB; passa a destra del quadrato):
-       [(-8, 8, -3.95, 12.2), (-8, 30, -6.7, -3.3), (12.5, 30, -45, -3.3),
-        (-27.75, 30, -60, -40.7)]
-  C3 (come C2 ma il passaggio e' a SINISTRA del quadrato, tra slot SIM e quadrato; componenti SOPRA):
-       [(-8, 8, -3.95, 12.2), (-39.5, 8, -6.7, -3.3), (-39.5, -27.75, -40.7, -3.3),
-        (-27.75, 30, -60, -40.7)]
+Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il quadrato bianco
+(rosso) e gli altri ostacoli (arancione) devono restare FUORI dal ritaglio.
+
+uso: python3 gen_dima_giro.py [--rot90ccw] [out.pdf]
+  default: out ../doc/x210ai_dima_giro_1a1.pdf, pagina A4 portrait
+  --rot90ccw: pagina ruotata di 90 gradi in senso antiorario (A4 landscape 297x210)
 
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
 """
@@ -35,30 +33,14 @@ from shapely.ops import unary_union                   # noqa: E402
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_dima_rev22 import MM                       # noqa: E402
 
-FORME = {
-    "L":  [(-31.5, 30.0, -6.7, 12.2), (12.5, 30.0, -26.0, -6.7)],
-    "C":  [(-8.0, 8.0, -3.95, 12.2), (-55.0, 8.0, -6.7, -3.3), (-55.0, -27.75, -26.0, -3.3)],
-    "C2": [(-8.0, 8.0, -3.95, 12.2), (-8.0, 30.0, -6.7, -3.3), (12.5, 30.0, -45.0, -3.3),
-           (-27.75, 30.0, -60.0, -40.7)],
-    "C3": [(-8.0, 8.0, -3.95, 12.2), (-39.5, 8.0, -6.7, -3.3), (-39.5, -27.75, -60.0, -3.3),
-           (-39.5, 30.0, -60.0, -40.7)],
-    # C4: come C3 ma "ingrossata" - base piena sotto il quadrato (niente ponte sottile da 3,4 mm)
-    "C4": [(-31.85, 30.0, -6.7, 12.2), (-39.5, -31.85, -6.7, -3.3),
-           (-39.5, -27.75, -60.0, -3.3), (-39.5, 30.0, -60.0, -40.7)],
-    # C5: margine 2 mm dal quadrato bianco; vicino allo slot SIM la scheda scende di altri 2 mm
-    #     (si allarga fino a y = -24,9, cioe' 2 mm sotto il bordo inferiore dello slot SIM)
-    "C5": [(-31.85, 30.0, -5.2, 12.2), (-39.5, -31.85, -5.2, -3.3),
-           (-39.5, -29.25, -60.0, -3.3), (-50.0, -29.25, -24.9, -3.3),
-           (-39.5, 30.0, -60.0, -42.2)],
-}
-DESCR = {
-    "L":  "base sotto il quadrato + braccio destro",
-    "C":  "giu' da BTB, ponte sotto il quadrato, componenti a SINISTRA del quadrato (R3 27,25x22,7)",
-    "C2": "giu' da BTB, ponte sotto, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
-    "C3": "giu' da BTB, ponte sotto, risale a SINISTRA del quadrato (tra slot SIM e quadrato), componenti SOPRA (R4)",
-    "C4": "ingrossata: base piena 61,9x18,9 sotto il quadrato, braccio sinistro largo 11,75, componenti SOPRA (R4 69,5x19,3)",
-    "C5": "margine 2 mm dal quadrato; vicino allo slot SIM scende di altri 2 mm (R3b fino a y=-24,9); componenti SOPRA (R4 fino a y=-42,2)",
-}
+# ---------------------------------------------------------------- forma della scheda (mm, coordinate dima)
+RETT = [
+    (-31.85, 30.0, -6.7, 12.2),     # R1 base (copre BTB_R_CONN1)
+    (-39.5, -31.85, -6.7, -3.3),    # R2 raccordo
+    (-39.5, -27.75, -60.0, -3.3),   # R3 braccio sinistro (tra slot SIM e quadrato)
+    (-39.5, 30.0, -60.0, -40.7),    # R4 componenti sopra il quadrato
+]
+FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
 
 # ostacoli (come OSTACOLI in design_boardB.py)
 OSTACOLI = [
@@ -75,37 +57,25 @@ OSTACOLI = [
 
 def main():
     args = sys.argv[1:]
-    forma = "C2"
-    land = "--landscape" in args
-    flip = "--flip180" in args
-    out = None
-    if "--forma" in args:
-        i = args.index("--forma")
-        forma = args[i + 1].upper()
-    pos = [a for a in args if not a.startswith("--") and a not in ("L", "C", "C2", "C3", "C4", "C5")]
-    if pos:
-        out = pos[0]
-    if out is None:
-        out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
-                           f"x210ai_dima_giro_{forma}{'_landscape' if land else ''}{'_flip180' if flip else ''}_1a1.pdf")
-    RETT = FORME[forma]
-    FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
-
-    if land:
-        # pagina A4 landscape (297x210), forma ruotata di 90 gradi in senso orario:
-        # coordinata dima (x,y) -> pagina (ox + y, oy - x)
+    ccw = "--rot90ccw" in args
+    pos = [a for a in args if not a.startswith("--")]
+    out = pos[0] if pos else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
+                                          "x210ai_dima_giro_1a1.pdf")
+    if ccw:
+        # pagina A4 landscape (297x210), tutto ruotato di 90 gradi in senso antiorario:
+        # coordinata dima (x,y) -> pagina (ox - y, oy + x)
         w, h = 297, 210
-        ox, oy = 150.0, 100.0
+        ox, oy = 100.0, 75.0
+
+        def P(x, y):
+            return ox - y, oy + x
     else:
         w, h = 210, 297
         ox, oy = 105.0, 160.0
 
-    def P(x, y):
-        if flip:
-            x, y = -x, -y          # ruota la forma di 180 gradi attorno all'origine
-        if land:
-            return ox + y, oy - x
-        return ox + x, oy + y
+        def P(x, y):
+            return ox + x, oy + y
+
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
@@ -124,19 +94,17 @@ def main():
     ax.plot(*zip(P(-70, 0), P(45, 0)), color="0.6", lw=0.5, zorder=0)
     ax.plot(*zip(P(0, -65), P(0, 65)), color="0.6", lw=0.5, zorder=0)
 
-    # forma della scheda: contorno esterno dell'unione, riempita chiara, bordo nero spesso = taglio
-    if FORMA.geom_type == "MultiPolygon":
-        FORMA = max(FORMA.geoms, key=lambda g: g.area)   # i rettangoli sono pensati sovrapposti
+    # forma della scheda: contorno esterno, riempita chiara, bordo nero spesso = taglio
     ext = FORMA.exterior.coords
     ax.add_patch(Polygon([P(x, y) for x, y in ext], fc="0.95", ec="black", lw=1.6, zorder=2))
     for k, r in enumerate(RETT):
         cx, cy = (r[0] + r[1]) / 2, (r[2] + r[3]) / 2
-        ax.text(*P(cx, cy), f"R{k+1} {r[1]-r[0]:g}x{r[3]-r[2]:g} mm", fontsize=6, ha="center", va="center")
+        ax.text(*P(cx, cy), f"R{k+1} {r[1]-r[0]:g}x{r[3]-r[2]:g}", fontsize=6, ha="center", va="center")
 
-    # zona sopra BTB_R_CONN1: solo PCB, niente componenti (restano ~1,8 mm)
+    # zona sopra BTB_R_CONN1: solo PCB, niente componenti (~1,8 mm sopra)
     ax.add_patch(Rectangle(P(-8.3, -3.95), 16.6, 7.9, fc="none", ec="tab:blue", lw=0.8,
                            hatch="..", zorder=3))
-    ax.text(*P(0, -5.8), "sopra BTB_R_CONN1: solo PCB 0,4-0,8 mm, niente componenti (~1,8 mm sopra)",
+    ax.text(*P(0, -5.8), "sopra BTB_R_CONN1: solo PCB 0,4-0,8 mm (~1,8 mm sopra)",
             fontsize=5.5, ha="center", color="tab:blue")
 
     # spina J2 a (0,0)
@@ -165,7 +133,7 @@ def main():
     ax.text(*P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
 
     # righello di controllo 50 mm
-    if land:
+    if ccw:
         ry = h - 12
         ax.plot([210, 260], [ry, ry], color="black", lw=0.8)
         for x in range(210, 261, 10):
@@ -178,8 +146,7 @@ def main():
         ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
 
     legend = [
-        f"Dima di prova 1:1 forma {forma} - scheda unica \"a giro del quadrato bianco\" (rev 2.3), coordinate dima mm",
-        f"Forma {forma}: {DESCR[forma]}.",
+        "Dima di prova 1:1 - scheda unica \"a giro del quadrato bianco\" (rev 2.3, forma C4), coordinate dima mm",
         "Origine (0,0) = centro di BTB_R_CONN1, x verso il palmrest (-x), y verso la vite (+y).",
         "1. Stampa al 100% (senza 'adatta alla pagina') e controlla il righello da 50 mm col calibro.",
         "2. Ritaglia lungo il bordo nero spesso (tieni il pezzo interno).",
@@ -188,22 +155,20 @@ def main():
         "   linguetta, slot SIM (arancione). Deve coprire solo BTB_R_CONN1 (verde, J2 sotto a 0,0).",
         "5. Sopra BTB_R_CONN1 (tratteggio blu) solo PCB: restano ~1,8 mm; poi prova a rimontare la tastiera.",
     ]
-    if land:
+    if ccw:
         for i, s in enumerate(legend):
-            ax.text(205, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
-        ax.text(205, 8, f"X210Ai - dima giro quadrato bianco, forma {forma} (landscape), rev 2.3",
+            ax.text(180, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
+        ax.text(180, 8, "X210Ai - dima giro quadrato bianco, forma C4 (ruotata 90 deg antiorario)",
                 fontsize=7, weight="bold")
     else:
         for i, s in enumerate(legend):
             ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-        ax.text(105, 8, f"X210Ai - dima giro quadrato bianco, forma {forma}, rev 2.3 (prova)", fontsize=8,
+        ax.text(105, 8, "X210Ai - dima giro quadrato bianco, forma C4, rev 2.3 (prova)", fontsize=8,
                 ha="center", weight="bold")
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
-    print(f"forma {forma}: area {FORMA.area:.0f} mm2, rettangoli {RETT}")
-
-    # verifica automatica: la forma non deve toccare gli ostacoli (margine 0,3 mm) e deve coprire BTB
+    print(f"area forma {FORMA.area:.0f} mm2")
     for nome, t, d in OSTACOLI:
         o = box(d[0], d[2], d[1], d[3]) if t == "r" else Point(d[:2]).buffer(d[2], 32)
         if "BTB" in nome:
