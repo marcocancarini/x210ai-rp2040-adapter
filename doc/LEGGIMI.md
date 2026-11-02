@@ -22,7 +22,7 @@ Integrazione di Board A + Board B in una **scheda unica senza cavo eDP**: si inn
 quadrato (lato opposto al connettore, y < −40,2), dove in verticale ci sono ~5 mm. Sopra BTB_R_CONN1
 restano ~1,8 mm: lì solo PCB 0,4–0,8 mm, niente componenti.
 
-- Dima 1:1: `doc/x210ai_dima_boardC_1a1.pdf` (forma C4, `gen2/gen_dima_giro.py`), scala verificata 1:1
+- Dime 1:1: `doc/x210ai_dima_boardC_1a1.pdf` (v1, A4 portrait) e `doc/x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata di 90° in senso antiorario, tutte le componenti ruotate insieme; `gen2/gen_dima_giro.py --rot90ccw`), scala verificata 1:1 (righello 50,09 mm)
 - Misure dalla foto con dima millimetrata: `riferimenti/misure/` (report `MISURE_foto_20261102.md`)
 - Ingombri: quadrato bianco 39,25 × 33 mm (x −27,25..12, y −40,2..−7,2); forma C4 area 2936 mm²,
   margine 0,5 mm dagli ostacoli, BTB coperta al 100 %

@@ -16,8 +16,9 @@ Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il q
 (rosso) e gli altri ostacoli (arancione) devono restare FUORI dal ritaglio.
 
 uso: python3 gen_dima_giro.py [--rot90ccw] [out.pdf]
-  default: out ../doc/x210ai_dima_boardC_1a1.pdf, pagina A4 portrait
-  --rot90ccw: pagina ruotata di 90 gradi in senso antiorario (A4 landscape 297x210)
+  default: out ../doc/x210ai_dima_boardC_1a1.pdf (v1, A4 portrait)
+  --rot90ccw: v2, dima ruotata di 90 gradi in senso antiorario (A4 landscape 297x210,
+              out ../doc/x210ai_dima_boardC_v2_1a1.pdf)
 
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
 """
@@ -60,11 +61,14 @@ def main():
     args = sys.argv[1:]
     ccw = "--rot90ccw" in args
     pos = [a for a in args if not a.startswith("--")]
-    out = pos[0] if pos else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
-                                          "x210ai_dima_boardC_1a1.pdf")
+    if pos:
+        out = pos[0]
+    else:
+        nome = "x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf"
+        out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc", nome)
     if ccw:
-        # pagina A4 landscape (297x210), tutto ruotato di 90 gradi in senso antiorario:
-        # coordinata dima (x,y) -> pagina (ox - y, oy + x)
+        # v2: pagina A4 landscape (297x210), dima ruotata di 90 gradi in senso ANTIORARIO
+        # (tutte le componenti ruotate insieme): coordinata dima (x,y) -> pagina (ox - y, oy + x)
         w, h = 297, 210
         ox, oy = 100.0, 75.0
 
@@ -159,7 +163,7 @@ def main():
     if ccw:
         for i, s in enumerate(legend):
             ax.text(180, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
-        ax.text(180, 8, "X210Ai - dima Board C (forma C4, ruotata 90 deg antiorario)",
+        ax.text(180, 8, "X210Ai - dima Board C v2 (forma C4, ruotata 90 deg antiorario)",
                 fontsize=7, weight="bold")
     else:
         for i, s in enumerate(legend):
