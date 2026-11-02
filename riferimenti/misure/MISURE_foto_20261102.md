@@ -58,3 +58,11 @@ sopra) ha in pianta: un braccio destro libero di 18 × 54 mm, una base sotto di 
 e un braccio sinistro di 27,8 × 54 mm (all'83 %). In verticale fuori dal quadrato bianco ci sono
 ~5,0 mm, quindi una scheda rigida (0,8–1,6 mm) con componenti ci sta; sopra il connettore BTB_R_CONN1
 restano ~1,8 mm (solo la spina J2, come nel progetto a scalino).
+
+## Variante rev 2.3: scheda unica a "C" (senza cavo eDP)
+
+Forma proposta (dima `doc/x210ai_dima_giro_1a1.pdf`): da BTB_R_CONN1 scende in +y (R1, 16 × 16,2 mm),
+passa sotto il quadrato bianco (R2, 63 × 3,4 mm) e risale a sinistra del quadrato (R3, 27,25 × 22,7 mm,
+libera 100 %): lì vanno tutte le componenti del RP2040 (la Board A, 28,9 × 16,4 mm, ci sta compattata).
+Area totale ~988 mm²; margini dagli ostacoli ≥ 0,5 mm; BTB_R_CONN1 coperta al 100 % (spina J2 sotto,
+sopra restano ~1,8 mm → solo PCB sottile). Foto di riferimento: `PXL_20261019_233538594.jpg` (19/10).
