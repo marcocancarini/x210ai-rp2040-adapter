@@ -45,6 +45,11 @@ FORME = {
     # C4: come C3 ma "ingrossata" - base piena sotto il quadrato (niente ponte sottile da 3,4 mm)
     "C4": [(-31.85, 30.0, -6.7, 12.2), (-39.5, -31.85, -6.7, -3.3),
            (-39.5, -27.75, -60.0, -3.3), (-39.5, 30.0, -60.0, -40.7)],
+    # C5: margine 2 mm dal quadrato bianco; vicino allo slot SIM la scheda scende di altri 2 mm
+    #     (si allarga fino a y = -24,9, cioe' 2 mm sotto il bordo inferiore dello slot SIM)
+    "C5": [(-31.85, 30.0, -5.2, 12.2), (-39.5, -31.85, -5.2, -3.3),
+           (-39.5, -29.25, -60.0, -3.3), (-50.0, -29.25, -24.9, -3.3),
+           (-39.5, 30.0, -60.0, -42.2)],
 }
 DESCR = {
     "L":  "base sotto il quadrato + braccio destro",
@@ -52,6 +57,7 @@ DESCR = {
     "C2": "giu' da BTB, ponte sotto, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
     "C3": "giu' da BTB, ponte sotto, risale a SINISTRA del quadrato (tra slot SIM e quadrato), componenti SOPRA (R4)",
     "C4": "ingrossata: base piena 61,9x18,9 sotto il quadrato, braccio sinistro largo 11,75, componenti SOPRA (R4 69,5x19,3)",
+    "C5": "margine 2 mm dal quadrato; vicino allo slot SIM scende di altri 2 mm (R3b fino a y=-24,9); componenti SOPRA (R4 fino a y=-42,2)",
 }
 
 # ostacoli (come OSTACOLI in design_boardB.py)
@@ -76,7 +82,7 @@ def main():
     if "--forma" in args:
         i = args.index("--forma")
         forma = args[i + 1].upper()
-    pos = [a for a in args if not a.startswith("--") and a not in ("L", "C", "C2", "C3", "C4")]
+    pos = [a for a in args if not a.startswith("--") and a not in ("L", "C", "C2", "C3", "C4", "C5")]
     if pos:
         out = pos[0]
     if out is None:

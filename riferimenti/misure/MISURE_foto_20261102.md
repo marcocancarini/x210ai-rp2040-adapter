@@ -69,7 +69,8 @@ Tre versioni di dima in `doc/` (generate da `gen2/gen_dima_giro.py --forma L|C|C
 | C | `x210ai_dima_giro_C_1a1.pdf` | giù da BTB, ponte sotto, componenti a **sinistra** del quadrato (R3 27,25 × 22,7 mm, libera 100 %) | 988 mm² |
 | C2 | `x210ai_dima_giro_C2_1a1.pdf` | giù da BTB, ponte sotto, risale a **destra** del quadrato, componenti **sopra** il quadrato (R4 57,75 × 19,3 mm, lato opposto a BTB) | 2087 mm² |
 | C3 | `x210ai_dima_giro_C3_1a1.pdf` | ↓ da BTB, ponte sotto, risale a **sinistra** del quadrato (tra slot SIM e quadrato, R3 larga 11,75 mm), componenti **sopra** il quadrato (R4 69,5 × 19,3 mm, lato opposto a BTB) | 2150 mm² |
-| **C4** | `x210ai_dima_giro_C4_1a1.pdf` | **ingrossata**: base piena 61,9 × 18,9 mm sotto il quadrato (R1, copre BTB), piccolo raccordo 7,65 × 3,4 mm verso sinistra, braccio sinistro 11,75 mm, componenti **sopra** il quadrato (R4 69,5 × 19,3 mm) | 2936 mm² |
+| C4 | `x210ai_dima_giro_C4_1a1.pdf` | ingrossata: base piena 61,9 × 18,9 mm sotto il quadrato (R1, copre BTB), raccordo 7,65 × 3,4 mm, braccio sinistro 11,75 mm, componenti **sopra** il quadrato (R4 69,5 × 19,3 mm) | 2936 mm² |
+| **C5** | `x210ai_dima_giro_C5_1a1.pdf` | **margine 2 mm dal quadrato** (base tagliata a y = −5,2, R4 fino a y = −42,2, braccio a x = −29,25); vicino allo **slot SIM scende di altri 2 mm** (R3b fino a y = −24,9, 2 mm sotto lo slot SIM) | 2934 mm² |
 
 Tutte: BTB_R_CONN1 coperta al 100 % (spina J2 sotto a 0,0, sopra restano ~1,8 mm → solo PCB sottile),
 distanza dal quadrato bianco 0,50 mm, dagli altri ostacoli ≥ 0,5 mm. Foto di riferimento:
