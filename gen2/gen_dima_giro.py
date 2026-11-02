@@ -139,7 +139,7 @@ def main():
     from shapely.geometry import Polygon as SPoly, box, Point
     forma = SPoly([(x, y) for x, y in FORMA])
     for nome, t, d in OSTACOLI:
-        o = box(*d) if t == "r" else Point(d[:2]).buffer(d[2], 32)
+        o = box(d[0], d[2], d[1], d[3]) if t == "r" else Point(d[:2]).buffer(d[2], 32)
         if "BTB" in nome:
             print(f"  BTB_R_CONN1 coperta: {forma.contains(o)}")
         else:
