@@ -42,7 +42,15 @@ RETT = [
     (-39.5, -27.75, -60.0, -3.3),   # R3 braccio sinistro (tra slot SIM e quadrato)
     (-39.5, 30.0, -60.0, -40.7),    # R4 componenti sopra il quadrato
 ]
-FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
+# v3: taglia la parte superiore dei due lati della U (in v2) fino a 3 mm sotto la parte
+# superiore del quadrato bianco: in coordinate dima.originali x = 12 - 3 = 9
+RETT_V3 = [
+    (-31.85, 9.0, -6.7, 12.2),      # R1 tagliata a x = 9
+    (-39.5, -31.85, -6.7, -3.3),    # R2 invariato
+    (-39.5, -27.75, -60.0, -3.3),   # R3 invariato
+    (-39.5, 9.0, -60.0, -40.7),     # R4 tagliata a x = 9
+]
+# FORMA viene calcolata in main() dopo aver scelto RETT (v1/v2/v3)
 
 # ostacoli (come OSTACOLI in design_boardB.py)
 OSTACOLI = [
@@ -60,12 +68,15 @@ OSTACOLI = [
 def main():
     args = sys.argv[1:]
     ccw = "--rot90ccw" in args
+    v3 = "--v3" in args
     pos = [a for a in args if not a.startswith("--")]
     if pos:
         out = pos[0]
     else:
-        nome = "x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf"
+        nome = "x210ai_dima_boardC_v3_1a1.pdf" if v3 else ("x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf")
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc", nome)
+    rett = RETT_V3 if v3 else RETT
+    FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in rett])
     # v2 (--rot90ccw): ruota di 90 gradi in senso ANTIORARIO tutti gli oggetti in coordinate
     # dima (board, quadrato vietato, connettori, riferimenti): (x,y) -> (y,-x). Pagina sempre A4
     # portrait: la rotazione e' nel sistema dima (y in giu'), non della pagina.
@@ -105,7 +116,7 @@ def main():
     # forma della scheda: contorno esterno, riempita chiara, bordo nero spesso = taglio
     ext = FORMA.exterior.coords
     ax.add_patch(Polygon([P(x, y) for x, y in ext], fc="0.95", ec="black", lw=1.6, zorder=2))
-    for k, r in enumerate(RETT):
+    for k, r in enumerate(rett):
         cx, cy = (r[0] + r[1]) / 2, (r[2] + r[3]) / 2
         ax.text(*P(cx, cy), f"R{k+1} {r[1]-r[0]:g}x{r[3]-r[2]:g}", fontsize=6, ha="center", va="center")
 
@@ -163,7 +174,7 @@ def main():
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
-    print(f"area forma {FORMA.area:.0f} mm2")
+    print(f"area forma {FORMA.area:.0f} mm2, rettangoli {rett}")
     for nome, t, d in OSTACOLI:
         o = box(d[0], d[2], d[1], d[3]) if t == "r" else Point(d[:2]).buffer(d[2], 32)
         if "BTB" in nome:
