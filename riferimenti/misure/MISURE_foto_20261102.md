@@ -61,7 +61,7 @@ restano ~1,8 mm (solo la spina J2, come nel progetto a scalino).
 
 ## Board C (rev 2.3): scheda unica che aggira il quadrato bianco (senza cavo eDP)
 
-Dime in `doc/x210ai_dima_boardC_1a1.pdf` (v1, portrait) e `doc/x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario), generate da `gen2/gen_dima_giro.py` (Board C, forma C4,
+Dime in `doc/x210ai_dima_boardC_1a1.pdf` (v1, portrait) e `doc/x210ai_dima_boardC_v2_1a1.pdf` (v2, tutti gli oggetti ruotati di 90° in senso antiorario nelle coordinate dima), generate da `gen2/gen_dima_giro.py` (Board C, forma C4,
 pagina A4 portrait; scala 1:1 verificata, righello 50,09 mm).
 
 Forma C4 (coordinate dima, origine = centro BTB_R_CONN1):

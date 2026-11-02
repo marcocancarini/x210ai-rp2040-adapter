@@ -17,8 +17,8 @@ Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il q
 
 uso: python3 gen_dima_giro.py [--rot90ccw] [out.pdf]
   default: out ../doc/x210ai_dima_boardC_1a1.pdf (v1, A4 portrait)
-  --rot90ccw: v2, dima ruotata di 90 gradi in senso antiorario (A4 landscape 297x210,
-              out ../doc/x210ai_dima_boardC_v2_1a1.pdf)
+  --rot90ccw: v2 - tutti gli oggetti (board, quadrato vietato, connettori, riferimenti) ruotati
+              di 90 gradi in senso antiorario nelle coordinate dima; out ../doc/x210ai_dima_boardC_v2_1a1.pdf
 
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
 """
@@ -66,20 +66,18 @@ def main():
     else:
         nome = "x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf"
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc", nome)
-    if ccw:
-        # v2: pagina A4 landscape (297x210), dima ruotata di 90 gradi in senso ANTIORARIO
-        # (tutte le componenti ruotate insieme): coordinata dima (x,y) -> pagina (ox - y, oy + x)
-        w, h = 297, 210
-        ox, oy = 100.0, 75.0
+    # v2 (--rot90ccw): ruota di 90 gradi in senso ANTIORARIO tutti gli oggetti in coordinate
+    # dima (board, quadrato vietato, connettori, riferimenti): (x,y) -> (y,-x). Pagina sempre A4
+    # portrait: la rotazione e' nel sistema dima (y in giu'), non della pagina.
+    w, h = 210, 297
+    ox, oy = 105.0, 150.0
 
-        def P(x, y):
-            return ox - y, oy + x
-    else:
-        w, h = 210, 297
-        ox, oy = 105.0, 160.0
+    def R(x, y):
+        return (y, -x) if ccw else (x, y)
 
-        def P(x, y):
-            return ox + x, oy + y
+    def P(x, y):
+        x, y = R(x, y)
+        return ox + x, oy + y
 
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
@@ -138,17 +136,10 @@ def main():
     ax.text(*P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
 
     # righello di controllo 50 mm
-    if ccw:
-        ry = h - 12
-        ax.plot([210, 260], [ry, ry], color="black", lw=0.8)
-        for x in range(210, 261, 10):
-            ax.plot([x, x], [ry - 1, ry + 1], color="black", lw=0.5)
-        ax.text(235, ry - 5, "50 mm: controlla con il calibro", fontsize=6, ha="center")
-    else:
-        ax.plot([18, 68], [288, 288], color="black", lw=0.8)
-        for x in range(18, 69, 10):
-            ax.plot([x, x], [287, 289], color="black", lw=0.5)
-        ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
+    ax.plot([18, 68], [288, 288], color="black", lw=0.8)
+    for x in range(18, 69, 10):
+        ax.plot([x, x], [287, 289], color="black", lw=0.5)
+    ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
 
     legend = [
         "Dima di prova 1:1 - Board C (rev 2.3, forma C4): scheda unica a giro del quadrato bianco, coordinate dima mm",
@@ -160,16 +151,11 @@ def main():
         "   linguetta, slot SIM (arancione). Deve coprire solo BTB_R_CONN1 (verde, J2 sotto a 0,0).",
         "5. Sopra BTB_R_CONN1 (tratteggio blu) solo PCB: restano ~1,8 mm; poi prova a rimontare la tastiera.",
     ]
-    if ccw:
-        for i, s in enumerate(legend):
-            ax.text(180, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
-        ax.text(180, 8, "X210Ai - dima Board C v2 (forma C4, ruotata 90 deg antiorario)",
-                fontsize=7, weight="bold")
-    else:
-        for i, s in enumerate(legend):
-            ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-        ax.text(105, 8, "X210Ai - dima Board C (forma C4), rev 2.3 (prova)", fontsize=8,
-                ha="center", weight="bold")
+    for i, s in enumerate(legend):
+        ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
+    titolo = "X210Ai - dima Board C v2 (forma C4, ruotata 90 gradi antiorario), rev 2.3" if ccw \
+        else "X210Ai - dima Board C (forma C4), rev 2.3 (prova)"
+    ax.text(105, 8, titolo, fontsize=8, ha="center", weight="bold")
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
