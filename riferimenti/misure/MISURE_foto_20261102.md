@@ -59,10 +59,16 @@ e un braccio sinistro di 27,8 × 54 mm (all'83 %). In verticale fuori dal quadra
 ~5,0 mm, quindi una scheda rigida (0,8–1,6 mm) con componenti ci sta; sopra il connettore BTB_R_CONN1
 restano ~1,8 mm (solo la spina J2, come nel progetto a scalino).
 
-## Variante rev 2.3: scheda unica a "C" (senza cavo eDP)
+## Variante rev 2.3: scheda unica che aggira il quadrato bianco (senza cavo eDP)
 
-Forma proposta (dima `doc/x210ai_dima_giro_1a1.pdf`): da BTB_R_CONN1 scende in +y (R1, 16 × 16,2 mm),
-passa sotto il quadrato bianco (R2, 63 × 3,4 mm) e risale a sinistra del quadrato (R3, 27,25 × 22,7 mm,
-libera 100 %): lì vanno tutte le componenti del RP2040 (la Board A, 28,9 × 16,4 mm, ci sta compattata).
-Area totale ~988 mm²; margini dagli ostacoli ≥ 0,5 mm; BTB_R_CONN1 coperta al 100 % (spina J2 sotto,
-sopra restano ~1,8 mm → solo PCB sottile). Foto di riferimento: `PXL_20261019_233538594.jpg` (19/10).
+Tre versioni di dima in `doc/` (generate da `gen2/gen_dima_giro.py --forma L|C|C2`, scala 1:1 verificata):
+
+| Versione | File | Forma | Area |
+|---|---|---|---|
+| L | `x210ai_dima_giro_L_1a1.pdf` | base sotto il quadrato + braccio destro | 1500 mm² |
+| C | `x210ai_dima_giro_C_1a1.pdf` | giù da BTB, ponte sotto, componenti a **sinistra** del quadrato (R3 27,25 × 22,7 mm, libera 100 %) | 988 mm² |
+| **C2** | `x210ai_dima_giro_C2_1a1.pdf` | giù da BTB, ponte sotto, risale a **destra** del quadrato, componenti **sopra** il quadrato (R4 57,75 × 19,3 mm, lato opposto a BTB) | 2087 mm² |
+
+Tutte: BTB_R_CONN1 coperta al 100 % (spina J2 sotto a 0,0, sopra restano ~1,8 mm → solo PCB sottile),
+distanza dal quadrato bianco 0,50 mm, dagli altri ostacoli ≥ 0,5 mm. Foto di riferimento:
+`PXL_20261019_233538594.jpg` (19/10).

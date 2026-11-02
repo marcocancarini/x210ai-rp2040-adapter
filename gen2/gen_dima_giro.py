@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Dima di prova 1:1 (PDF A4) per la scheda unica "a giro del quadrato bianco" (rev 2.3, senza cavo eDP).
+"""Dime di prova 1:1 (PDF A4) per la scheda unica "a giro del quadrato bianco" (rev 2.3, senza cavo eDP).
 
-Forma proposta (coordinate dima, mm; origine al centro di BTB_R_CONN1, x verso il palmrest = -x,
-y verso la vite = +y, come in design_boardB.py). La scheda aggira il quadrato bianco passando
-SOTTO (y > -7,2) e a SINISTRA (x < -27,25); a sinistra mette tutte le componenti del RP2040:
+uso: python3 gen_dima_giro.py [--forma L|C|C2] [out.pdf]
+  default: --forma C2, out ../doc/x210ai_dima_giro_C2_1a1.pdf
 
-  R1 braccio dal connettore (scende in +y, copre BTB):  x -8 .. 8      y -3,95 .. 12,2
-  R2 ponte sotto il quadrato:                          x -55 .. 8     y -6,7 .. -3,3
-  R3 zona componenti RP2040 (sinistra del quadrato):   x -55 .. -27,75 y -26 .. -3,3
-                                                       (27,25 x 22,7 mm, libera 100%)
+Coordinate dima (mm): origine al centro di BTB_R_CONN1, x verso il palmrest (-x), y verso la vite
+(+y), come in design_boardB.py. Ostacoli: quadrato bianco vietato x -27,25..12, y -40,2..-7,2 (sopra
+< 1 mm); BTB_R_CONN1 x -7,8..7,8, y -3,45..3,45 (la spina J2 va sotto a 0,0).
 
-Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il quadrato bianco
-(rosso) e gli altri ostacoli (arancione) devono restare FUORI dal ritaglio.
+Forme (rettangoli x0,x1,y0,y1):
+  L  (prima prova):  base sotto il quadrato + braccio destro
+       [(-31.5, 30, -6.7, 12.2), (12.5, 30, -26, -6.7)]
+  C  (componenti a SINISTRA del quadrato):
+       [(-8, 8, -3.95, 12.2), (-55, 8, -6.7, -3.3), (-55, -27.75, -26, -3.3)]
+  C2 (componenti SOPRA il quadrato, lato opposto a BTB; passa a destra del quadrato):
+       [(-8, 8, -3.95, 12.2), (-8, 30, -6.7, -3.3), (12.5, 30, -45, -3.3),
+        (-27.75, 30, -60, -40.7)]
 
-uso: python3 gen_dima_giro.py [out.pdf]   (default ../doc/x210ai_dima_giro_1a1.pdf)
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
 """
 import os
@@ -29,12 +32,17 @@ from shapely.ops import unary_union                   # noqa: E402
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_dima_rev22 import MM                       # noqa: E402
 
-# ---------------------------------------------------------------- forma della scheda (mm, coordinate dima)
-R1 = (-8.0, 8.0, -3.95, 12.2)       # braccio dal connettore (copre BTB_R_CONN1, scende in +y)
-R2 = (-55.0, 8.0, -6.7, -3.3)       # ponte sotto il quadrato bianco
-R3 = (-55.0, -27.75, -26.0, -3.3)   # braccio componenti RP2040, a sinistra del quadrato
-FORMA = unary_union([box(R1[0], R1[2], R1[1], R1[3]), box(R2[0], R2[2], R2[1], R2[3]),
-                     box(R3[0], R3[2], R3[1], R3[3])])
+FORME = {
+    "L":  [(-31.5, 30.0, -6.7, 12.2), (12.5, 30.0, -26.0, -6.7)],
+    "C":  [(-8.0, 8.0, -3.95, 12.2), (-55.0, 8.0, -6.7, -3.3), (-55.0, -27.75, -26.0, -3.3)],
+    "C2": [(-8.0, 8.0, -3.95, 12.2), (-8.0, 30.0, -6.7, -3.3), (12.5, 30.0, -45.0, -3.3),
+           (-27.75, 30.0, -60.0, -40.7)],
+}
+DESCR = {
+    "L":  "base sotto il quadrato + braccio destro",
+    "C":  "giu' da BTB, ponte sotto il quadrato, componenti a SINISTRA del quadrato (R3 27,25x22,7)",
+    "C2": "giu' da BTB, ponte sotto il quadrato, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
+}
 
 # ostacoli (come OSTACOLI in design_boardB.py)
 OSTACOLI = [
@@ -45,42 +53,56 @@ OSTACOLI = [
     ("vite", "c", (-7.8, 19.1, 3.55)),
     ("linguetta vite", "r", (-13.1, -5.8, 22.3, 26.4)),
     ("connettore CN1", "r", (-30.35, -21.6, 17.25, 23.5)),
+    ("slot SIM", "r", (-50.0, -40.0, -38.9, -26.9)),
 ]
 
 
 def main():
-    out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                             "..", "doc", "x210ai_dima_giro_1a1.pdf")
+    args = sys.argv[1:]
+    forma = "C2"
+    out = None
+    if "--forma" in args:
+        i = args.index("--forma")
+        forma = args[i + 1].upper()
+    if args and not args[0].startswith("--"):
+        out = args[0]
+    elif args and args[0].startswith("--") and len(args) > 2:
+        out = args[-1]
+    if out is None:
+        out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
+                           f"x210ai_dima_giro_{forma}_1a1.pdf")
+    RETT = FORME[forma]
+    FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
+
     w, h = 210, 297
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
     ax.set_ylim(h, 0)
     ax.axis("off")
-    ox, oy = 105.0, 150.0          # origine dima (0,0) al centro pagina
+    ox, oy = 105.0, 160.0          # origine dima (0,0)
 
     def P(x, y):
         return ox + x, oy + y
 
     # griglia 10 mm con numeri sugli assi
     for x in range(-70, 46, 10):
-        ax.plot(*zip(P(x, -45), P(x, 40)), color="0.85", lw=0.4, zorder=0)
+        ax.plot(*zip(P(x, -65), P(x, 40)), color="0.85", lw=0.4, zorder=0)
         if x % 20 == 0:
-            ax.text(*P(x, -47), f"{x}", fontsize=5, ha="center", color="0.5")
-    for y in range(-45, 41, 10):
+            ax.text(*P(x, -67), f"{x}", fontsize=5, ha="center", color="0.5")
+    for y in range(-65, 41, 10):
         ax.plot(*zip(P(-70, y), P(45, y)), color="0.85", lw=0.4, zorder=0)
         if y % 20 == 0:
             ax.text(*P(-72, y), f"{y}", fontsize=5, va="center", color="0.5")
     ax.plot(*zip(P(-70, 0), P(45, 0)), color="0.6", lw=0.5, zorder=0)
-    ax.plot(*zip(P(0, -45), P(0, 40)), color="0.6", lw=0.5, zorder=0)
+    ax.plot(*zip(P(0, -65), P(0, 40)), color="0.6", lw=0.5, zorder=0)
 
     # forma della scheda: contorno esterno dell'unione, riempita chiara, bordo nero spesso = taglio
     ext = FORMA.exterior.coords
     ax.add_patch(Polygon([P(x, y) for x, y in ext], fc="0.95", ec="black", lw=1.6, zorder=2))
-    ax.text(*P(0, 5), "R1: dal connettore\nBTB in giu' (16 x 16,2 mm)", fontsize=6, ha="center")
-    ax.text(*P(-24, -5.0), "R2 ponte sotto il quadrato (63 x 3,4 mm)", fontsize=6, ha="center")
-    ax.text(*P(-41.4, -15), "R3 componenti RP2040\n27,25 x 22,7 mm (libera 100%)", fontsize=6.5,
-            ha="center", weight="bold")
+    for k, r in enumerate(RETT):
+        cx, cy = (r[0] + r[1]) / 2, (r[2] + r[3]) / 2
+        ax.text(*P(cx, cy), f"R{k+1} {r[1]-r[0]:g}x{r[3]-r[2]:g} mm", fontsize=6, ha="center", va="center")
 
     # zona sopra BTB_R_CONN1: solo PCB, niente componenti (restano ~1,8 mm)
     ax.add_patch(Rectangle(P(-8.3, -3.95), 16.6, 7.9, fc="none", ec="tab:blue", lw=0.8,
@@ -114,30 +136,30 @@ def main():
     ax.text(*P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
 
     # righello di controllo 50 mm
-    ax.plot([18, 68], [282, 282], color="black", lw=0.8)
+    ax.plot([18, 68], [288, 288], color="black", lw=0.8)
     for x in range(18, 69, 10):
-        ax.plot([x, x], [281, 283], color="black", lw=0.5)
-    ax.text(43, 287, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
+        ax.plot([x, x], [287, 289], color="black", lw=0.5)
+    ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
 
     legend = [
-        "Dima di prova 1:1 - scheda unica \"a giro del quadrato bianco\" (rev 2.3, senza cavo eDP), coordinate dima mm",
+        f"Dima di prova 1:1 forma {forma} - scheda unica \"a giro del quadrato bianco\" (rev 2.3), coordinate dima mm",
+        f"Forma {forma}: {DESCR[forma]}.",
         "Origine (0,0) = centro di BTB_R_CONN1, x verso il palmrest (-x), y verso la vite (+y).",
         "1. Stampa al 100% (senza 'adatta alla pagina') e controlla il righello da 50 mm col calibro.",
-        "2. Ritaglia lungo il bordo nero spesso della forma a C (tieni il pezzo interno).",
-        "3. Togli la tastiera. Appoggia il ritaglio sulla scheda madre con le frecce rosse puntate al centro",
-        "   di BTB_R_CONN1 (connettore orizzontale, lato lungo parallelo all'asse x).",
-        "4. Controlla che il ritaglio NON copra: quadrato bianco (rosso, vietato), FPC, flat arancione, CN1,",
-        "   vite, linguetta (arancione). Deve coprire solo BTB_R_CONN1 (verde, spina J2 sotto a 0,0).",
-        "5. R3 (a sinistra del quadrato) e' la zona per le componenti del RP2040; sopra BTB_R_CONN1",
-        "   (tratteggio blu) solo PCB: devono restare ~1,8 mm, poi prova a rimontare la tastiera.",
+        "2. Ritaglia lungo il bordo nero spesso (tieni il pezzo interno).",
+        "3. Togli la tastiera. Appoggia il ritaglio con le frecce rosse puntate al centro di BTB_R_CONN1.",
+        "4. Il ritaglio NON deve coprire: quadrato bianco (rosso, vietato), FPC, flat, CN1, vite,",
+        "   linguetta, slot SIM (arancione). Deve coprire solo BTB_R_CONN1 (verde, J2 sotto a 0,0).",
+        "5. Sopra BTB_R_CONN1 (tratteggio blu) solo PCB: restano ~1,8 mm; poi prova a rimontare la tastiera.",
     ]
     for i, s in enumerate(legend):
-        ax.text(18, 16 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-    ax.text(105, 10, "X210Ai - dima giro quadrato bianco, rev 2.3 (prova)", fontsize=8, ha="center", weight="bold")
+        ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
+    ax.text(105, 8, f"X210Ai - dima giro quadrato bianco, forma {forma}, rev 2.3 (prova)", fontsize=8,
+            ha="center", weight="bold")
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
-    print(f"area forma {FORMA.area:.0f} mm2: R1 {R1}, R2 {R2}, R3 {R3}")
+    print(f"forma {forma}: area {FORMA.area:.0f} mm2, rettangoli {RETT}")
 
     # verifica automatica: la forma non deve toccare gli ostacoli (margine 0,3 mm) e deve coprire BTB
     for nome, t, d in OSTACOLI:
