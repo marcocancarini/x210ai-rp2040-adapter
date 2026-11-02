@@ -42,12 +42,16 @@ FORME = {
            (-27.75, 30.0, -60.0, -40.7)],
     "C3": [(-8.0, 8.0, -3.95, 12.2), (-39.5, 8.0, -6.7, -3.3), (-39.5, -27.75, -60.0, -3.3),
            (-39.5, 30.0, -60.0, -40.7)],
+    # C4: come C3 ma "ingrossata" - base piena sotto il quadrato (niente ponte sottile da 3,4 mm)
+    "C4": [(-31.85, 30.0, -6.7, 12.2), (-39.5, -31.85, -6.7, -3.3),
+           (-39.5, -27.75, -60.0, -3.3), (-39.5, 30.0, -60.0, -40.7)],
 }
 DESCR = {
     "L":  "base sotto il quadrato + braccio destro",
     "C":  "giu' da BTB, ponte sotto il quadrato, componenti a SINISTRA del quadrato (R3 27,25x22,7)",
     "C2": "giu' da BTB, ponte sotto, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
     "C3": "giu' da BTB, ponte sotto, risale a SINISTRA del quadrato (tra slot SIM e quadrato), componenti SOPRA (R4)",
+    "C4": "ingrossata: base piena 61,9x18,9 sotto il quadrato, braccio sinistro largo 11,75, componenti SOPRA (R4 69,5x19,3)",
 }
 
 # ostacoli (come OSTACOLI in design_boardB.py)
