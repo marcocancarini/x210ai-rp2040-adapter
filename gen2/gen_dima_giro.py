@@ -16,6 +16,9 @@ Forme (rettangoli x0,x1,y0,y1):
   C2 (componenti SOPRA il quadrato, lato opposto a BTB; passa a destra del quadrato):
        [(-8, 8, -3.95, 12.2), (-8, 30, -6.7, -3.3), (12.5, 30, -45, -3.3),
         (-27.75, 30, -60, -40.7)]
+  C3 (come C2 ma il passaggio e' a SINISTRA del quadrato, tra slot SIM e quadrato; componenti SOPRA):
+       [(-8, 8, -3.95, 12.2), (-39.5, 8, -6.7, -3.3), (-39.5, -27.75, -40.7, -3.3),
+        (-27.75, 30, -60, -40.7)]
 
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
 """
@@ -37,11 +40,14 @@ FORME = {
     "C":  [(-8.0, 8.0, -3.95, 12.2), (-55.0, 8.0, -6.7, -3.3), (-55.0, -27.75, -26.0, -3.3)],
     "C2": [(-8.0, 8.0, -3.95, 12.2), (-8.0, 30.0, -6.7, -3.3), (12.5, 30.0, -45.0, -3.3),
            (-27.75, 30.0, -60.0, -40.7)],
+    "C3": [(-8.0, 8.0, -3.95, 12.2), (-39.5, 8.0, -6.7, -3.3), (-39.5, -27.75, -60.0, -3.3),
+           (-39.5, 30.0, -60.0, -40.7)],
 }
 DESCR = {
     "L":  "base sotto il quadrato + braccio destro",
     "C":  "giu' da BTB, ponte sotto il quadrato, componenti a SINISTRA del quadrato (R3 27,25x22,7)",
-    "C2": "giu' da BTB, ponte sotto il quadrato, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
+    "C2": "giu' da BTB, ponte sotto, risale a DESTRA del quadrato, componenti SOPRA (R4 57,75x19,3)",
+    "C3": "giu' da BTB, ponte sotto, risale a SINISTRA del quadrato (tra slot SIM e quadrato), componenti SOPRA (R4)",
 }
 
 # ostacoli (come OSTACOLI in design_boardB.py)
@@ -98,6 +104,8 @@ def main():
     ax.plot(*zip(P(0, -65), P(0, 40)), color="0.6", lw=0.5, zorder=0)
 
     # forma della scheda: contorno esterno dell'unione, riempita chiara, bordo nero spesso = taglio
+    if FORMA.geom_type == "MultiPolygon":
+        FORMA = max(FORMA.geoms, key=lambda g: g.area)   # i rettangoli sono pensati sovrapposti
     ext = FORMA.exterior.coords
     ax.add_patch(Polygon([P(x, y) for x, y in ext], fc="0.95", ec="black", lw=1.6, zorder=2))
     for k, r in enumerate(RETT):
