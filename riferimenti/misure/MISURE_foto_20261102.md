@@ -62,7 +62,7 @@ restano ~1,8 mm (solo la spina J2, come nel progetto a scalino).
 ## Variante rev 2.3: scheda unica che aggira il quadrato bianco (senza cavo eDP)
 
 Dima unica in `doc/x210ai_dima_giro_1a1.pdf`, generata da `gen2/gen_dima_giro.py` (forma C4,
-pagina ruotata di 90 gradi in senso antiorario con `--rot90ccw`; scala 1:1 verificata, righello 50,09 mm).
+pagina A4 portrait; scala 1:1 verificata, righello 50,09 mm).
 
 Forma C4 (coordinate dima, origine = centro BTB_R_CONN1):
 
