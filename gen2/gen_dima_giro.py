@@ -71,6 +71,7 @@ def main():
     args = sys.argv[1:]
     forma = "C2"
     land = "--landscape" in args
+    flip = "--flip180" in args
     out = None
     if "--forma" in args:
         i = args.index("--forma")
@@ -80,7 +81,7 @@ def main():
         out = pos[0]
     if out is None:
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
-                           f"x210ai_dima_giro_{forma}{'_landscape' if land else ''}_1a1.pdf")
+                           f"x210ai_dima_giro_{forma}{'_landscape' if land else ''}{'_flip180' if flip else ''}_1a1.pdf")
     RETT = FORME[forma]
     FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
 
@@ -89,15 +90,16 @@ def main():
         # coordinata dima (x,y) -> pagina (ox + y, oy - x)
         w, h = 297, 210
         ox, oy = 150.0, 100.0
-
-        def P(x, y):
-            return ox + y, oy - x
     else:
         w, h = 210, 297
         ox, oy = 105.0, 160.0
 
-        def P(x, y):
-            return ox + x, oy + y
+    def P(x, y):
+        if flip:
+            x, y = -x, -y          # ruota la forma di 180 gradi attorno all'origine
+        if land:
+            return ox + y, oy - x
+        return ox + x, oy + y
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
@@ -106,15 +108,15 @@ def main():
 
     # griglia 10 mm con numeri sugli assi
     for x in range(-70, 46, 10):
-        ax.plot(*zip(P(x, -65), P(x, 40)), color="0.85", lw=0.4, zorder=0)
+        ax.plot(*zip(P(x, -65), P(x, 65)), color="0.85", lw=0.4, zorder=0)
         if x % 20 == 0:
             ax.text(*P(x, -67), f"{x}", fontsize=5, ha="center", color="0.5")
-    for y in range(-65, 41, 10):
+    for y in range(-65, 66, 10):
         ax.plot(*zip(P(-70, y), P(45, y)), color="0.85", lw=0.4, zorder=0)
         if y % 20 == 0:
             ax.text(*P(-72, y), f"{y}", fontsize=5, va="center", color="0.5")
     ax.plot(*zip(P(-70, 0), P(45, 0)), color="0.6", lw=0.5, zorder=0)
-    ax.plot(*zip(P(0, -65), P(0, 40)), color="0.6", lw=0.5, zorder=0)
+    ax.plot(*zip(P(0, -65), P(0, 65)), color="0.6", lw=0.5, zorder=0)
 
     # forma della scheda: contorno esterno dell'unione, riempita chiara, bordo nero spesso = taglio
     if FORMA.geom_type == "MultiPolygon":
