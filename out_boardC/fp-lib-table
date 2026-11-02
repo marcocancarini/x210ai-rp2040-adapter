@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "x210ai")(type "KiCad")(uri "${KIPRJMOD}/x210ai.pretty")(options "")(descr "Footprint progetto X210Ai"))
+)

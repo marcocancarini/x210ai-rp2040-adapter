@@ -21,6 +21,7 @@ have = {(z.GetLayer(), z.GetNetname()) for z in board.Zones()}
 for p in pour:
     if (LAY[p], "GND") not in have:
         BP.add_zone(board, LAY[p], "GND", 0.0, 0, "GND_" + p)
+board.BuildConnectivity()       # senza, la rimozione delle isole non vede la connettivita'
 pcbnew.ZONE_FILLER(board).Fill(board.Zones())
 pcbnew.SaveBoard(pcb_out, board)
 for z in board.Zones():

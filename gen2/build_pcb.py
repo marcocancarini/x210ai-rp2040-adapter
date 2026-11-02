@@ -37,6 +37,8 @@ COMMENTS = {
           "RP2040 e componenti sotto; J4 (eDP verso la Board B) sopra"),
     "B": ("Flessibile 4 strati (poliimmide ~0,25 mm, In1 GND) con irrigidimenti su User.1 - JLCPCB flex, via 0,4/0,2",
           "A scalino: J2 sotto in BTB_R_CONN1 e J4 sul gradino alto; J1 (tastiera) sul gradino basso a 25 gradi"),
+    "C": ("4 strati: F.Cu / In1 GND / In2 segnali / B.Cu - 0,4 mm JLCPCB, ENIG, via 0,4/0,2",
+          "J1 sopra e J2 sotto allineati su BTB_R_CONN1; RP2040 sotto nel braccio lontano (Mylar sulla madre)"),
 }
 # scritte in serigrafia: (testo, x, y, lato, altezza) in coordinate del modello dati (Board A: D.SILK)
 SILK = {
@@ -227,7 +229,7 @@ def pad_xy(board, ref, num):
 
 
 def special_gnd(board):
-    """masse di J1/J2 collegate con via dedicate (coordinate relative)"""
+    """masse di J1/J2 (rev 2.0 e Board C) collegate con via dedicate (coordinate relative)"""
     vias = [(2.8, -3.85), (3.55, 0.65)]
     for x, y in vias:
         PR.add_via(board, "GND", *A(x, y))
@@ -380,7 +382,7 @@ def build(out_dir, uuids=None):
     if hasattr(D, "STIFFENERS"):
         add_stiffeners(board)
     outline = outline_poly()
-    if BOARD == "2.0":
+    if BOARD in ("2.0", "C"):      # J1 sopra e J2 sotto allineati: masse con via dedicate
         special_gnd(board)
     if BOARD == "B" and getattr(D, "ROT_KB", 0) % 90:
         j1_fanout(board)
@@ -393,7 +395,7 @@ def build(out_dir, uuids=None):
                       "QSPI_SD0", "QSPI_SD1", "QSPI_SD2", "QSPI_SD3"}
             qd, qs = PR.qfn_fanout(board, "U1", direct, outline)
             print(f"fan-out QFN: {len(qd)} via interne, piazzole lasciate al router: {qs}")
-    skip = (lambda fp, p: (BOARD == "2.0" and fp.GetReference() in ("J1", "J2")) or
+    skip = (lambda fp, p: (BOARD in ("2.0", "C") and fp.GetReference() in ("J1", "J2")) or
             (fp.GetReference() == "U1" and p.GetNumber() in ("57", "19")))
     failed = []
     if four:                       # via di massa verso il piano In1 (a 2 strati la massa la instrada il router)

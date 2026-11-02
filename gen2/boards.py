@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Scelta della scheda e compatibilita' KiCad per gli script di gen2.
 
-Ogni script accetta "--board A" o "--board B" (rev 2.2) in qualunque punto della riga di comando, oppure la
+Ogni script accetta "--board A" o "--board B" (rev 2.2) o "--board C" (rev 2.3) in qualunque punto della riga di comando, oppure la
 variabile d'ambiente X210_BOARD; senza indicazioni usa la rev 2.0 (design2.py).
 Le funzioni kc_* coprono le differenze dell'API pcbnew tra KiCad 7 e KiCad 9/10.
 """
@@ -10,7 +10,7 @@ import importlib
 import os
 import sys
 
-MODULES = {"A": "design_boardA", "B": "design_boardB", "2.0": "design2"}
+MODULES = {"A": "design_boardA", "B": "design_boardB", "C": "design_boardC", "2.0": "design2"}
 
 
 def pick(argv=None):
@@ -23,7 +23,7 @@ def pick(argv=None):
         del argv[i:i + 2]
     name = name.upper().replace("BOARD", "").strip() if name.upper() != "2.0" else "2.0"
     if name not in MODULES:
-        raise SystemExit(f"--board {name}: valori ammessi A, B, 2.0")
+        raise SystemExit(f"--board {name}: valori ammessi A, B, C, 2.0")
     os.environ["X210_BOARD"] = name          # cosi' gli script importati (build_pcb da fill_zones) lo ritrovano
     return name
 

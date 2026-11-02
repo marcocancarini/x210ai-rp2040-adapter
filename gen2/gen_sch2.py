@@ -93,7 +93,10 @@ def lib_symbols(rev13_sch):
     # rev 2.0, che si scarta perche' l'ERC la segnalerebbe come diversa dalla libreria
     QD = "Transistor_FET:Q_Dual_NMOS_S1G1D2S2G2D1"
     syms.pop("Device:Q_Dual_NMOS_S1G1D2S2G2D1", None)
-    dev = open(os.path.join(boards.kicad_share("symbols"), "Transistor_FET.kicad_sym")).read()
+    lib = os.path.join(boards.kicad_share("symbols"), "Transistor_FET.kicad_sym")
+    if not os.path.exists(lib):      # KiCad 10 su Linux: libreria a cartella, un file per simbolo
+        lib = os.path.join(lib + "dir", "Q_Dual_NMOS_S1G1D2S2G2D1.kicad_sym")
+    dev = open(lib).read()
     a = dev.find('(symbol "Q_Dual_NMOS_S1G1D2S2G2D1"')
     depth = 0
     for b in range(a, len(dev)):
@@ -238,6 +241,18 @@ if BOARD == "A":
     ]
     COMMENTS = ["Board A 4 strati 0,8 mm (JLCPCB): RP2040, flash, LDO, traslatori TrackPoint, USB, J4 eDP",
                 "Firmware invariato: hektopuss ThinkPad_RP2040_Keyboard + patch X210Ai (GPIO come la rev 2.0)"]
+elif BOARD == "C":
+    # stessa netlist e stesso schema della rev 2.0 (J1 sopra, J2 sotto allineati): cambiano solo le note
+    NOTES = [(20.32, 132.08, f"{D.TITLE} - rev {D.REV}", 2.0)] + NOTES[1:] + [
+        (20.32, 148.59, "Board C = Board A + Board B in una scheda (niente cavo eDP); RP2040 sotto, nel braccio "
+                        "dall'altra parte del quadrato bianco.", 1.5)]
+    # Q2 diviso: Q2 = reset TrackPoint (meta' b a massa), Q4 = Fn verso l'EC (meta' a a massa)
+    LAYOUT = [it for it in LAYOUT if it[:2] != ("Q2", 2)] + [
+        ("Q2", 2, 129.54, 132.08), ("Q4", 2, 129.54, 168.91), ("Q4", 1, 152.4, 168.91)]
+    NOTES = [n for n in NOTES if not n[2].startswith("Q2b")] + [
+        (20.32, 144.78, "Q4b e Q3 emulano Fn+PgUp verso l'EC (ThinkLight). Pin 19 (accensione) passa diretto J1-J2.", 1.5)]
+    COMMENTS = ["Board C 4 strati 0,4 mm (JLCPCB): J1 sopra / J2 sotto su BTB_R_CONN1, RP2040 sotto (Mylar)",
+                COMMENTS[1]]
 elif BOARD == "B":
     LAYOUT = [("J1", 1, 63.5, 88.9), ("J2", 1, 63.5, 177.8), ("J4", 1, 228.6, 127.0),
               ("Q2", 1, 147.32, 88.9), ("Q2", 2, 147.32, 152.4), ("R13", 1, 132.08, 162.56),

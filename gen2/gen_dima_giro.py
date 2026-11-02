@@ -17,6 +17,8 @@ Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il q
 
 uso: python3 gen_dima_giro.py [--rot90ccw] [out.pdf]
   default: out ../doc/x210ai_dima_boardC_1a1.pdf (v1, A4 portrait)
+  --v32: v3.2 = v3.1 con fondo alzato (plastica telaio), invasione SIM 2 mm, flat +2 mm, braccio sx -4 mm
+  --v31: v3.1 = forma v3 con ingombri dai nomi corretti (02/11) + riferimenti, PDF + SVG modificabile
   --rot90ccw: v2 - tutti gli oggetti (board, quadrato vietato, connettori, riferimenti) ruotati
               di 90 gradi in senso antiorario nelle coordinate dima; out ../doc/x210ai_dima_boardC_v2_1a1.pdf
 
@@ -53,6 +55,19 @@ RETT_V3 = [
 # v4 = v3 + modifiche: invade lo spazio dello slot SIM di 2,2 mm (R3 x min -39,5 -> -42,2),
 # parte bassa della U tagliata di 2 mm (R1 y max 12,2 -> 10,2),
 # parte sinistra della U allargata di 7 mm (R4 y min -60 -> -67)
+# v3.2 = v3.1 + modifiche (02/11/2026, prova sulla scheda madre):
+#  - la plastica del telaio entra ~2 mm nella parte bassa della U: bordo plastica corretto a
+#    x = -37,5, fondo della scheda (R2, R3, R4) da x -39,5 a -37,0 (0,5 mm di margine);
+#  - lo slot SIM si puo' invadere dall'alto di 2 mm: R1 scende da x -31,85 a -34,35;
+#  - il flat arancione occupa 2 mm in piu' verso sinistra (y min 12,7 -> 10,7): R1 ristretta a y 10,2;
+#  - braccio sinistro della U (R4) accorciato in alto di 4 mm: x max 9 -> 5.
+RETT_V32 = [
+    (-34.35, 9.0, -6.7, 10.2),      # R1: invade lo slot SIM di 2 mm, ristretta verso il flat
+    (-37.0, -31.85, -6.7, -3.3),    # R2: fondo alzato di 2,5 mm (plastica telaio)
+    (-37.0, -27.75, -60.0, -3.3),   # R3: fondo alzato di 2,5 mm
+    (-37.0, 5.0, -60.0, -40.7),     # R4: fondo alzato di 2,5 mm, alto tagliato di 4 mm
+]
+SIM_INVADIBILE = 2.0   # mm dello slot SIM (dal lato x = -32,35) che la scheda puo' coprire
 RETT_V4 = [
     (-31.85, 9.0, -6.7, 10.2),      # R1: tagliata 2 mm in basso
     (-39.5, -31.85, -6.7, -3.3),    # R2 invariato
@@ -61,35 +76,58 @@ RETT_V4 = [
 ]
 # FORMA viene calcolata in main() dopo aver scelto RETT (v1/v2/v3)
 
-# ostacoli (come OSTACOLI in design_boardB.py)
-# ostacoli: nomi e posizioni dal parsing della foto 02/11/2026 (riferimenti/misure/)
+# ostacoli: posizioni come nella v3 originale (OSTACOLI di design_boardB.py, foto 19/10), nomi
+# corretti il 02/11/2026 rifacendo il parsing delle foto con calibrazione su BTB_R_CONN1 + bordi del
+# quadrato bianco (vedi riferimenti/misure/MISURE_foto_20261102.md, sezione "Correzione"):
+#  - il rettangolo che si chiamava "connettore FPC" e' lo SLOT SIM (contatti dorati);
+#  - il vero connettore FPC e' lo ZIF beige a destra del flat arancione (prima mancava);
+#  - il vecchio "slot SIM" (x -50..-40, y -38,9..-26,9) era sulla plastica del telaio: tolto;
+#  - tolti anche i rettangoli aggiunti il 02/11 (slot SIM a colonna e 3 "FPC" in alto): venivano da
+#    una rettifica sbagliata (cornice ruotata di 180 gradi e non centrata su BTB nella foto).
 OSTACOLI = [
     ("quadrato bianco VIETATO (<1 mm sopra), 39,3 x 33 mm", "r", (-27.25, 12.0, -40.2, -7.2)),
     ("BTB_R_CONN1 (spina J2 sotto, a 0,0)", "r", (-7.8, 7.8, -3.45, 3.45)),
-    ("slot SIM", "r", (-54.0, -42.0, -12.5, 4.3)),                    # colonna verticale a sinistra (dalla foto)
-    ("connettore FPC sinistro", "r", (-55.0, -33.4, -26.0, -13.9)),   # fila in alto, dalla foto
-    ("connettore FPC centrale", "r", (-25.6, 1.7, -26.0, -13.9)),
-    ("connettore FPC destro", "r", (9.3, 30.0, -26.0, -14.0)),
-    ("flat arancione", "r", (-37.35, -21.35, 12.7, 17.2)),
+    ("slot SIM", "r", (-45.0, -32.35, -2.8, 12.7)),
+    ("flat arancione", "r", (-37.35, -21.35, 10.7, 17.2)),          # 02/11: +2 mm verso -y (prova fisica)
+    ("connettore CN1", "r", (-30.35, -21.6, 17.25, 23.5)),
+    ("connettore FPC (ZIF)", "r", (-45.5, -34.2, 18.2, 25.2)),
     ("vite", "c", (-7.8, 19.1, 3.55)),
     ("linguetta vite", "r", (-13.1, -5.8, 22.3, 26.4)),
-    ("connettore CN1", "r", (-30.35, -21.6, 17.25, 23.5)),
 ]
-
+# riferimenti (grigio tratteggiato): non sono ostacoli sul PCB ma aiutano ad allineare la dima e
+# segnano dove finisce il piano libero; misurati sulle foto 19/10 e 02/11 (+-0,6 mm)
+RIFERIMENTI = [
+    ("plastica telaio (bordo)", (-60.0, -37.5, -47.0, -5.3)),       # 02/11: entra 2 mm piu' del misurato in foto
+    ("plastica telaio (bordo)", (-60.0, -44.0, 4.8, 30.0)),
+    ("staffa metallica", (11.15, 15.55, -9.3, 13.7)),
+]
+# posizione delle etichette nelle dime ruotate (v2+), coordinate dima: (x, y, rotazione testo)
+# per non sovrapporle; chi non e' qui usa la posizione di default
+ETICHETTE_CCW = {
+    "slot SIM": (-38.7, 5.0, 0),
+    "flat arancione": (-29.35, 13.95, 90),
+    "connettore CN1": (-26.0, 24.5, 0),
+    "connettore FPC (ZIF)": (-47.5, 18.2, 0),
+    "BTB_R_CONN1 (spina J2 sotto, a 0,0)": (17.8, 0.0, 0),
+    "vite": (-12.0, 19.1, 0),
+}
 
 def main():
     args = sys.argv[1:]
     ccw = "--rot90ccw" in args
     v3 = "--v3" in args
     v4 = "--v4" in args
+    v32 = "--v32" in args
+    v31 = "--v31" in args or v32
+    v3 = v3 or v31
     pos = [a for a in args if not a.startswith("--")]
     if pos:
         out = pos[0]
     else:
-        nome = ("x210ai_dima_boardC_v4_1a1.pdf" if v4 else "x210ai_dima_boardC_v3_1a1.pdf" if v3
+        nome = ("x210ai_dima_boardC_v3_2_1a1.pdf" if v32 else "x210ai_dima_boardC_v3_1_1a1.pdf" if v31 else "x210ai_dima_boardC_v4_1a1.pdf" if v4 else "x210ai_dima_boardC_v3_1a1.pdf" if v3
                 else "x210ai_dima_boardC_v2_1a1.pdf" if ccw else "x210ai_dima_boardC_1a1.pdf")
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc", nome)
-    rett = RETT_V4 if v4 else (RETT_V3 if v3 else RETT)
+    rett = RETT_V32 if v32 else RETT_V4 if v4 else (RETT_V3 if v3 else RETT)
     FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in rett])
     # v2 (--rot90ccw): ruota di 90 gradi in senso ANTIORARIO tutti gli oggetti in coordinate
     # dima (board, quadrato vietato, connettori, riferimenti): (x,y) -> (y,-x). Pagina sempre A4
@@ -136,12 +174,22 @@ def main():
 
     # zona sopra BTB_R_CONN1: solo PCB, niente componenti (~1,8 mm sopra)
     rect(-8.3, 8.3, -3.95, 3.95, fc="none", ec="tab:blue", lw=0.8, hatch="..", zorder=3)
-    ax.text(*P(0, -5.8), "sopra BTB_R_CONN1: solo PCB 0,4-0,8 mm (~1,8 mm sopra)",
+    ax.text(*P(23 if ccw else 0, 0 if ccw else -5.8), "sopra BTB_R_CONN1: solo PCB 0,4-0,8 mm (~1,8 mm sopra)",
             fontsize=5.5, ha="center", color="tab:blue")
 
     # spina J2 a (0,0)
     rect(-6.62, 6.72, -2.92, 3.12, fc="none", ec="green", lw=1.0, zorder=4)
     ax.text(*P(0, 0), "J2", fontsize=6, ha="center", va="center", color="green", weight="bold", zorder=5)
+
+    # riferimenti (non ostacoli): grigio tratteggiato
+    for nome, (x0, x1, y0, y1) in RIFERIMENTI:
+        rect(x0, x1, y0, y1, fc="none", ec="0.55", lw=0.7, ls="--", zorder=1)
+        ax.text(*P((x0 + x1) / 2, (y0 + y1) / 2), "rif. " + nome, fontsize=4.5, color="0.45",
+                ha="center", va="center", rotation=(90 if y1 - y0 < 6 else 0) if ccw else 90, zorder=1)
+
+    if v32:   # fascia dello slot SIM che la scheda puo' coprire (dall'alto)
+        x1s = -32.35
+        rect(x1s - SIM_INVADIBILE, x1s, -2.8, 12.7, fc="none", ec="darkorange", lw=0.5, hatch="////", zorder=3)
 
     # ostacoli
     for nome, t, d in OSTACOLI:
@@ -150,19 +198,25 @@ def main():
             col = "red" if "VIETATO" in nome else ("green" if "BTB" in nome else "darkorange")
             lw = 1.6 if "VIETATO" in nome else 0.9
             rect(x0, x1, y0, y1, fc="none", ec=col, lw=lw, zorder=3)
-            ax.text(*P(x0 + 0.5, y0 - 2.0 if "VIETATO" in nome else y1 + 2.0), nome, fontsize=5,
-                    color=col, ha="left")
+            if ccw and nome in ETICHETTE_CCW:
+                lx, ly, rot = ETICHETTE_CCW[nome]
+                ax.text(*P(lx, ly), nome, fontsize=5, color=col, ha="center", va="center", rotation=rot,
+                        zorder=5)
+            else:
+                ax.text(*P(x0 + 0.5, y0 - 2.0 if "VIETATO" in nome else y1 + 2.0), nome, fontsize=5,
+                        color=col, ha="left")
         else:
             cx, cy, r = d
             ax.add_patch(Circle(P(cx, cy), r, fc="none", ec="darkorange", lw=0.9, zorder=3))
-            ax.text(*P(cx, cy + r + 2.0), nome, fontsize=5, color="darkorange", ha="center")
+            lx, ly, _ = ETICHETTE_CCW[nome] if ccw and nome in ETICHETTE_CCW else (cx, cy + r + 2.0, 0)
+            ax.text(*P(lx, ly), nome, fontsize=5, color="darkorange", ha="center", va="center")
 
     # frecce rosse verso l'origine (centro BTB_R_CONN1)
     for (xa, ya), (xb, yb) in (((0, -36), (0, -30)), ((0, 34), (0, 28)),
                                ((-52, 0), (-46, 0)), ((36, 0), (30, 0))):
         ax.annotate("", xy=P(xb, yb), xytext=P(xa, ya),
                     arrowprops=dict(arrowstyle="-|>", lw=0.8, color="tab:red"))
-    ax.text(*P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
+    ax.text(*P(38, 0) if ccw else P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
 
     # righello di controllo 50 mm
     ax.plot([18, 68], [288, 288], color="black", lw=0.8)
@@ -180,21 +234,39 @@ def main():
         "   linguetta, slot SIM (arancione). Deve coprire solo BTB_R_CONN1 (verde, J2 sotto a 0,0).",
         "5. Sopra BTB_R_CONN1 (tratteggio blu) solo PCB: restano ~1,8 mm; poi prova a rimontare la tastiera.",
     ]
+    if v32:
+        legend.append("7. v3.2: fascia arancione tratteggiata = 2 mm di slot SIM che la scheda puo' coprire dall'alto.")
+    if v31:
+        legend.insert(len(legend) - (1 if v32 else 0), "6. Grigio tratteggiato = riferimenti (bordo plastica telaio, staffa metallica): non ostacoli PCB,"
+                      " servono per allineare; " + ("il fondo della U sta 0,5 mm dentro la plastica." if v32
+                      else "il bordo basso della U tocca la plastica (~0,3 mm, da verificare)."))
     for i, s in enumerate(legend):
         ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-    titolo = "X210Ai - dima Board C v2 (forma C4, ruotata 90 gradi antiorario), rev 2.3" if ccw \
-        else "X210Ai - dima Board C (forma C4), rev 2.3 (prova)"
+    ver = "v3.2" if v32 else "v3.1" if v31 else "v4" if v4 else "v3" if v3 else "v2" if ccw else "v1"
+    titolo = f"X210Ai - dima Board C {ver} (forma C4" + (", ruotata 90 gradi antiorario" if ccw else "") \
+        + "), rev 2.3" + (" - plastica, SIM, flat, braccio sx corretti" if v32
+                                 else " - ingombri con nomi corretti 02/11" if v31 else "")
     ax.text(105, 8, titolo, fontsize=8, ha="center", weight="bold")
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
+    if v31:   # versione modificabile (Inkscape): stessa pagina A4 1:1
+        fig.savefig(out[:-4] + ".svg")
+        print("ok", os.path.normpath(out[:-4] + ".svg"))
     print(f"area forma {FORMA.area:.0f} mm2, rettangoli {rett}")
     for nome, t, d in OSTACOLI:
         o = box(d[0], d[2], d[1], d[3]) if t == "r" else Point(d[:2]).buffer(d[2], 32)
         if "BTB" in nome:
             print(f"  BTB_R_CONN1 coperta: {FORMA.contains(o)}")
         else:
-            print(f"  distanza da {nome}: {FORMA.distance(o):.2f} mm")
+            sov = FORMA.intersection(o).area
+            print(f"  distanza da {nome}: {FORMA.distance(o):.2f} mm"
+                  + (f"  SOVRAPPOSIZIONE {sov:.1f} mm2" if sov > 0.01 else ""))
+    for nome, d in RIFERIMENTI:
+        o = box(d[0], d[2], d[1], d[3])
+        sov = FORMA.intersection(o)
+        print(f"  rif. {nome}: distanza {FORMA.distance(o):.2f} mm, sovrapposizione {sov.area:.1f} mm2"
+              + (f" (bordo x {sov.bounds[0]:.1f}..{sov.bounds[2]:.1f})" if sov.area else ""))
 
 
 if __name__ == "__main__":

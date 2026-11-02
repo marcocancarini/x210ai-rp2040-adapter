@@ -68,6 +68,12 @@ passa sotto e a sinistra del quadrato e mette le componenti del RP2040 sopra il 
 al connettore). Dime 1:1 in `doc/`: `x210ai_dima_boardC_1a1.pdf` (v1), `x210ai_dima_boardC_v2_1a1.pdf` (v2, ruotata 90° antiorario), `x210ai_dima_boardC_v3_1a1.pdf` (v3 = v2 tagliata a x = 9 mm; 2134 mm²) · `x210ai_dima_boardC_v4_1a1.pdf` (v4 = v3 + invade lo slot SIM di 2,2 mm, parte bassa della U tagliata di 2 mm, lato sinistro allargato di 7 mm; 2545 mm²); generate da `gen2/gen_dima_giro.py` (`--rot90ccw`, `--v3`, `--v4`);
 misure dalla foto con dima millimetrata in `riferimenti/misure/`.
 
+**Board C integrata (02/11/2026)**: `gen2/design_boardC.py` (`--board C` in tutti gli script, uscite in
+`out_boardC/`). Struttura della rev 2.0: **J1 sopra e J2 sotto allineati a (0,0)** su BTB_R_CONN1, stessa
+netlist (Q2b/Q3 per Fn+PgUp verso l'EC, pin 19 diretto), firmware invariato. Contorno = forma v3.2 della dima
+(`x210ai_dima_boardC_v3_2_1a1.pdf`); gruppo RP2040 + TrackPoint della Board A **sotto**, nel braccio
+dall'altra parte del quadrato bianco (la scheda madre è coperta di Mylar); PCB 4 strati 0,4 mm.
+
 **Prima di ordinare**
 - [ ] Misurare col calibro la distanza tra le file della spina 2×22 del flat (oggi stimata 3,9 mm)
 - [x] Cavo: tipo **1-N** (il cavo non si capovolge lungo il percorso), lunghezza **150 o 200 mm** (`doc/CABLE_SPEC.md`)

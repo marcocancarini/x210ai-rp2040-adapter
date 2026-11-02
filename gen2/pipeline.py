@@ -16,6 +16,7 @@ Programmi esterni:
 """
 import glob
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -50,7 +51,7 @@ def main():
     argv = list(sys.argv)
     board = boards.pick(argv)
     if board == "2.0":
-        raise SystemExit("indica la scheda: --board A oppure --board B")
+        raise SystemExit("indica la scheda: --board A, --board B oppure --board C")
     D = boards.load(["x", "--board", board])
     steps = STEPS
     if "--da" in argv:
@@ -96,7 +97,10 @@ def main():
             jar = os.environ.get("FREEROUTING_JAR", os.path.join(ROOT, "freerouting-1.9.0.jar"))
             if not os.path.exists(jar):
                 raise SystemExit(f"Freerouting non trovato ({jar}): imposta FREEROUTING_JAR")
-            run([os.environ.get("JAVA", "java"), "-jar", jar, "-de", dsn, "-do", ses, "-mp", "100"])
+            extra = []
+            if re.search(r"freerouting-([2-9])\.", os.path.basename(jar)):   # 2.x: senza finestra (Linux headless)
+                extra = ["--gui.enabled=false"]
+            run([os.environ.get("JAVA", "java"), "-jar", jar, "-de", dsn, "-do", ses, "-mp", os.environ.get("FREEROUTING_PASSES", "100"), *extra])
         elif s == "ses":
             run([py, g("import_ses.py"), pcb, ses, pcb])
             run([py, g("cleanup_pcb.py"), pcb, pcb])
@@ -116,7 +120,9 @@ def main():
             run([py, g(os.path.join("verifica", "gerber_check2.py")), os.path.join(prod, "gerber"), cpl])
             run([py, g(os.path.join("verifica", "dfm_check.py")), pcb])
         elif s == "dima":
-            if board == "B":     # Board B a scalino: dima e legenda di tutti i componenti
+            if board == "C":     # dima della forma v3.2 (contorno della Board C)
+                run([py, g("gen_dima_giro.py"), "--rot90ccw", "--v32"])
+            elif board == "B":     # Board B a scalino: dima e legenda di tutti i componenti
                 run([py, g("gen_dima_boardB_scalino.py"), os.path.join("doc", "x210ai_dima_boardB_scalino_1a1.pdf")])
             else:
                 run([py, g("gen_dima_rev22.py"), board, os.path.join("doc", f"x210ai_dima_board{board}_1a1.pdf")])

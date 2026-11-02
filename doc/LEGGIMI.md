@@ -28,6 +28,21 @@ restano ~1,8 mm: lì solo PCB 0,4–0,8 mm, niente componenti.
 - Ingombri: quadrato bianco 39,25 × 33 mm (x −27,25..12, y −40,2..−7,2); forma C4 area 2936 mm²,
   margine 0,5 mm dagli ostacoli, BTB coperta al 100 %
 
+### Board C integrata (`gen2/design_boardC.py`, `--board C`)
+
+- Struttura della rev 2.0: J1 (ricettacolo tastiera) **sopra** e J2 (spina in BTB_R_CONN1) **sotto**,
+  allineati a (0,0). Netlist identica alla rev 2.0: firmware invariato, Fn+PgUp verso l'EC con Q2b/Q3,
+  accensione (pin 19) diretta J1-J2. Niente cavo eDP.
+- Contorno = forma **v3.2** della dima (R1 x −34,35..9 · y −6,7..10,2; R3 x −37..−27,75 · y −60..−3,3;
+  R4 x −37..5 · y −60..−40,7).
+- RP2040, flash, quarzo, LDO, traslatori TrackPoint e piazzole USB (J3) **sotto**, nell'angolo di R4 lontano
+  da BTB (piazzamento della Board A traslato in blocco): la scheda madre è coperta di Mylar, e sotto la
+  scheda c'è l'altezza della coppia J2/BTB_R_CONN1 (~1,54 mm); il più alto è l'LDO SOT-23 (≤ 1,25 mm).
+- Q2/Q3/R13/R14 sotto, accanto a J2 (fuori dal corpo di BTB_R_CONN1), come nella Board B.
+- PCB 4 strati **0,4 mm** (JLCPCB, ENIG). Altezza sopra BTB_R_CONN1: la spina della tastiera sale di
+  coppia J2/BTB (~1,54) + PCB 0,4 ≈ 1,94 mm rispetto a oggi, contro ~1,8 mm misurati (5 cent sì, 10 cent
+  no): **circa 0,1–0,15 mm oltre**, da verificare.
+
 ## Spessore
 
 **Board B** (altezze dalla scheda madre). Sopra BTB_R_CONN1 la spina della tastiera non può salire: non ci
