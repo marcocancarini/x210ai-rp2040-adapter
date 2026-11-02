@@ -70,30 +70,39 @@ OSTACOLI = [
 def main():
     args = sys.argv[1:]
     forma = "C2"
+    land = "--landscape" in args
     out = None
     if "--forma" in args:
         i = args.index("--forma")
         forma = args[i + 1].upper()
-    if args and not args[0].startswith("--"):
-        out = args[0]
-    elif args and args[0].startswith("--") and len(args) > 2:
-        out = args[-1]
+    pos = [a for a in args if not a.startswith("--") and a not in ("L", "C", "C2", "C3", "C4")]
+    if pos:
+        out = pos[0]
     if out is None:
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
-                           f"x210ai_dima_giro_{forma}_1a1.pdf")
+                           f"x210ai_dima_giro_{forma}{'_landscape' if land else ''}_1a1.pdf")
     RETT = FORME[forma]
     FORMA = unary_union([box(r[0], r[2], r[1], r[3]) for r in RETT])
 
-    w, h = 210, 297
+    if land:
+        # pagina A4 landscape (297x210), forma ruotata di 90 gradi in senso orario:
+        # coordinata dima (x,y) -> pagina (ox + y, oy - x)
+        w, h = 297, 210
+        ox, oy = 150.0, 100.0
+
+        def P(x, y):
+            return ox + y, oy - x
+    else:
+        w, h = 210, 297
+        ox, oy = 105.0, 160.0
+
+        def P(x, y):
+            return ox + x, oy + y
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
     ax.set_ylim(h, 0)
     ax.axis("off")
-    ox, oy = 105.0, 160.0          # origine dima (0,0)
-
-    def P(x, y):
-        return ox + x, oy + y
 
     # griglia 10 mm con numeri sugli assi
     for x in range(-70, 46, 10):
@@ -148,10 +157,17 @@ def main():
     ax.text(*P(0, -38), "centro BTB_R_CONN1 qui (0,0)", fontsize=6, ha="center", color="tab:red")
 
     # righello di controllo 50 mm
-    ax.plot([18, 68], [288, 288], color="black", lw=0.8)
-    for x in range(18, 69, 10):
-        ax.plot([x, x], [287, 289], color="black", lw=0.5)
-    ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
+    if land:
+        ry = h - 12
+        ax.plot([210, 260], [ry, ry], color="black", lw=0.8)
+        for x in range(210, 261, 10):
+            ax.plot([x, x], [ry - 1, ry + 1], color="black", lw=0.5)
+        ax.text(235, ry - 5, "50 mm: controlla con il calibro", fontsize=6, ha="center")
+    else:
+        ax.plot([18, 68], [288, 288], color="black", lw=0.8)
+        for x in range(18, 69, 10):
+            ax.plot([x, x], [287, 289], color="black", lw=0.5)
+        ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
 
     legend = [
         f"Dima di prova 1:1 forma {forma} - scheda unica \"a giro del quadrato bianco\" (rev 2.3), coordinate dima mm",
@@ -164,10 +180,16 @@ def main():
         "   linguetta, slot SIM (arancione). Deve coprire solo BTB_R_CONN1 (verde, J2 sotto a 0,0).",
         "5. Sopra BTB_R_CONN1 (tratteggio blu) solo PCB: restano ~1,8 mm; poi prova a rimontare la tastiera.",
     ]
-    for i, s in enumerate(legend):
-        ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-    ax.text(105, 8, f"X210Ai - dima giro quadrato bianco, forma {forma}, rev 2.3 (prova)", fontsize=8,
-            ha="center", weight="bold")
+    if land:
+        for i, s in enumerate(legend):
+            ax.text(205, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
+        ax.text(205, 8, f"X210Ai - dima giro quadrato bianco, forma {forma} (landscape), rev 2.3",
+                fontsize=7, weight="bold")
+    else:
+        for i, s in enumerate(legend):
+            ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
+        ax.text(105, 8, f"X210Ai - dima giro quadrato bianco, forma {forma}, rev 2.3 (prova)", fontsize=8,
+                ha="center", weight="bold")
 
     fig.savefig(out)
     print("ok", os.path.normpath(out))
