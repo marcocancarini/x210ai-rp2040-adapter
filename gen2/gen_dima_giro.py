@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Dima di prova 1:1 (PDF A4) per la scheda unica "a giro del quadrato bianco" (rev 2.3, senza cavo eDP).
+"""Dima di prova 1:1 (PDF A4) per la Board C (rev 2.3): scheda unica "a giro del quadrato bianco",
+integrazione di Board A + Board B senza cavo eDP.
 
 Forma C4 (coordinate dima, mm; origine al centro di BTB_R_CONN1, x verso il palmrest = -x,
 y verso la vite = +y, come in design_boardB.py). La scheda aggira il quadrato bianco passant
@@ -15,7 +16,7 @@ Sopra BTB_R_CONN1 restano ~1,8 mm: lì solo PCB sottile, niente componenti. Il q
 (rosso) e gli altri ostacoli (arancione) devono restare FUORI dal ritaglio.
 
 uso: python3 gen_dima_giro.py [--rot90ccw] [out.pdf]
-  default: out ../doc/x210ai_dima_giro_1a1.pdf, pagina A4 portrait
+  default: out ../doc/x210ai_dima_boardC_1a1.pdf, pagina A4 portrait
   --rot90ccw: pagina ruotata di 90 gradi in senso antiorario (A4 landscape 297x210)
 
 Stampare al 100% (senza "adatta alla pagina") e controllare il righello da 50 mm.
@@ -60,7 +61,7 @@ def main():
     ccw = "--rot90ccw" in args
     pos = [a for a in args if not a.startswith("--")]
     out = pos[0] if pos else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "doc",
-                                          "x210ai_dima_giro_1a1.pdf")
+                                          "x210ai_dima_boardC_1a1.pdf")
     if ccw:
         # pagina A4 landscape (297x210), tutto ruotato di 90 gradi in senso antiorario:
         # coordinata dima (x,y) -> pagina (ox - y, oy + x)
@@ -146,7 +147,7 @@ def main():
         ax.text(43, 293, "50 mm: controlla con il calibro dopo la stampa", fontsize=6, ha="center")
 
     legend = [
-        "Dima di prova 1:1 - scheda unica \"a giro del quadrato bianco\" (rev 2.3, forma C4), coordinate dima mm",
+        "Dima di prova 1:1 - Board C (rev 2.3, forma C4): scheda unica a giro del quadrato bianco, coordinate dima mm",
         "Origine (0,0) = centro di BTB_R_CONN1, x verso il palmrest (-x), y verso la vite (+y).",
         "1. Stampa al 100% (senza 'adatta alla pagina') e controlla il righello da 50 mm col calibro.",
         "2. Ritaglia lungo il bordo nero spesso (tieni il pezzo interno).",
@@ -158,12 +159,12 @@ def main():
     if ccw:
         for i, s in enumerate(legend):
             ax.text(180, 14 + i * 4.6, s, fontsize=5.2 if i else 6.2, weight="bold" if i == 0 else "normal")
-        ax.text(180, 8, "X210Ai - dima giro quadrato bianco, forma C4 (ruotata 90 deg antiorario)",
+        ax.text(180, 8, "X210Ai - dima Board C (forma C4, ruotata 90 deg antiorario)",
                 fontsize=7, weight="bold")
     else:
         for i, s in enumerate(legend):
             ax.text(18, 14 + i * 4.6, s, fontsize=5.6 if i else 6.5, weight="bold" if i == 0 else "normal")
-        ax.text(105, 8, "X210Ai - dima giro quadrato bianco, forma C4, rev 2.3 (prova)", fontsize=8,
+        ax.text(105, 8, "X210Ai - dima Board C (forma C4), rev 2.3 (prova)", fontsize=8,
                 ha="center", weight="bold")
 
     fig.savefig(out)

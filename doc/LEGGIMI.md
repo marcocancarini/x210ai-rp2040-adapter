@@ -14,6 +14,19 @@ Alla scheda madre passano solo il **tasto di accensione** (diretto, funziona anc
 **masse** e il **Fn+PgUp emulato** per la **ThinkLight**. La tastiera ISO (e la JIS) funziona su Windows e
 Linux senza driver. Firmware in `FIRMWARE.md`, verifiche in `VERIFICA.md`, cavo in `CABLE_SPEC.md`.
 
+## Board C (rev 2.3, in prova)
+
+Integrazione di Board A + Board B in una **scheda unica senza cavo eDP**: si innesta su BTB_R_CONN1
+(spina J2 sotto, a 0,0), aggira il **quadrato bianco** (zona vietata, < 1 mm sopra) passando sotto
+(y > −7,2) e a sinistra (tra slot SIM e quadrato), e mette le componenti del RP2040 **sopra** il
+quadrato (lato opposto al connettore, y < −40,2), dove in verticale ci sono ~5 mm. Sopra BTB_R_CONN1
+restano ~1,8 mm: lì solo PCB 0,4–0,8 mm, niente componenti.
+
+- Dima 1:1: `doc/x210ai_dima_boardC_1a1.pdf` (forma C4, `gen2/gen_dima_giro.py`), scala verificata 1:1
+- Misure dalla foto con dima millimetrata: `riferimenti/misure/` (report `MISURE_foto_20261102.md`)
+- Ingombri: quadrato bianco 39,25 × 33 mm (x −27,25..12, y −40,2..−7,2); forma C4 area 2936 mm²,
+  margine 0,5 mm dagli ostacoli, BTB coperta al 100 %
+
 ## Spessore
 
 **Board B** (altezze dalla scheda madre). Sopra BTB_R_CONN1 la spina della tastiera non può salire: non ci

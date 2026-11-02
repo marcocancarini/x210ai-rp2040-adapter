@@ -59,9 +59,9 @@ e un braccio sinistro di 27,8 × 54 mm (all'83 %). In verticale fuori dal quadra
 ~5,0 mm, quindi una scheda rigida (0,8–1,6 mm) con componenti ci sta; sopra il connettore BTB_R_CONN1
 restano ~1,8 mm (solo la spina J2, come nel progetto a scalino).
 
-## Variante rev 2.3: scheda unica che aggira il quadrato bianco (senza cavo eDP)
+## Board C (rev 2.3): scheda unica che aggira il quadrato bianco (senza cavo eDP)
 
-Dima unica in `doc/x210ai_dima_giro_1a1.pdf`, generata da `gen2/gen_dima_giro.py` (forma C4,
+Dima unica in `doc/x210ai_dima_boardC_1a1.pdf`, generata da `gen2/gen_dima_giro.py` (Board C, forma C4,
 pagina A4 portrait; scala 1:1 verificata, righello 50,09 mm).
 
 Forma C4 (coordinate dima, origine = centro BTB_R_CONN1):
