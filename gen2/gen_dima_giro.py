@@ -79,6 +79,11 @@ def main():
         x, y = R(x, y)
         return ox + x, oy + y
 
+    def rect(x0, x1, y0, y1, **kw):
+        # rettangolo in coordinate dima: ruota TUTTI e 4 i vertici (width/height si scambiano)
+        pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+        ax.add_patch(Polygon([P(*pt) for pt in pts], **kw))
+
     fig = plt.figure(figsize=(w * MM, h * MM))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, w)
@@ -105,13 +110,12 @@ def main():
         ax.text(*P(cx, cy), f"R{k+1} {r[1]-r[0]:g}x{r[3]-r[2]:g}", fontsize=6, ha="center", va="center")
 
     # zona sopra BTB_R_CONN1: solo PCB, niente componenti (~1,8 mm sopra)
-    ax.add_patch(Rectangle(P(-8.3, -3.95), 16.6, 7.9, fc="none", ec="tab:blue", lw=0.8,
-                           hatch="..", zorder=3))
+    rect(-8.3, 8.3, -3.95, 3.95, fc="none", ec="tab:blue", lw=0.8, hatch="..", zorder=3)
     ax.text(*P(0, -5.8), "sopra BTB_R_CONN1: solo PCB 0,4-0,8 mm (~1,8 mm sopra)",
             fontsize=5.5, ha="center", color="tab:blue")
 
     # spina J2 a (0,0)
-    ax.add_patch(Rectangle(P(-6.62, -2.92), 13.34, 6.04, fc="none", ec="green", lw=1.0, zorder=4))
+    rect(-6.62, 6.72, -2.92, 3.12, fc="none", ec="green", lw=1.0, zorder=4)
     ax.text(*P(0, 0), "J2", fontsize=6, ha="center", va="center", color="green", weight="bold", zorder=5)
 
     # ostacoli
@@ -120,7 +124,7 @@ def main():
             x0, x1, y0, y1 = d
             col = "red" if "VIETATO" in nome else ("green" if "BTB" in nome else "darkorange")
             lw = 1.6 if "VIETATO" in nome else 0.9
-            ax.add_patch(Rectangle(P(x0, y0), x1 - x0, y1 - y0, fc="none", ec=col, lw=lw, zorder=3))
+            rect(x0, x1, y0, y1, fc="none", ec=col, lw=lw, zorder=3)
             ax.text(*P(x0 + 0.5, y0 - 2.0 if "VIETATO" in nome else y1 + 2.0), nome, fontsize=5,
                     color=col, ha="left")
         else:
