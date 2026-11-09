@@ -110,6 +110,28 @@ PLACE.update({
     "Q4": (-12.1, 1.2, 0, "B"), "R13": (-8.8, 1.2, 90, "B"),
 })
 
+# Fascio J1 -> gruppo RP2040 pre-instradato (preroute_bus.py). Su F.Cu: fila di J1 verso il quadrato (-y) e
+# fila verso la vite (+y), nell'ordine delle piazzole. VBUS (J1-38, 0,2 mm) e TP_RST_5V (J1-40) sono le
+# piste piu' esterne della fila +y, quindi su F.Cu finirebbero nelle corsie piu' basse, ma vanno all'estremita'
+# lontana del gruppo (TrackPoint, x ~ 2..4): vanno su In2 con un via subito fuori da J1.
+BUS = dict(odd=[1, 3, 5, 7, 9, 11, 13, 15, 17, 37, 39],
+           even=[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32],
+           wide={38: 0.2},
+           odd_y0=-3.7, even_y0=3.5,      # prime quote di uscita (piazzole fino a -3,40 / 3,20, linguette J1-41)
+           lane_x0=-28.2,                 # prima corsia in R3: bordo a -27,75 + 0,25 + mezza pista + margine
+           turn_y0=-41.2,                 # prima quota in R4: bordo a -40,7
+           end_step=0.45, end_back=0.3,   # fine a scala: 0,45 mm prima della pista sopra, 0,3 prima del pin
+           x_end_min=-24.0, x_end_max=-24.0,   # fine del fascio su F.Cu a x -24, in zona libera prima del gruppo:
+                                          # l'ultimo tratto lo fa Freerouting (col router a griglia i primi
+                                          # percorsi giravano attorno al QFN e chiudevano la strada agli altri)
+           inner={                        # su In2 (R1: x >= -34,05 fino a y -3,3)
+               38: dict(via_y=3.9, y_band=8.2, x_lane=-33.6, y_turn=-41.3, x_end=2.8),
+               40: dict(via_y=4.6, y_band=8.6, x_lane=-33.95, y_turn=-41.65, x_end=1.6)},
+           bottom={                       # gate EC su B.Cu (sotto R1/R3 non ci sono componenti), dalla piazzola
+               "EC_PGUP_G": dict(path=[(-13.05, -2.6), (-32.9, -2.6), (-32.9, -41.0), (-24.0, -41.0)]),   # Q3-2
+               "EC_FN_G": dict(path=[(-8.8, 1.71), (-8.8, 3.0), (-33.15, 3.0), (-33.15, -41.2),
+                                     (-24.0, -41.2)])})                                                   # R13-1
+
 _jp1, _jp2, _tp1, _tp4 = PLACE["JP1"], PLACE["JP2"], PLACE["TP1"], PLACE["TP4"]
 SILK = [(f"X210Ai Board C rev {REV}", -14.0, -44.0, "F", 0.8),
         ("RP2040 sotto (Mylar)", -14.0, -42.4, "F", 0.6),

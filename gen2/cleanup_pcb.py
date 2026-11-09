@@ -41,6 +41,7 @@ def one_pass(src, dst):
 def main():
     # una passata per processo: pcbnew (KiCad 10) non regge LoadBoard ripetuti nello stesso processo
     import json
+    import re
     import subprocess
     src, dst = sys.argv[1:3]
     if "--una" in sys.argv:
@@ -49,11 +50,12 @@ def main():
     n = dup = 0
     for _ in range(10):
         out = subprocess.run([sys.executable, __file__, src, dst, "--una"], capture_output=True, text=True)
-        last = [ln for ln in out.stdout.splitlines() if ln.startswith("[")]
+        # gli avvisi "swig/python detected a memory leak" di KiCad 10 finiscono sulla stessa riga del risultato
+        last = re.findall(r"\[(\d+), (\d+)\]", out.stdout)
         if out.returncode or not last:
             sys.stderr.write(out.stderr[-2000:])
             raise SystemExit("pulizia fallita")
-        d, e = json.loads(last[-1])
+        d, e = map(int, last[-1])
         n, dup, src = n + d, dup + e, dst
         if not d and not e:
             break

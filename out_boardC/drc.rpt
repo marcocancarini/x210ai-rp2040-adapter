@@ -1,0 +1,288 @@
+** Drc report for x210ai_boardC.kicad_pcb **
+** Created on 2026-11-02T23:43:45 **
+** Report includes: Errors, Warnings **
+
+** Found 40 DRC violations **
+[starved_thermal]: Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(82.8900 mm, 53.2850 mm): Pad 2 [GND] of C16 on B.Cu
+[starved_thermal]: Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(82.8900 mm, 54.2850 mm): Pad 2 [GND] of C17 on B.Cu
+[starved_thermal]: Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(88.6900 mm, 54.3350 mm): Pad 2 [GND] of C5 on B.Cu
+[starved_thermal]: Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(96.3900 mm, 52.2850 mm): Pad 2 [GND] of C3 on B.Cu
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Jumper'
+    Local override; warning
+    @(84.4600 mm, 47.7350 mm): Footprint JP2
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Jumper'
+    Local override; warning
+    @(80.8600 mm, 47.7350 mm): Footprint JP1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(82.4100 mm, 53.2850 mm): Footprint C16
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(81.6100 mm, 51.1350 mm): Footprint R2
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(95.9100 mm, 54.2850 mm): Footprint R9
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(82.4100 mm, 54.2850 mm): Footprint C17
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(85.6100 mm, 53.1850 mm): Footprint C10
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(88.2100 mm, 54.3350 mm): Footprint C5
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Package_TO_SOT_SMD'
+    Local override; warning
+    @(79.4100 mm, 53.3350 mm): Footprint U3
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(103.6600 mm, 47.2350 mm): Footprint R12
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(103.6600 mm, 46.0850 mm): Footprint R10
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Crystal'
+    Local override; warning
+    @(97.0600 mm, 48.9350 mm): Footprint Y1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(83.6100 mm, 50.1850 mm): Footprint C6
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(103.6600 mm, 48.3850 mm): Footprint C18
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(98.2600 mm, 53.2850 mm): Footprint R7
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(85.6100 mm, 50.1850 mm): Footprint C8
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(95.9100 mm, 51.2850 mm): Footprint R3
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(98.2600 mm, 52.2850 mm): Footprint C7
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(95.9100 mm, 46.5850 mm): Footprint C13
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(88.2100 mm, 44.9350 mm): Footprint C1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(91.8100 mm, 54.3350 mm): Footprint C4
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(98.2600 mm, 54.2850 mm): Footprint R11
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(91.8100 mm, 44.9350 mm): Footprint C2
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(85.6100 mm, 51.1850 mm): Footprint C9
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(83.1100 mm, 46.5850 mm): Footprint R4
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(83.6100 mm, 52.1850 mm): Footprint C11
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(85.1100 mm, 46.5850 mm): Footprint C15
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(98.2600 mm, 51.2850 mm): Footprint C14
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(91.2000 mm, 101.2000 mm): Footprint R13
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(95.9100 mm, 52.2850 mm): Footprint C3
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(95.9100 mm, 53.2850 mm): Footprint R5
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(81.6100 mm, 50.1650 mm): Footprint R1
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(103.6600 mm, 44.9350 mm): Footprint R8
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Capacitor_SMD'
+    Local override; warning
+    @(85.6100 mm, 52.1850 mm): Footprint C12
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Resistor_SMD'
+    Local override; warning
+    @(91.2000 mm, 97.4000 mm): Footprint R14
+[lib_footprint_issues]: The current configuration does not include the footprint library 'Package_DFN_QFN'
+    Local override; warning
+    @(90.8100 mm, 49.6350 mm): Footprint U1
+
+** Found 35 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_F' [GND] on F.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_F' [GND] on F.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_In1' [GND] on In1.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+    @(63.0000 mm, 40.0000 mm): Zone 'GND_B' [GND] on B.Cu, priority 0
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(92.2100 mm, 46.1975 mm): Track [KB_FN] on B.Cu, length 0.8875 mm
+    @(95.3000 mm, 97.4300 mm): Pad 1 [KB_FN] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(90.6100 mm, 53.0725 mm): Pad 36 [KB_R2] of U1 on B.Cu
+    @(95.3000 mm, 102.3700 mm): Pad 2 [KB_R2] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(91.4100 mm, 46.1975 mm): Track [KB_C3] on B.Cu, length 0.8875 mm
+    @(95.8000 mm, 97.4300 mm): Pad 3 [KB_C3] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(91.0100 mm, 53.0725 mm): Pad 35 [KB_R4] of U1 on B.Cu
+    @(95.8000 mm, 102.3700 mm): Pad 4 [KB_R4] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(91.0100 mm, 46.1975 mm): Track [KB_C5] on B.Cu, length 1.3875 mm
+    @(96.3000 mm, 97.4300 mm): Pad 5 [KB_C5] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(91.4100 mm, 53.0725 mm): Pad 34 [KB_R6] of U1 on B.Cu
+    @(96.3000 mm, 102.3700 mm): Pad 6 [KB_R6] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(90.6100 mm, 46.1975 mm): Track [KB_C7] on B.Cu, length 0.8875 mm
+    @(96.8000 mm, 97.4300 mm): Pad 7 [KB_C7] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(92.2100 mm, 53.0725 mm): Pad 32 [KB_R8] of U1 on B.Cu
+    @(96.8000 mm, 102.3700 mm): Pad 8 [KB_R8] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(90.2100 mm, 46.1975 mm): Track [KB_C9] on B.Cu, length 1.3875 mm
+    @(97.3000 mm, 97.4300 mm): Pad 9 [KB_C9] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(93.0100 mm, 53.0725 mm): Pad 30 [KB_R12] of U1 on B.Cu
+    @(97.8000 mm, 102.3700 mm): Pad 12 [KB_R12] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(89.4100 mm, 46.1975 mm): Track [KB_C13] on B.Cu, length 1.3875 mm
+    @(98.3000 mm, 97.4300 mm): Pad 13 [KB_C13] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(93.4100 mm, 53.0725 mm): Pad 29 [KB_R14] of U1 on B.Cu
+    @(98.3000 mm, 102.3700 mm): Pad 14 [KB_R14] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(89.0100 mm, 46.1975 mm): Track [KB_C15] on B.Cu, length 0.8875 mm
+    @(98.8000 mm, 97.4300 mm): Pad 15 [KB_C15] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(94.2475 mm, 52.2350 mm): Pad 28 [KB_R16] of U1 on B.Cu
+    @(98.8000 mm, 102.3700 mm): Pad 16 [KB_R16] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(88.6100 mm, 46.1975 mm): Track [KB_C17] on B.Cu, length 1.3875 mm
+    @(99.3000 mm, 97.4300 mm): Pad 17 [KB_C17] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(94.2475 mm, 51.8350 mm): Pad 27 [KB_R18] of U1 on B.Cu
+    @(99.3000 mm, 102.3700 mm): Pad 18 [KB_R18] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(94.2475 mm, 48.2350 mm): Pad 18 [KB_R20] of U1 on B.Cu
+    @(99.8000 mm, 102.3700 mm): Pad 20 [KB_R20] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(94.2475 mm, 47.8350 mm): Pad 17 [KB_R22] of U1 on B.Cu
+    @(100.3000 mm, 102.3700 mm): Pad 22 [KB_R22] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(93.0100 mm, 46.1975 mm): Track [KB_R30] on B.Cu, length 0.8875 mm
+    @(102.3000 mm, 102.3700 mm): Pad 30 [KB_R30] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(92.6100 mm, 46.1975 mm): Track [KB_R32] on B.Cu, length 1.3875 mm
+    @(102.8000 mm, 102.3700 mm): Pad 32 [KB_R32] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(100.0100 mm, 48.2850 mm): Pad 3 [TP_DATA_5V] of Q1 on B.Cu
+    @(104.3000 mm, 97.4300 mm): Pad 37 [TP_DATA_5V] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(103.1500 mm, 46.0850 mm): Pad 1 [TP_DATA_5V] of R10 on B.Cu
+    @(100.0100 mm, 48.2850 mm): Pad 3 [TP_DATA_5V] of Q1 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(101.9100 mm, 49.5850 mm): Pad 6 [TP_CLK_5V] of Q1 on B.Cu
+    @(104.8000 mm, 97.4300 mm): Pad 39 [TP_CLK_5V] of J1 on F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(103.1500 mm, 44.9350 mm): Pad 1 [TP_CLK_5V] of R8 on B.Cu
+    @(101.9100 mm, 49.5850 mm): Pad 6 [TP_CLK_5V] of Q1 on B.Cu
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Silkscreen clearance
+    - Silkscreen clipped by solder mask
+    - Silkscreen clipped by board edge
+    - Text height out of range
+    - Text thickness out of range
+    - Footprint component type doesn't match footprint pads
+    - Footprint doesn't match copy in library
+
+** End of Report **

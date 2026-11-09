@@ -384,6 +384,10 @@ def build(out_dir, uuids=None):
     outline = outline_poly()
     if BOARD in ("2.0", "C"):      # J1 sopra e J2 sotto allineati: masse con via dedicate
         special_gnd(board)
+    if hasattr(D, "BUS"):          # Board C: fascio J1 -> RP2040 su F.Cu, prima dei fan-out (che lo evitano)
+        import preroute_bus
+        bus, bus_ends = preroute_bus.bus_preroute(board, D, pad_xy)
+        print(f"fascio pre-instradato: {len(bus)} segnali")
     if BOARD == "B" and getattr(D, "ROT_KB", 0) % 90:
         j1_fanout(board)
     if "U1" in D.BY_REF:          # rev 2.0 e Board A: stesso gruppo RP2040 (posizioni relative identiche)
@@ -395,6 +399,9 @@ def build(out_dir, uuids=None):
                       "QSPI_SD0", "QSPI_SD1", "QSPI_SD2", "QSPI_SD3"}
             qd, qs = PR.qfn_fanout(board, "U1", direct, outline)
             print(f"fan-out QFN: {len(qd)} via interne, piazzole lasciate al router: {qs}")
+    if hasattr(D, "BUS"):          # ultimo tratto del fascio (router a griglia), prima del fan-out GND
+        lm_ok, lm_ko = preroute_bus.last_mile(board, D, outline, bus_ends, skip_layers=(pcbnew.F_Cu,))
+        print(f"ultimo tratto del fascio: {len(lm_ok)} ok, falliti (li prova Freerouting): {lm_ko}")
     skip = (lambda fp, p: (BOARD in ("2.0", "C") and fp.GetReference() in ("J1", "J2")) or
             (fp.GetReference() == "U1" and p.GetNumber() in ("57", "19")))
     failed = []

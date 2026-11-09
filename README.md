@@ -1,5 +1,12 @@
 # X210Ai RP2040 adapter (rev 2.2)
 
+> ⚠️ **Progetto interrotto**: lo sviluppo di questa scheda adattatore è stato sospeso perché le
+> modifiche fatte via patch al firmware dell'EC (IT5571) hanno reso superfluo l'RP2040 esterno.
+> Il reverse engineering dell'EC e le relative patch sono nella repo pubblica
+> **[marcocancarini/x210ai-ec](https://github.com/marcocancarini/x210ai-ec)**
+> (firmware EC patchato in [`firmware/patched/`](https://github.com/marcocancarini/x210ai-ec/tree/main/firmware/patched),
+> strumento di patch in [`tools/patch_keyboard.py`](https://github.com/marcocancarini/x210ai-ec/blob/main/tools/patch_keyboard.py)).
+
 Controller USB con RP2040 per la tastiera del ThinkPad X210Ai (ISO italiana e JIS giapponese), su due schede:
 **Board A** (RP2040, sotto il palmrest) e **Board B** (flessibile a scalino sul connettore tastiera BTB_R_CONN1),
 collegate da un cavo eDP 40 pin. Dettagli in [`passaggio.md`](passaggio.md) e
